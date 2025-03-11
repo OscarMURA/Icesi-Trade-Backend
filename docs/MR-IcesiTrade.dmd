@@ -1,0 +1,13 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<OSDM_Design class="oracle.dbtools.crest.model.design.Design" name="MR-IcesiTrade" id="C21AA5FE-9BB6-909E-B04A-70734C5F3D03" version="3.5">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:07:13 UTC</createdTime>
+<ownerDesignName>IcesiTradeMR</ownerDesignName>
+<capitalNames>false</capitalNames>
+<designId>C21AA5FE-9BB6-909E-B04A-70734C5F3D03</designId>
+<usedDesignStorageDescriptors>
+<designDescr class="oracle.dbtools.crest.model.design.Design$DesignStorageDesc" id="9C363368-0B85-026F-5162-2E2DFE65BE0D">
+<designStoragePath>C:\icesi_trade_schema</designStoragePath>
+</designDescr>
+</usedDesignStorageDescriptors>
+</OSDM_Design>

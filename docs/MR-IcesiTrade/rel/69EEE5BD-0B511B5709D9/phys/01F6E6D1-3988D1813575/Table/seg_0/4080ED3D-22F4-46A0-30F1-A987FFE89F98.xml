@@ -1,0 +1,98 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableProxyOraclev20c class="oracle.dbtools.crest.model.design.storage.oracle.v20c.TableProxyOraclev20c" name="PRODUCTS" directorySegmentName="seg_0" id="4080ED3D-22F4-46A0-30F1-A987FFE89F98">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<logging>YES</logging>
+<partitionedRowMovement>DISABLE</partitionedRowMovement>
+<temporaryChanged>false</temporaryChanged>
+<accessDriverType>oracle_loader</accessDriverType>
+<rejectLimit></rejectLimit>
+<columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
+<ColumnProxy name="title" id="4F7DF637-8991-1B6A-06CA-DDD628A572D5">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="id" id="55D414E1-E2FC-F549-2191-18A830CB6392">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<autoIncrementDDL>IDENTITY_CLAUSE</autoIncrementDDL>
+</ColumnProxy>
+<ColumnProxy name="description" id="7314DBF2-B0ED-3F64-9618-9566C47D68F7">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="price" id="8695D76E-BC8E-40EA-BD8F-A173A279A780">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="seller" id="87F6E782-35D5-69F9-212B-42DCF9126D3F">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:41:33 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="updated_at" id="8FFF3E82-48FB-A444-1FC6-FB1E3266309D">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="is_sold" id="E7C2E0A0-9C4B-4848-C893-5EF0C7A71E4B">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:15:38 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="location" id="F0F40872-C9D5-88E9-9283-1FEE0F826EE5">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="created_at" id="F47C3A8E-01B9-F019-07E1-70919EAB34F3">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<defaultValue>CURRENT_TIMESTAMP</defaultValue>
+</ColumnProxy>
+<ColumnProxy name="category" id="F79C93E8-6619-86DF-7C4D-3D2E74D17458">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:35:23 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="status" id="FB6BFE97-A368-7B5D-EFE4-1E951DBA4622">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:31:02 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+</columnProxies>
+<foreignKeys>
+<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="PRODUCTS_USERS_FK" id="8F731BA1-7186-9C8E-1C2D-87C4E4E7D7FB">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:41:33 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ForeignKey>
+<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="PRODUCTS_CATEGORIES_FK" id="97603C73-63C7-FEEB-1E4E-1B99D29998D4">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:35:23 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ForeignKey>
+</foreignKeys>
+<primaryKeys>
+<PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="pk_products" id="8DE02FF8-AD58-FE9F-DD9D-9EAE3CDC34D5">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<indexSort>SORTED</indexSort>
+</PrimaryKey>
+</primaryKeys>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.storage.oracle.TableCheckConstraintOracle">
+<TableCheckConstraint name="ck_products_status" id="8B4BAEDC-9AFE-0A77-6A61-BCF15A77FCE7">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<nameChanged>true</nameChanged>
+</TableCheckConstraint>
+</tableCheckConstraints>
+</TableProxyOraclev20c>

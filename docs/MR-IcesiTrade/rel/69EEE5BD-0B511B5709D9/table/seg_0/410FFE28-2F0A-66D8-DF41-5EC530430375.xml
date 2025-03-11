@@ -1,0 +1,70 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="410FFE28-2F0A-66D8-DF41-5EC530430375" name="IMAGES_PRODUCTS">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:56:19 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<ordsAlias>table_12</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id" id="9521D78F-3863-158B-2443-6570323E1FB7">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:56:45 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="url" id="F24CED0A-B369-BD4C-9C1D-7CB6ABEBE8DD">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:57:34 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>255</dataTypeSize>
+<ownDataTypeParameters>255,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="product" id="AC06E8DB-29E1-3C4C-1382-5659E1B42989">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:57:45 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="A23DDD07-0508-D5B6-FE93-134D0E35EE44" referredColumn="55D414E1-E2FC-F549-2191-18A830CB6392"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="6DAB4F74-1AEE-FB43-ABB0-81E871C95DF0" name="IMAGES_PRODUCTS_PK">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:56:45 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="9521D78F-3863-158B-2443-6570323E1FB7"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="682F8770-206F-7086-5F66-63F943D0EA41" name="IMAGES_PRODUCTS_PRODUCTS_FK">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:57:45 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="AC06E8DB-29E1-3C4C-1382-5659E1B42989"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

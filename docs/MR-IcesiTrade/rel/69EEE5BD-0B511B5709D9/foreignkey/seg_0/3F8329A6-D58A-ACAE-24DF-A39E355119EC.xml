@@ -1,0 +1,16 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="3F8329A6-D58A-ACAE-24DF-A39E355119EC" containerWithKeyObject="A768D9A9-8670-8FA8-429B-73D5C5F3F914" localFKIndex="B7C5AF34-4ABF-9BD9-EA76-7D5660B9F5A1" name="NOTIFICATIONS_TYPE_NOTIFICATION_FK">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:04:03 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<referredTableLongName>TYPE_NOTIFICATION</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>DD675713-F680-9F72-24C5-860837DDCE4B</referredTableID>
+<keyObject>A9610563-3AAB-8283-2DC8-095A95836D34</keyObject>
+<referredKeyID>A9610563-3AAB-8283-2DC8-095A95836D34</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>id</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

@@ -1,0 +1,131 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="2E8E7649-7E24-B072-4032-81849E07AAB6" name="USERS">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>32B9121C-E5C6-7C03-1E83-43E0ACE0BFDC</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id" id="0126A2DB-4962-9ED1-84AC-7C76C472FC73">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>36796C3C-A286-4CCC-FBF9-B967F105AD28</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>87176D65-5C6E-688A-58B3-1FC2DBB1A86C</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementGenerateAlways>true</autoIncrementGenerateAlways>
+<autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
+</Column>
+<Column name="email" id="CFD130C5-5754-C56C-F702-18340F57E455">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>5499AD37-C43C-B1C7-E030-8959C2891008</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>D5B8B71B-935C-C5BF-EF58-A3C805BBE340</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="password" id="E24F39F2-B8F8-9269-D761-E7907CA1E1D5">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>B6685DEE-548B-E173-E86C-F55A556B559C</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>CE33A5F7-98C4-5E73-BFD0-79D0ECAA8BAD</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="name" id="43219B46-6F3F-F771-316F-E98B30660BA1">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>FFDE4AEB-3F6E-85DA-B167-CEB5DDDF08D2</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>D5B8B71B-935C-C5BF-EF58-A3C805BBE340</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="phone" id="66EEC514-148E-A74C-E086-C85BFEB137AF">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:17:25 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>20</dataTypeSize>
+<ownDataTypeParameters>20,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="created_at" id="2BC5AF3F-3E72-B834-D180-EC199311023F">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>DEAEF378-5427-C217-690F-74245E12187A</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>C4115C64-6651-2F31-8119-6C5D2697FB77</domain>
+<defaultValue>CURRENT_TIMESTAMP</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="updated_at" id="DDF18C26-E5E7-AE2E-BFF3-AE9353AFCDBD">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>23432D56-128F-F866-6A1F-3052FD15CA0E</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>C4115C64-6651-2F31-8119-6C5D2697FB77</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="D0FE1E36-D380-2CC2-AA09-160F6EFB9F4A" name="USERS_PK">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>63B89AF9-93D6-5E35-05C8-00FE6F58EB08</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="0126A2DB-4962-9ED1-84AC-7C76C472FC73"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="BA8F33E0-9859-AA2E-5F39-9BB0E1AD682B" name="USERS_EMAIL_UQ">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>A850D93D-2829-FB1B-34FC-75B9CEF0AE08</importedID>
+<indexState>Unique Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="CFD130C5-5754-C56C-F702-18340F57E455"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

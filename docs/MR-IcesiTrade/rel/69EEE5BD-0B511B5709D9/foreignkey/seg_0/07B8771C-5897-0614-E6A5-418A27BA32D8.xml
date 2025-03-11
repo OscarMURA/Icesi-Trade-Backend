@@ -1,0 +1,16 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<FKIndexAssociation class="oracle.dbtools.crest.model.design.relational.FKIndexAssociation" directorySegmentName="seg_0" id="07B8771C-5897-0614-E6A5-418A27BA32D8" containerWithKeyObject="4080ED3D-22F4-46A0-30F1-A987FFE89F98" localFKIndex="97603C73-63C7-FEEB-1E4E-1B99D29998D4" name="PRODUCTS_CATEGORIES_FK">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:35:23 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<referredTableLongName>CATEGORIES</referredTableLongName>
+<deleteRule>NO ACTION</deleteRule>
+<referredTableID>86F67D02-CE5E-2B53-ADAD-BE5288471529</referredTableID>
+<keyObject>2F5C5415-5493-62FB-1CCF-351881D3FF93</keyObject>
+<referredKeyID>2F5C5415-5493-62FB-1CCF-351881D3FF93</referredKeyID>
+<mandatory>true</mandatory>
+<refColNames>id_category</refColNames>
+<transferable>true</transferable>
+<rely>false</rely>
+<columnDependencyConstraintGenerateInDDL>true</columnDependencyConstraintGenerateInDDL>
+</FKIndexAssociation>

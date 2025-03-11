@@ -1,0 +1,48 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableProxyOraclev20c class="oracle.dbtools.crest.model.design.storage.oracle.v20c.TableProxyOraclev20c" name="ROLE_PERMISSIONS" directorySegmentName="seg_0" id="10A479DF-FC74-5375-5F86-50FB532DEB49">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:55:22 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<logging>YES</logging>
+<partitionedRowMovement>DISABLE</partitionedRowMovement>
+<temporaryChanged>false</temporaryChanged>
+<accessDriverType>oracle_loader</accessDriverType>
+<rejectLimit></rejectLimit>
+<columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
+<ColumnProxy name="role" id="8AA17630-7726-F39D-FB3B-6E1D7F83A65B">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:56:04 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="permission" id="A97B3F57-8749-A2C6-B725-0BC1FF561950">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:56:13 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="id" id="AA709453-549B-72B5-6C2E-3D63D65E9A3E">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:55:57 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+</columnProxies>
+<foreignKeys>
+<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="ROLE_PERMISSIONS_PERMISSIONS_FK" id="27475ACF-F941-824C-9E63-5BDF40713E33">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:56:13 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ForeignKey>
+<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="ROLE_PERMISSIONS_ROLES_FK" id="88FC460D-8949-D8A9-2746-B554666E1DB5">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:56:04 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ForeignKey>
+</foreignKeys>
+<primaryKeys>
+<PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="ROLE_PERMISSIONS_PK" id="02573A38-897D-0338-89BF-D00BD7FE14A0">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:55:57 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<indexSort>SORTED</indexSort>
+</PrimaryKey>
+</primaryKeys>
+</TableProxyOraclev20c>

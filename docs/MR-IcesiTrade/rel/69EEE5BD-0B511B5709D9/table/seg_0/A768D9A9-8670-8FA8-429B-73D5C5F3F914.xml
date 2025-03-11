@@ -1,0 +1,114 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="A768D9A9-8670-8FA8-429B-73D5C5F3F914" name="NOTIFICATIONS">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:59:40 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<ordsAlias>table_13</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id" id="776C1716-C1F4-9B21-1EBD-8C94D3ACC591">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:01:01 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="type" id="1AB78A45-74C0-A9D6-75DA-C72C18DADDB5">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:04:03 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="3F8329A6-D58A-ACAE-24DF-A39E355119EC" referredColumn="462C3410-11BA-764B-8B8A-65509140D022"/>
+</associations>
+</Column>
+<Column name="read" id="DF6CA72F-5549-C6B8-19F4-7E081A72870A">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:01:01 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="user" id="54145BA0-F3C5-8477-D31C-0DED98DB7939">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:02:01 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>87176D65-5C6E-688A-58B3-1FC2DBB1A86C</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="3F7A42E5-FBD6-136D-0B69-FF5307287F11" referredColumn="0126A2DB-4962-9ED1-84AC-7C76C472FC73"/>
+</associations>
+</Column>
+<Column name="message" id="56BF26B3-DD50-676F-310C-AB4717C91DF8">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:02:38 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT028</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="created_at" id="4B66823C-E86D-ABEC-EEEA-E0BF0C1AE447">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:01:01 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="4FF5C720-52DB-DD7E-03B0-040C8FB2B800" name="NOTIFICATIONS_PK">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:01:01 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="776C1716-C1F4-9B21-1EBD-8C94D3ACC591"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="4493ABEB-1295-C98A-B0F3-99B81E2BE0D7" name="NOTIFICATIONS_USERS_FK">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:02:01 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="54145BA0-F3C5-8477-D31C-0DED98DB7939"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="B7C5AF34-4ABF-9BD9-EA76-7D5660B9F5A1" name="NOTIFICATIONS_TYPE_NOTIFICATION_FK">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:04:03 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="1AB78A45-74C0-A9D6-75DA-C72C18DADDB5"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

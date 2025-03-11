@@ -1,0 +1,85 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<DomainFile class="oracle.dbtools.crest.model.design.DomainFileWrapper" fileName="icesi_trade_schema_Domains">
+<domains>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="NUMERIC_10_2_0" id="0EB05B96-637A-9677-BB30-B6B9CECD8790">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>10</dataTypePrecision>
+<dataTypeScale>2</dataTypeScale>
+<dataTypeSize>0</dataTypeSize>
+<fileName>icesi_trade_schema_Domains</fileName>
+<logicalDatatype>LOGDT019</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="VARCHAR_0_0_20" id="1CA386F8-8419-ED2D-1261-A179CF844F1B">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>0</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>20</dataTypeSize>
+<fileName>icesi_trade_schema_Domains</fileName>
+<logicalDatatype>LOGDT024</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="CLOB_0_0_0" id="3722149E-4408-A4B6-C93C-FB2242A64411">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<fileName>icesi_trade_schema_Domains</fileName>
+<logicalDatatype>LOGDT028</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="NUMERIC_0_0_0" id="87176D65-5C6E-688A-58B3-1FC2DBB1A86C">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<fileName>icesi_trade_schema_Domains</fileName>
+<logicalDatatype>LOGDT019</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="NUMERIC_1_0_0" id="BCB79F4B-31AD-102D-6E6C-B1D12F39E91D">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>1</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>0</dataTypeSize>
+<fileName>icesi_trade_schema_Domains</fileName>
+<logicalDatatype>LOGDT019</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="Timestamp_6_0_0" id="C4115C64-6651-2F31-8119-6C5D2697FB77">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>6</dataTypePrecision>
+<fileName>icesi_trade_schema_Domains</fileName>
+<logicalDatatype>LOGDT015</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="VARCHAR_0_0_255" id="CE33A5F7-98C4-5E73-BFD0-79D0ECAA8BAD">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>0</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>255</dataTypeSize>
+<fileName>icesi_trade_schema_Domains</fileName>
+<logicalDatatype>LOGDT024</logicalDatatype>
+</Domain>
+<Domain class="oracle.dbtools.crest.model.design.Domain" name="VARCHAR_0_0_100" id="D5B8B71B-935C-C5BF-EF58-A3C805BBE340">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<avTSortOrder>0</avTSortOrder>
+<dataTypePrecision>0</dataTypePrecision>
+<dataTypeScale>0</dataTypeScale>
+<dataTypeSize>100</dataTypeSize>
+<fileName>icesi_trade_schema_Domains</fileName>
+<logicalDatatype>LOGDT024</logicalDatatype>
+</Domain>
+</domains>
+</DomainFile>

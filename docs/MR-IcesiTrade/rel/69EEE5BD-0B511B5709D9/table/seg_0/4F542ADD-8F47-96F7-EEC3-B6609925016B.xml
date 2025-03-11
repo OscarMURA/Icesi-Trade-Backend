@@ -1,0 +1,58 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="4F542ADD-8F47-96F7-EEC3-B6609925016B" name="PERMISSIONS">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:50:25 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<ordsAlias>table_12</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id" id="78DE06E7-9F59-6D74-488F-D746A5B874D5">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:52:17 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="name" id="C4F2E281-19C3-D550-61B5-74C697C1FC34">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:52:17 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>30</dataTypeSize>
+<ownDataTypeParameters>30,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="description" id="388BAAC6-8A53-6ECB-4883-AF2BFE9EE717">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:52:17 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>300</dataTypeSize>
+<ownDataTypeParameters>300,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="6ED4DFC0-4A7F-CC26-4817-4CDD15119A7D" name="PERMISSIONS_PK">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:52:17 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="78DE06E7-9F59-6D74-488F-D746A5B874D5"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

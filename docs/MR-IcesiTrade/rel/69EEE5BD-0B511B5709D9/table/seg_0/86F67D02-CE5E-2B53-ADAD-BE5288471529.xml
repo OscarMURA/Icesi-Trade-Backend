@@ -1,0 +1,58 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="86F67D02-CE5E-2B53-ADAD-BE5288471529" name="CATEGORIES">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:18:58 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<ordsAlias>table_9</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id_category" id="17889828-DD55-F82E-EE28-F7A2A73C8930">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:19:56 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="name" id="D7606A7C-8B0C-1E7A-2E48-326D1B13B748">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:19:56 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>20</dataTypeSize>
+<ownDataTypeParameters>20,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="description" id="6902D262-FD27-70CA-9321-C8F495D06ADB">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:19:56 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<nullsAllowed>true</nullsAllowed>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<dataTypeSize>150</dataTypeSize>
+<ownDataTypeParameters>150,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="2F5C5415-5493-62FB-1CCF-351881D3FF93" name="CATEGORIES_PK">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:19:56 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="17889828-DD55-F82E-EE28-F7A2A73C8930"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

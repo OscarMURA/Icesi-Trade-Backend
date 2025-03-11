@@ -1,0 +1,53 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableProxyOraclev20c class="oracle.dbtools.crest.model.design.storage.oracle.v20c.TableProxyOraclev20c" name="SALES" directorySegmentName="seg_0" id="3D34F3E0-9EDD-F163-F50F-8BFF59AE1293">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:05:25 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<logging>YES</logging>
+<partitionedRowMovement>DISABLE</partitionedRowMovement>
+<temporaryChanged>false</temporaryChanged>
+<accessDriverType>oracle_loader</accessDriverType>
+<rejectLimit></rejectLimit>
+<columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
+<ColumnProxy name="buyer" id="6FA9FF9B-E283-5CFD-A5F2-D888B61F0C1B">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:06:13 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="created_at" id="8B38E55D-03E3-A859-1AA1-4C459D9F61C1">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:06:51 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="product" id="941E342D-9937-0F23-5285-4C70CFBE0390">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:06:18 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="id" id="D524780F-19A8-A7B0-DCC0-F25927ADAB20">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:05:43 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+</columnProxies>
+<foreignKeys>
+<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="SALES_PRODUCTS_FK" id="B6E9286F-4B5E-03EE-B7E4-AB902114976E">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:06:18 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ForeignKey>
+<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="SALES_USERS_FK" id="BB1E81A8-5F8D-CB44-9636-E962072516CE">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:06:13 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ForeignKey>
+</foreignKeys>
+<primaryKeys>
+<PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="SALES_PK" id="9237BD9B-C255-67B4-929F-DCBD663B9DC6">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:05:43 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<indexSort>SORTED</indexSort>
+</PrimaryKey>
+</primaryKeys>
+</TableProxyOraclev20c>

@@ -1,0 +1,36 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableProxyOraclev20c class="oracle.dbtools.crest.model.design.storage.oracle.v20c.TableProxyOraclev20c" name="PERMISSIONS" directorySegmentName="seg_0" id="4F542ADD-8F47-96F7-EEC3-B6609925016B">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:50:25 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<logging>YES</logging>
+<partitionedRowMovement>DISABLE</partitionedRowMovement>
+<temporaryChanged>false</temporaryChanged>
+<accessDriverType>oracle_loader</accessDriverType>
+<rejectLimit></rejectLimit>
+<columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
+<ColumnProxy name="description" id="388BAAC6-8A53-6ECB-4883-AF2BFE9EE717">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:52:17 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="id" id="78DE06E7-9F59-6D74-488F-D746A5B874D5">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:52:17 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="name" id="C4F2E281-19C3-D550-61B5-74C697C1FC34">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:52:17 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+</columnProxies>
+<primaryKeys>
+<PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="PERMISSIONS_PK" id="6ED4DFC0-4A7F-CC26-4817-4CDD15119A7D">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:52:17 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<indexSort>SORTED</indexSort>
+</PrimaryKey>
+</primaryKeys>
+</TableProxyOraclev20c>

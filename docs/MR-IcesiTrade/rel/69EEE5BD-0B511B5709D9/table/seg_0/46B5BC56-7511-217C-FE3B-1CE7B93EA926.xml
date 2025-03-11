@@ -1,0 +1,97 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="46B5BC56-7511-217C-FE3B-1CE7B93EA926" name="FAVORITES_PRODUCTS">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>0F6EC940-CD2A-49E9-BD08-DCB04599B3FD</importedID>
+<ordsAlias>favorites</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id" id="92641175-1825-2646-A223-766E6924E3B8">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:38:50 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="user" id="490D27F2-C07C-7A00-AE2C-B81FE09AF7E9">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:47:14 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>87176D65-5C6E-688A-58B3-1FC2DBB1A86C</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="53324E15-BD1A-1AB4-F19E-F39C335D9057" referredColumn="0126A2DB-4962-9ED1-84AC-7C76C472FC73"/>
+</associations>
+</Column>
+<Column name="product" id="D4017A6B-2C70-5388-E145-B236971D6457">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:47:21 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="CDCBA6F8-7A82-22A3-9A63-A7A164BB8D33" referredColumn="55D414E1-E2FC-F549-2191-18A830CB6392"/>
+</associations>
+</Column>
+<Column name="created_at" id="603DE9F4-C588-F959-48EC-EE8736712208">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:24:18 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="98579D96-17B7-C56B-4FA7-B18D87ED90C1" name="FAVORITES_PRODUCTS_PK">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>83B1ED40-CDDE-9B8C-05A3-515F8CF14A69</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="92641175-1825-2646-A223-766E6924E3B8"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="F391533E-D48A-9626-EA65-8D65391D8BC9" name="FAVORITES_PRODUCTS_USERS_FK">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:47:14 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="490D27F2-C07C-7A00-AE2C-B81FE09AF7E9"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="0769CDF3-BA14-5078-BB3D-A7A9D95107D9" name="FAVORITES_PRODUCTS_PRODUCTS_FK">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:47:21 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="D4017A6B-2C70-5388-E145-B236971D6457"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

@@ -1,0 +1,60 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<TableProxyOraclev20c class="oracle.dbtools.crest.model.design.storage.oracle.v20c.TableProxyOraclev20c" name="MESSAGES" directorySegmentName="seg_0" id="F28ED87E-6D5F-5C79-1CE7-47AD8E80AC40">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<logging>YES</logging>
+<partitionedRowMovement>DISABLE</partitionedRowMovement>
+<temporaryChanged>false</temporaryChanged>
+<accessDriverType>oracle_loader</accessDriverType>
+<rejectLimit></rejectLimit>
+<columnProxies itemClass="oracle.dbtools.crest.model.design.storage.oracle.v12c.ColumnProxyOraclev12c">
+<ColumnProxy name="receiver" id="20B25EFD-6D1A-FF87-DB70-FD02760A8C00">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:45:26 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="created_at" id="7A03C344-A0E5-CCDD-F04F-A56077E94921">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<defaultValue>CURRENT_TIMESTAMP</defaultValue>
+</ColumnProxy>
+<ColumnProxy name="content" id="A46F3A62-DAC9-5415-FF81-E42421A8D626">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+<ColumnProxy name="id" id="C4FF7456-5F5E-23CF-97CC-10AF9B2C401E">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<autoIncrementDDL>IDENTITY_CLAUSE</autoIncrementDDL>
+</ColumnProxy>
+<ColumnProxy name="sender" id="DD1FDD84-9736-88A8-B6FD-9E226D77C70E">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:45:21 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ColumnProxy>
+</columnProxies>
+<foreignKeys>
+<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="MESSAGES_USERS_FK" id="02934D2F-0F6A-58DE-5733-77959EA4BC9C">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:45:21 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ForeignKey>
+<ForeignKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.FKProxyOraclev10g" name="MESSAGES_USERS_FKv2" id="EF38CD0F-9081-D9F8-ED0A-86FA0A6132C6">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:45:26 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+</ForeignKey>
+</foreignKeys>
+<primaryKeys>
+<PrimaryKey class="oracle.dbtools.crest.model.design.storage.oracle.v10g.PKProxyOraclev10g" name="pk_messages" id="BCFCC9D3-82CE-324F-E6D8-DD6B199F56A7">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<indexSort>SORTED</indexSort>
+</PrimaryKey>
+</primaryKeys>
+</TableProxyOraclev20c>

@@ -1,0 +1,15 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<relationalModel class="oracle.dbtools.crest.model.design.relational.RelationalDesign" name="Relational_1" id="69EEE5BD-D8EB-64A0-3305-0B511B5709D9" mainViewID="78490FD3-862A-2477-D5BA-004CA7385B87">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:07:49 UTC</createdTime>
+<ownerDesignName>IcesiTradeMR</ownerDesignName>
+<shouldBeOpen>true</shouldBeOpen>
+<selectedRDBMSSite>01F6E6D1-21D0-CFBD-ABDD-3988D1813575</selectedRDBMSSite>
+<importDDLFileStamps>
+<importDDLFileStamp class="oracle.dbtools.crest.imports.DDLFileStamp">
+<fileName>icesi_trade_schema.sql</fileName>
+<pathName>C:\Users\jhuli\Downloads\icesi_trade_schema</pathName>
+<dbType>17</dbType>
+</importDDLFileStamp>
+</importDDLFileStamps>
+</relationalModel>

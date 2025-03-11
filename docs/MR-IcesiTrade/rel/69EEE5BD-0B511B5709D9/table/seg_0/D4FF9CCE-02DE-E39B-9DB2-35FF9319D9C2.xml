@@ -1,0 +1,83 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="D4FF9CCE-02DE-E39B-9DB2-35FF9319D9C2" name="USER_ROLES">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:52:57 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<ordsAlias>table_14</ordsAlias>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id" id="CF9F827B-0ABD-5D72-055B-BAE27EC56B2A">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:53:29 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="USERS_id" id="45C390BB-5BBA-B0D0-4A80-606DBE51E936">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:53:48 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>87176D65-5C6E-688A-58B3-1FC2DBB1A86C</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="598F6A50-A646-EFA3-DFA2-95A815B78AFA" referredColumn="0126A2DB-4962-9ED1-84AC-7C76C472FC73"/>
+</associations>
+</Column>
+<Column name="ROLES_id" id="05F6F111-396E-CEBB-2ACE-50FB20E681CB">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:53:57 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="583843FA-FF82-3A6E-D43D-6FF22B47B9E6" referredColumn="7A31674C-B49F-744F-30DB-499C5C0D6606"/>
+</associations>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="970BB657-AEBD-417E-E86A-E376CCB95A0C" name="USER_ROLES_PK">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:54:22 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="CF9F827B-0ABD-5D72-055B-BAE27EC56B2A"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="854EB3ED-8F7E-5119-F7A8-70F183602547" name="USER_ROLES_USERS_FK">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:53:48 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="45C390BB-5BBA-B0D0-4A80-606DBE51E936"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="C725489D-2D5A-82D4-320A-A8132A684A66" name="USER_ROLES_ROLES_FK">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:53:57 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="05F6F111-396E-CEBB-2ACE-50FB20E681CB"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+</Table>

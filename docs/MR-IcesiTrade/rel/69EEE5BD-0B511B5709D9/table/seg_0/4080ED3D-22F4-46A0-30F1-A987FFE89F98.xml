@@ -1,0 +1,201 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<Table class="oracle.dbtools.crest.model.design.relational.Table" directorySegmentName="seg_0" id="4080ED3D-22F4-46A0-30F1-A987FFE89F98" name="PRODUCTS">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>267CC6E0-4912-9FA5-0AF4-6CF6AB3C3D80</importedID>
+<allowColumnReorder>false</allowColumnReorder>
+<existDependencyGenerateInDDl>true</existDependencyGenerateInDDl>
+<parsed>true</parsed>
+<columns itemClass="oracle.dbtools.crest.model.design.relational.Column">
+<Column name="id" id="55D414E1-E2FC-F549-2191-18A830CB6392">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>DBF3385A-834D-A6BF-8A8F-A07F09F9EE9A</importedID>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementColumn>true</autoIncrementColumn>
+<identityColumn>true</identityColumn>
+<autoIncrementGenerateAlways>true</autoIncrementGenerateAlways>
+<autoIncrementCycle>false</autoIncrementCycle>
+<autoIncrementOrder>false</autoIncrementOrder>
+</Column>
+<Column name="title" id="4F7DF637-8991-1B6A-06CA-DDD628A572D5">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>A73A254C-5F7C-47DF-EADE-5DBFA05F84D1</importedID>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>CE33A5F7-98C4-5E73-BFD0-79D0ECAA8BAD</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="category" id="F79C93E8-6619-86DF-7C4D-3D2E74D17458">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:35:23 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="07B8771C-5897-0614-E6A5-418A27BA32D8" referredColumn="17889828-DD55-F82E-EE28-F7A2A73C8930"/>
+</associations>
+</Column>
+<Column name="status" id="FB6BFE97-A368-7B5D-EFE4-1E951DBA4622">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:31:02 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="description" id="7314DBF2-B0ED-3F64-9618-9566C47D68F7">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>A3899A0B-D0DF-1DF4-257B-5C96E68F2281</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT028</logicalDatatype>
+<domain>3722149E-4408-A4B6-C93C-FB2242A64411</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="price" id="8695D76E-BC8E-40EA-BD8F-A173A279A780">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>296785FF-45AC-A6E8-B7FC-228B99AC6600</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>0EB05B96-637A-9677-BB30-B6B9CECD8790</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="location" id="F0F40872-C9D5-88E9-9283-1FEE0F826EE5">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>1E3F0FB8-4DE2-3297-5860-569469705607</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT024</logicalDatatype>
+<domain>D5B8B71B-935C-C5BF-EF58-A3C805BBE340</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="is_sold" id="E7C2E0A0-9C4B-4848-C893-5EF0C7A71E4B">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 01:15:38 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<useDomainConstraints>false</useDomainConstraints>
+<use>1</use>
+<logicalDatatype>LOGDT006</logicalDatatype>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="seller" id="87F6E782-35D5-69F9-212B-42DCF9126D3F">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:41:33 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<use>0</use>
+<logicalDatatype>LOGDT019</logicalDatatype>
+<domain>87176D65-5C6E-688A-58B3-1FC2DBB1A86C</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<previousColumn>false</previousColumn>
+<autoIncrementCycle>false</autoIncrementCycle>
+<associations>
+<colAssociation fkAssociation="E9331713-9B29-3C72-71FE-CB272077E85A" referredColumn="0126A2DB-4962-9ED1-84AC-7C76C472FC73"/>
+</associations>
+</Column>
+<Column name="created_at" id="F47C3A8E-01B9-F019-07E1-70919EAB34F3">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>6BC0442A-CBE2-97E1-BA90-556827CF0417</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>C4115C64-6651-2F31-8119-6C5D2697FB77</domain>
+<defaultValue>CURRENT_TIMESTAMP</defaultValue>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+<Column name="updated_at" id="8FFF3E82-48FB-A444-1FC6-FB1E3266309D">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>1C5BDC70-F4E3-40BF-70E7-55B63A8CE123</importedID>
+<nullsAllowed>true</nullsAllowed>
+<use>0</use>
+<logicalDatatype>LOGDT015</logicalDatatype>
+<domain>C4115C64-6651-2F31-8119-6C5D2697FB77</domain>
+<ownDataTypeParameters>,,</ownDataTypeParameters>
+<autoIncrementCycle>false</autoIncrementCycle>
+</Column>
+</columns>
+<indexes itemClass="oracle.dbtools.crest.model.design.relational.Index">
+<ind_PK_UK id="8DE02FF8-AD58-FE9F-DD9D-9EAE3CDC34D5" name="pk_products">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<importedID>B92173BF-857D-6BE1-282C-09E52FEE70CE</importedID>
+<pk>true</pk>
+<indexState>Primary Constraint</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="55D414E1-E2FC-F549-2191-18A830CB6392"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="97603C73-63C7-FEEB-1E4E-1B99D29998D4" name="PRODUCTS_CATEGORIES_FK">
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:35:23 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="F79C93E8-6619-86DF-7C4D-3D2E74D17458"/>
+</indexColumnUsage>
+</ind_PK_UK>
+<ind_PK_UK id="8F731BA1-7186-9C8E-1C2D-87C4E4E7D7FB" name="PRODUCTS_USERS_FK">
+<createdBy>sara-lucia</createdBy>
+<createdTime>2025-03-11 19:41:33 UTC</createdTime>
+<ownerDesignName>MR-IcesiTrade</ownerDesignName>
+<indexState>Foreign Key</indexState>
+<isSurrogateKey>false</isSurrogateKey>
+<indexColumnUsage>
+<colUsage columnID="87F6E782-35D5-69F9-212B-42DCF9126D3F"/>
+</indexColumnUsage>
+</ind_PK_UK>
+</indexes>
+<tableCheckConstraints itemClass="oracle.dbtools.crest.model.design.constraint.TableLevelConstraint">
+<tableCheckConstraint name="ck_products_status" directorySegmentName="seg_0" id="8B4BAEDC-9AFE-0A77-6A61-BCF15A77FCE7">
+<sourceDDLFile>icesi_trade_schema.sql</sourceDDLFile>
+<createdBy>jhuli</createdBy>
+<createdTime>2025-02-17 00:09:06 UTC</createdTime>
+<ownerDesignName>IcesiTradeMR</ownerDesignName>
+<importedID>00D6BA32-6605-78D5-50CC-E3F662BD56EA</importedID>
+<rule><![CDATA[status IN ('AVAILABLE','SOLD')]]></rule>
+</tableCheckConstraint>
+</tableCheckConstraints>
+</Table>
