@@ -29,7 +29,7 @@ public class Notification {
     private Boolean read;
 
     @ManyToOne
-    @JoinColumn(name = "user")
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Lob
