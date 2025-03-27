@@ -1,9 +1,14 @@
 package com.trade.icesi_trade.repository;
 
 import com.trade.icesi_trade.model.Role;
-import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
 public interface RoleRepository extends JpaRepository<Role, Long> {
-            Role findByRole(String role);
-            Role findByRole_Id(Long role_id);
+    Optional<Role> findById(Long id);
+    Role findByName(String name);
 }

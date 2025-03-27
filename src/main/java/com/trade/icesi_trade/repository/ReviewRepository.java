@@ -6,12 +6,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.springframework.stereotype.Repository;
+
+@Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     // Buscar reseña por ID
-    Review findByReview_Id(Long id);
-
+    Optional<Review> findById(Long id);
+ 
     // Buscar todas las reseñas para un producto específico
     List<Review> findByProduct_Id(Long productId);
 
