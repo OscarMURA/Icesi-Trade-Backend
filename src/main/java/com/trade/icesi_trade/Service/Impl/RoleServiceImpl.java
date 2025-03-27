@@ -5,18 +5,17 @@ import org.springframework.stereotype.Service;
 
 import com.trade.icesi_trade.Service.Interface.RoleService;
 import com.trade.icesi_trade.model.Role;
+import com.trade.icesi_trade.repository.RolePermissionRepository;
 import com.trade.icesi_trade.repository.RoleRepository;
 
 @Service
 public class RoleServiceImpl implements RoleService {
 
-    private final RoleRepository roleRepository;
-
     @Autowired
-    public RoleServiceImpl(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
-
+    private  RoleRepository roleRepository;
+    @Autowired
+    private RolePermissionRepository rolePermissionRepository;
+    
     @Override
     public Role findRoleByName(String name) {
         return roleRepository.findByName(name);
@@ -24,6 +23,15 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role saveRole(Role role) {
+        if (role.getId() == null || role.getName() == null) {
+            throw new IllegalArgumentException("El rol debe tener al menos un ID y un nombre.");
+        }
+
+        // Validar que el rol tenga al menos un permiso asociado
+        if (rolePermissionRepository.findByRole_Id(role.getId()).isEmpty()) {
+            throw new IllegalArgumentException("El rol debe tener al menos un permiso asignado.");
+        }
+
         return roleRepository.save(role);
     }
 

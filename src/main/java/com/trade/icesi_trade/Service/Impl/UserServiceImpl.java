@@ -6,16 +6,18 @@ import org.springframework.stereotype.Service;
 import com.trade.icesi_trade.Service.Interface.UserService;
 import com.trade.icesi_trade.model.User;
 import com.trade.icesi_trade.repository.UserRepository;
+import com.trade.icesi_trade.repository.UserRoleRepository;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final UserRepository userRepository;
-
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private  UserRepository userRepository;
+    @Autowired
+
+    private  UserRoleRepository userRoleRepository;
+
+    
 
     @Override
     public User findUserByEmail(String email) {
@@ -24,6 +26,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User saveUser(User user) {
+        
+        if (user.getId() == null || user.getEmail() == null) {
+            throw new IllegalArgumentException("El usuario debe tener al menos un ID y un email.");
+        }
+        if (userRoleRepository.countByUser_Id(user.getId()) == 0) {
+            throw new IllegalArgumentException("El usuario debe tener al menos un rol asignado.");
+        }
+
         return userRepository.save(user);
     }
 
