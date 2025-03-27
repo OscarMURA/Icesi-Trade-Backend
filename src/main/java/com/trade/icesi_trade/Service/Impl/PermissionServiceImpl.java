@@ -2,33 +2,46 @@ package com.trade.icesi_trade.Service.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.NoSuchElementException;
 import com.trade.icesi_trade.Service.Interface.PermissionService;
 import com.trade.icesi_trade.model.Permission;
 import com.trade.icesi_trade.repository.PermissionRepository;
 
 @Service
 public class PermissionServiceImpl implements PermissionService {
-
+    @Autowired
     private final PermissionRepository permissionRepository;
 
-    @Autowired
     public PermissionServiceImpl(PermissionRepository permissionRepository) {
         this.permissionRepository = permissionRepository;
     }
 
     @Override
     public Permission findPermissionByName(String name) {
-        return permissionRepository.findByName(name);
+        Permission permission = permissionRepository.findByName(name);
+        if (permission == null) {
+            throw new NoSuchElementException("Permiso no encontrado.");
+        }
+        return permission;
     }
+    
+    
 
     @Override
     public Permission savePermission(Permission permission) {
+        if (permission.getName() == null || permission.getName().isEmpty()) {
+            throw new IllegalArgumentException("El permiso debe tener un nombre.");
+        }
         return permissionRepository.save(permission);
     }
+    
 
     @Override
     public void deletePermission(Long permissionId) {
+        if (!permissionRepository.existsById(permissionId)) {
+            throw new IllegalArgumentException("El permiso no existe.");
+        }
         permissionRepository.deleteById(permissionId);
     }
+    
 }

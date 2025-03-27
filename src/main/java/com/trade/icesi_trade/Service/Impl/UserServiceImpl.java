@@ -7,17 +7,15 @@ import com.trade.icesi_trade.Service.Interface.UserService;
 import com.trade.icesi_trade.model.User;
 import com.trade.icesi_trade.repository.UserRepository;
 import com.trade.icesi_trade.repository.UserRoleRepository;
-
+  
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private  UserRepository userRepository;
+
     @Autowired
-
     private  UserRoleRepository userRoleRepository;
-
-    
 
     @Override
     public User findUserByEmail(String email) {
@@ -39,6 +37,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new IllegalArgumentException("El usuario no existe.");
+        }
         userRepository.deleteById(userId);
     }
 }

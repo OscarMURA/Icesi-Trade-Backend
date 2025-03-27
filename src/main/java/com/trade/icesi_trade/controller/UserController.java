@@ -18,10 +18,9 @@ import com.trade.icesi_trade.model.User;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-
+    @Autowired
     private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }

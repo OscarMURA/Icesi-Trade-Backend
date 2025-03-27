@@ -18,8 +18,12 @@ public class RoleServiceImpl implements RoleService {
     
     @Override
     public Role findRoleByName(String name) {
+        if (name == null) {
+            throw new IllegalArgumentException("El nombre del rol no puede ser nulo.");
+        }
         return roleRepository.findByName(name);
     }
+    
 
     @Override
     public Role saveRole(Role role) {
@@ -37,6 +41,9 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void deleteRole(Long roleId) {
+        if (!roleRepository.existsById(roleId)) {
+            throw new IllegalArgumentException("El rol no existe.");
+        }
         roleRepository.deleteById(roleId);
     }
 }
