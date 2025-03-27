@@ -4,5 +4,8 @@ import com.trade.icesi_trade.model.FavoriteProduct;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FavoriteProductRepository extends JpaRepository<FavoriteProduct, Long> {
-
+            
+            FavoriteProduct findByProduct_IdAndUser_Id(Long product_id, Long user_id);
+            FavoriteProduct findByProduct_Id(Long product_id);
+            FavoriteProduct findByUser_Id(Long user_id);
 }
