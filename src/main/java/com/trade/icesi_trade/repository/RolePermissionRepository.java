@@ -9,15 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RolePermissionRepository extends JpaRepository<RolePermission, Long> {
 
-    // Buscar relaciones por role_id
     List<RolePermission> findByRole_Id(Long roleId);
-
-    // Buscar relaciones por permission_id
     List<RolePermission> findByPermission_Id(Long permissionId);
-
-    // Obtener todas las relaciones entre roles y permisos
     List<RolePermission> findAll();
-
-    // Eliminar una relación por role_id y permission_id
     void deleteByRole_IdAndPermission_Id(Long roleId, Long permissionId);
 }
