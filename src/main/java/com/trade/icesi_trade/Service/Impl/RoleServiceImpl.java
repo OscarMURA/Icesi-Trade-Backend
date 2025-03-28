@@ -51,6 +51,23 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
+    public Role updateRole(Long roleId, Role updatedRole) {
+        if (roleId == null || updatedRole == null) {
+            throw new IllegalArgumentException("El ID del rol y el rol actualizado no pueden ser nulos.");
+        }
+
+        if (!roleRepository.existsById(roleId)) {
+            throw new IllegalArgumentException("El rol no existe.");
+        }
+
+        if (rolePermissionRepository.findByRole_Id(roleId).isEmpty()) {
+            throw new IllegalArgumentException("El rol debe tener al menos un permiso asignado.");
+        }
+
+        return roleRepository.save(updatedRole);
+    }
+
+    @Override
     public List<Role> findAllRoles() {
         return roleRepository.findAll();
     }

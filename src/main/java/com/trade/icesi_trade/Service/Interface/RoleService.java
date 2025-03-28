@@ -8,6 +8,7 @@ import com.trade.icesi_trade.model.Role;
 public interface RoleService {
     Role findRoleByName(String name);
     Role saveRole(Role role);
+    Role updateRole(Long roleId, Role updatedRole);
     void deleteRole(Long roleId);
     List<Role> findAllRoles();
     List<Role> findAllById(List<Long> ids);
