@@ -1,5 +1,7 @@
 package com.trade.icesi_trade.Service.Impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,5 +47,18 @@ public class RoleServiceImpl implements RoleService {
             throw new IllegalArgumentException("El rol no existe.");
         }
         roleRepository.deleteById(roleId);
+    }
+
+    @Override
+    public List<Role> findAllRoles() {
+        return roleRepository.findAll();
+    }
+
+    @Override
+    public List<Role> findAllById(List<Long> ids) {
+        if (ids == null || ids.isEmpty()) {
+            throw new IllegalArgumentException("La lista de IDs no puede ser nula o vacía.");
+        }
+        return roleRepository.findAllById(ids);
     }
 }
