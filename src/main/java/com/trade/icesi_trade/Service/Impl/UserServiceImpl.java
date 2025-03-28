@@ -30,7 +30,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email).orElseThrow(() -> new NoSuchElementException("Usuario no encontrado."));
+    }
+
+    @Override
+    public User findUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Usuario no encontrado."));
+    }
+
+    @Override
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
     }
 
     @Override
@@ -73,7 +83,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // Elimina roles anteriores
         List<UserRole> existingRoles = userRoleRepository.findByUser_Id(userId);
         userRoleRepository.deleteAll(existingRoles);
 
@@ -84,8 +93,6 @@ public class UserServiceImpl implements UserService {
                 .role(role)
                 .build();
             userRoleRepository.save(userRole);
+        }
     }
-}
-
-
 }
