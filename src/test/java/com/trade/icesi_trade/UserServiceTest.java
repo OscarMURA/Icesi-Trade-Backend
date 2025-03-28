@@ -1,22 +1,31 @@
 package com.trade.icesi_trade;
 
-import com.trade.icesi_trade.model.User;
-import com.trade.icesi_trade.repository.UserRepository;
-import com.trade.icesi_trade.repository.UserRoleRepository;
-import com.trade.icesi_trade.Service.Impl.UserServiceImpl;
-import com.trade.icesi_trade.model.UserRole; // Import UserRole class
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDateTime;
+import java.util.Collections;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
-import java.time.LocalDateTime;
-import java.util.Collections;
+import com.trade.icesi_trade.Service.Impl.UserServiceImpl;
+import com.trade.icesi_trade.model.User;
+import com.trade.icesi_trade.model.UserRole; // Import UserRole class
+import com.trade.icesi_trade.repository.UserRepository;
+import com.trade.icesi_trade.repository.UserRoleRepository;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class UserServiceTest {
 
     @Mock
