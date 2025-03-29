@@ -40,7 +40,6 @@ public class User {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-
     
     @OneToMany(mappedBy = "user")
     private List<UserRole> userRoles;

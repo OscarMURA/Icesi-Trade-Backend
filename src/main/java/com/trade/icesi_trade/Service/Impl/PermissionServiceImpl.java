@@ -43,5 +43,17 @@ public class PermissionServiceImpl implements PermissionService {
         }
         permissionRepository.deleteById(permissionId);
     }
+
+    @Override
+    public Permission updatePermission(Permission permission, Long id) {
+        if (permission.getName() == null || permission.getName().isEmpty()) {
+            throw new IllegalArgumentException("El permiso debe tener un nombre.");
+        }
+        Permission existingPermission = permissionRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Permiso no encontrado."));
+        existingPermission.setName(permission.getName());
+        existingPermission.setDescription(permission.getDescription());
+        
+        return permissionRepository.save(existingPermission);
+    }
     
 }
