@@ -31,12 +31,10 @@ public class NotificationServiceTest {
     @InjectMocks
     private NotificationServiceImpl notificationService;
     
-    // Variables para los distintos escenarios de notificaciones
     private Notification defaultNotification;
     private Notification secondNotification;
     private List<Notification> notificationList;
     
-    // Primer setUp: Inicializa la notificación por defecto (pendiente, no leída)
     @BeforeEach
     public void setUp() {
         defaultNotification = Notification.builder()
@@ -56,44 +54,43 @@ public class NotificationServiceTest {
         notificationList = Arrays.asList(defaultNotification, secondNotification);
     }
 
-    
-    // Segundo setUp: Inicializa otra notificación (ya leída)
-    @BeforeEach
-    public void setUpSecondNotification() {
-        secondNotification = Notification.builder()
-                .id(2L)
-                .read(true)
-                .message("Oferta aceptada")
-                .user(User.builder().id(10L).build())
-                .build();
-    }
-    
-    // Tercer setUp: Inicializa una lista con ambas notificaciones para simular el historial de un usuario
+        
     @BeforeEach
     public void setUpNotificationList() {
         notificationList = Arrays.asList(defaultNotification, secondNotification);
     }
     
+    /**
+     * Test case for the successful creation of a notification.
+     * 
+     * This test verifies that the NotificationService correctly creates a 
+     * notification and saves it using the NotificationRepository. It ensures 
+     * that the created notification has the expected message, the read status 
+     * is initialized to false, and the repository's save method is called once.
+     */
     @Test
     public void testCreateNotification_Success() {
-        // Arrange: Simulamos que al guardar la notificación se retorne la misma instancia.
+        // Arrange
         when(notificationRepository.save(any(Notification.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
         
-        // Act: Se crea una notificación con defaultNotification
+        // Act
         Notification created = notificationService.createNotification(defaultNotification);
         
         // Assert
         assertNotNull(created);
         assertEquals("Mensaje recibido", created.getMessage());
-        // Como en este caso se inicializa read en false en el setUp, se espera ese valor.
         assertFalse(created.getRead());
         verify(notificationRepository, times(1)).save(defaultNotification);
     }
     
+    /**
+     * Tests the behavior of the createNotification method when a null notification is provided.
+     * Verifies that an IllegalArgumentException is thrown with the expected message.
+     */
     @Test
     public void testCreateNotification_NullNotification() {
-        // Act & Assert: Se espera que al intentar crear una notificación nula se lance IllegalArgumentException
+        // Act  Assert
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             notificationService.createNotification(null);
         });
@@ -102,13 +99,13 @@ public class NotificationServiceTest {
     
     @Test
     public void testMarkNotificationAsRead_Success() {
-        // Arrange: Se simula que se encuentra la notificación por ID
+        // Arrange
         when(notificationRepository.findById(1L))
                 .thenReturn(Optional.of(defaultNotification));
         when(notificationRepository.save(any(Notification.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
         
-        // Act: Se marca la notificación como leída
+        // Act
         Notification updated = notificationService.markNotificationAsRead(1L);
         
         // Assert
@@ -118,28 +115,45 @@ public class NotificationServiceTest {
         verify(notificationRepository, times(1)).save(defaultNotification);
     }
     
+    /**
+     * Tests the behavior of the NotificationService when attempting to mark a 
+     * notification as read that does not exist in the repository.
+     * 
+     * This test verifies that a NoSuchElementException is thrown with the 
+     * appropriate error message when the notification ID is not found.
+     */
     @Test
     public void testMarkNotificationAsRead_NotFound() {
-        // Arrange: Simula que la notificación no se encuentra
+        // Arrange
         when(notificationRepository.findById(1L))
                 .thenReturn(Optional.empty());
         
-        // Act & Assert: Se espera NoSuchElementException con el mensaje adecuado.
+        // Act & Assert
         Exception exception = assertThrows(NoSuchElementException.class, () -> {
             notificationService.markNotificationAsRead(1L);
         });
         assertTrue(exception.getMessage().contains("Notificación no encontrada con el ID: 1"));
     }
     
+    /**
+     * Test case for the NotificationService's getNotificationsByUser method.
+     * 
+     * This test verifies that the method correctly retrieves notifications
+     * associated with a specific user ID. It ensures that:
+     * - The returned list is not null.
+     * - The size of the list matches the expected number of notifications.
+     * - All notifications in the list belong to the specified user ID.
+     * - The notificationRepository's findAll method is called exactly once.
+     */
     @Test
     public void testGetNotificationsByUser_Success() {
-        // Arrange: Simula que al llamar a findAll() se retorna la lista completa de notificaciones.
+        // Arrange
         when(notificationRepository.findAll()).thenReturn(notificationList);
         
-        // Act: Se obtienen las notificaciones del usuario con ID 10
+        // Act
         List<Notification> notifications = notificationService.getNotificationsByUser(10L);
         
-        // Assert: Se espera que ambas notificaciones correspondan al usuario con ID 10.
+        // Assert
         assertNotNull(notifications);
         assertEquals(2, notifications.size());
         List<Long> userIds = notifications.stream().map(n -> n.getUser().getId()).collect(Collectors.toList());
@@ -147,24 +161,32 @@ public class NotificationServiceTest {
         verify(notificationRepository, times(1)).findAll();
     }
     
+    /**
+     * Tests the behavior of the getNotificationsByUser method when a null userId is provided.
+     * Verifies that an IllegalArgumentException is thrown with the expected error message.
+     */
     @Test
     public void testGetNotificationsByUser_NullUserId() {
-        // Act & Assert: Se espera que pasando un userId nulo se lance IllegalArgumentException.
+        // Act & Assert
         Exception exception = assertThrows(IllegalArgumentException.class, () -> {
             notificationService.getNotificationsByUser(null);
         });
         assertEquals("El ID del usuario no puede ser nulo.", exception.getMessage());
     }
     
+    /**
+     * Test for getPendingNotificationsByUser method.
+     * Verifies that only unread notifications for a specific user are returned.
+     */
     @Test
     public void testGetPendingNotificationsByUser_Success() {
-        // Arrange: Utilizamos la misma lista; en ella defaultNotification tiene read false.
+        // Arrange
         when(notificationRepository.findAll()).thenReturn(notificationList);
         
-        // Act: Se obtienen las notificaciones pendientes del usuario con ID 10
+        // Act
         List<Notification> pending = notificationService.getPendingNotificationsByUser(10L);
         
-        // Assert: Solo se espera que defaultNotification esté pendiente (read false)
+        // Asser: Only expect defaultNotification to be pending (read false)
         assertNotNull(pending);
         assertEquals(1, pending.size());
         assertFalse(pending.get(0).getRead());
