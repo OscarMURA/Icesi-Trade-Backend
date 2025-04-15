@@ -19,6 +19,13 @@ public class RoleServiceImpl implements RoleService {
     @Autowired
     private RolePermissionRepository rolePermissionRepository;
     
+    /**
+     * Finds a role by its name.
+     *
+     * @param name the name of the role to find; must not be null.
+     * @return the Role object corresponding to the given name.
+     * @throws IllegalArgumentException if the provided name is null.
+     */
     @Override
     public Role findRoleByName(String name) {
         if (name == null) {
@@ -28,6 +35,14 @@ public class RoleServiceImpl implements RoleService {
     }
     
 
+    /**
+     * Saves a role to the repository after performing necessary validations.
+     *
+     * @param role The {@link Role} object to be saved. It must have a non-null ID and name.
+     * @return The saved {@link Role} object.
+     * @throws IllegalArgumentException If the role does not have an ID, a name, 
+     *                                  or at least one associated permission.
+     */
     @Override
     public Role saveRole(Role role) {
         if (role.getId() == null || role.getName() == null) {
@@ -42,6 +57,12 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.save(role);
     }
 
+    /**
+     * Deletes a role by its ID.
+     *
+     * @param roleId the ID of the role to be deleted
+     * @throws IllegalArgumentException if the role with the specified ID does not exist
+     */
     @Override
     public void deleteRole(Long roleId) {
         if (!roleRepository.existsById(roleId)) {
