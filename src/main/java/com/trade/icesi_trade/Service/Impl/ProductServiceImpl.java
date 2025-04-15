@@ -61,6 +61,7 @@ public class ProductServiceImpl implements ProductService {
         existingProduct.setLocation(product.getLocation());
         existingProduct.setStatus(product.getStatus());
         existingProduct.setUpdatedAt(LocalDateTime.now());
+        existingProduct.setCategory(product.getCategory());
 
         return productRepository.save(existingProduct);
     }
