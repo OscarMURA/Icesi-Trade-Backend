@@ -1,4 +1,4 @@
-name: Java CI with Maven and PostgreSQL
+name: Java CI with Maven
 
 on:
   push:
@@ -11,23 +11,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:13
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
@@ -37,12 +22,17 @@ jobs:
           java-version: '17'
           cache: maven
 
-      - name: Build with Maven
-        run: mvn -B package --file pom.xml
-
-      - name: Run tests with Maven
+      - name: Run Maven tests
         run: mvn -B test
 
-      # Opcional: Actualizar el grafo de dependencias
-      - name: Update dependency graph
-        uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
+      - name: Display Test Reports in Terminal
+        run: |
+          echo "=== Test Reports ==="
+          if [ -d target/surefire-reports ]; then
+            for file in target/surefire-reports/*.txt; do
+              echo "------ $file ------"
+              cat "$file"
+            done
+          else
+            echo "No se encontraron reportes de pruebas."
+          fi
