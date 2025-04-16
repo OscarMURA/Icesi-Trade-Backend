@@ -1,13 +1,14 @@
---- USERS 
-INSERT INTO USERS (id, email, password, name, phone, created_at, updated_at) VALUES (1, 'juan.perez@example.com', 'hashed_password_1', 'Juan Pérez', '3001234567', CURRENT_TIMESTAMP, NULL);
-INSERT INTO USERS (id, email, password, name, phone, created_at, updated_at) VALUES (2, 'maria.gomez@example.com', 'hashed_password_2', 'María Gómez', '3107654321', CURRENT_TIMESTAMP, NULL);
-INSERT INTO USERS (id, email, password, name, phone, created_at, updated_at) VALUES (3, 'carlos.lopez@example.com', 'hashed_password_3', 'Carlos López', '3159876543', CURRENT_TIMESTAMP, NULL);
-INSERT INTO USERS (id, email, password, name, phone, created_at, updated_at) VALUES (4, 'laura.martinez@example.com', 'hashed_password_4', 'Laura Martínez', '3205556677', CURRENT_TIMESTAMP, NULL);
-INSERT INTO USERS (id, email, password, name, phone, created_at, updated_at) VALUES (5, 'andres.rodriguez@example.com', 'hashed_password_5', 'Andrés Rodríguez', '3228889990', CURRENT_TIMESTAMP, NULL);
+--- USERS -> 1234
+INSERT INTO USERS (id, email, password, name, phone, created_at, updated_at) VALUES
+(1, 'juan.perez@example.com', '$2a$10$/1nBoNr/yazRX57ICxeBdeG8sG7Tnd7Y79QrhXPCU5UdwaGKIJAAO', 'Juan Pérez', '3001234567', CURRENT_TIMESTAMP, NULL),
+(2, 'maria.gomez@example.com', '$2a$10$k5bCEXCgGJQ0CGOeQUFz..N7SSVm5y4KDmVZutpoijlU3SfPXQVXK', 'María Gómez', '3107654321', CURRENT_TIMESTAMP, NULL),
+(3, 'carlos.lopez@example.com', '$2a$10$aATacY/YZu5FBg9BDPtfR.R0oJ75Dxi91o5D7PpBWeJOhiGIOuezy', 'Carlos López', '3159876543', CURRENT_TIMESTAMP, NULL),
+(4, 'laura.martinez@example.com', '$2a$10$x4E491xe0EYmoZqGPXMKjeLeKkQjsrwUf30zrEj/.cNA7t/7EhU9q', 'Laura Martínez', '3205556677', CURRENT_TIMESTAMP, NULL),
+(5, 'andres.rodriguez@example.com', '$2a$10$Eu1oQr5CaMJqZy8U4WO./.NLHkql3AOoZfOX4Ki8Euyu6MXjM3cG6', 'Andrés Rodríguez', '3228889990', CURRENT_TIMESTAMP, NULL);
 
 --- ROLES
-INSERT INTO ROLES (id, name, description) VALUES (1, 'ADMIN', 'Administrator');
-INSERT INTO ROLES (id, name, description) VALUES (2, 'USER', 'User');
+INSERT INTO ROLES (id, name, description) VALUES (1, 'ROLE_ADMIN', 'Administrator');
+INSERT INTO ROLES (id, name, description) VALUES (2, 'ROLE_USER', 'User');
 
 --- PERMISSIONS
 --- USERS
