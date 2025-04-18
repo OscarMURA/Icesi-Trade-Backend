@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Bienvenido</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body class="bandits-body">
+
+  <div class="bandits-container">
+    <h2 class="bandits-title">Bienvenido, Usuario</h2>
+    <p style="text-align: center;">Este es tu panel de inicio.</p>
+
+    <div style="text-align: center; margin-top: 2rem;">
+      <a th:href="@{/logout}" class="bandits-logout">Cerrar sesión</a>
+    </div>
+  </div>
+
+</body>
+</html>

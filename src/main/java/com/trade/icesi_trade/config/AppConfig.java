@@ -44,7 +44,7 @@ public class AppConfig {
             )
             .formLogin(form -> form
                 .loginPage("/login")
-                .defaultSuccessUrl("/users", true)
+                .defaultSuccessUrl("/default", true)
                 .permitAll()
             )
             .logout(logout -> logout
