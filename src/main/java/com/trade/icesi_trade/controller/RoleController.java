@@ -98,4 +98,17 @@ public class RoleController {
         return "redirect:/roles";
     }
 
+    @GetMapping
+    public String listRoles(Model model) {
+        model.addAttribute("roles", roleService.findAllRoles());
+        return "roles/list";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String deleteRole(@PathVariable Long id) {
+        roleService.deleteRole(id); // Más adelante validamos si tiene permisos
+        return "redirect:/roles";
+    }
+
+
 }
