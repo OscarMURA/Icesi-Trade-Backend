@@ -13,7 +13,9 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class UserRole {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne

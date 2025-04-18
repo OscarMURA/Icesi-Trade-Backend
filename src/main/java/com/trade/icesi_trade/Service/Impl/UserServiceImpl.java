@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.trade.icesi_trade.Service.Interface.UserService;
+import com.trade.icesi_trade.dtos.RegisterDto;
 import com.trade.icesi_trade.model.Role;
 import com.trade.icesi_trade.model.User;
 import com.trade.icesi_trade.model.UserRole;
@@ -134,4 +135,31 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
         return userDetails;
     }
+
+    @Override
+    @Transactional
+    public User register(RegisterDto dto) {
+
+        if (userRepository.findByEmail(dto.getEmail()).isPresent()) {
+            throw new IllegalArgumentException("Ya existe un usuario con ese correo");
+        }
+        User u = new User();
+        u.setEmail(dto.getEmail());
+        u.setPassword(passwordEncoder.encode(dto.getPassword()));
+        u.setName(dto.getName());
+        u.setPhone(dto.getPhone());
+        u.setCreatedAt(LocalDateTime.now());
+        User saved = userRepository.save(u);
+
+        // 2) asigno “ROLE_USER”
+        Role userRole = roleService.findRoleByName("ROLE_USER");
+        UserRole ur = UserRole.builder()
+                            .user(saved)
+                            .role(userRole)
+                            .build();
+        userRoleRepository.save(ur);
+
+        return saved;
+    }
+    
 }

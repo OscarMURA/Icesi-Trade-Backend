@@ -5,6 +5,11 @@
     <title>Iniciar Sesión</title>
 </head>
 <body>
+
+    <div th:if="${param.registered}">
+        <p style="color:green;">Registro exitoso. ¡Ya puedes iniciar sesión!</p>
+    </div>
+
     <h2>Iniciar Sesión</h2>
 
     <form th:action="@{/login}" method="post">
@@ -24,9 +29,10 @@
     <div th:if="${param.error}">
         <p style="color:red;">Credenciales incorrectas</p>
     </div>
-
     <div th:if="${param.logout}">
         <p style="color:green;">Has cerrado sesión exitosamente</p>
     </div>
+
+    <p>¿No tienes cuenta? <a th:href="@{/register}">Regístrate aquí</a></p>
 </body>
 </html>

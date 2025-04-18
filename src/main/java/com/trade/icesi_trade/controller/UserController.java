@@ -19,6 +19,8 @@ import org.springframework.ui.Model;
 import com.trade.icesi_trade.Service.Interface.UserService;
 import com.trade.icesi_trade.model.User;
 
+import jakarta.validation.Valid;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -46,6 +48,7 @@ public class UserController {
         User savedUser =  userService.saveUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
+
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")

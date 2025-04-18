@@ -1,7 +1,18 @@
 package com.trade.icesi_trade.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+
+import com.trade.icesi_trade.dtos.RegisterDto;
+
+import jakarta.validation.Valid;
+
+import com.trade.icesi_trade.Service.Impl.UserServiceImpl;
 
 // import org.springframework.beans.factory.annotation.Autowired;
 // import org.springframework.http.ResponseEntity;
@@ -26,6 +37,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 // @RequestMapping("/public")
 public class AuthController {
 
+    @Autowired
+    private UserServiceImpl userService;
+
     @GetMapping("/login")
     public String loginPage() {
         return "auth/login";
@@ -36,6 +50,40 @@ public class AuthController {
         return "redirect:/users";
     }
 
+    @GetMapping("/register")
+    public String showRegisterForm(Model model) {
+        model.addAttribute("registerDto", new RegisterDto());
+        return "auth/register";
+    }
+
+    @PostMapping("/register")
+    public String processRegister(
+            @Valid @ModelAttribute("registerDto") RegisterDto dto,
+            BindingResult br,
+            Model model
+    ) {
+        // validación de coincidencia de contraseñas
+        if (!dto.getPassword().equals(dto.getConfirmPassword())) {
+            br.rejectValue("confirmPassword", "error.confirmPassword", "Las contraseñas no coinciden");
+        }
+
+        if (br.hasErrors()) {
+            return "auth/register";
+        }
+
+        try {
+            userService.register(dto);
+        } catch (IllegalArgumentException ex) {
+            model.addAttribute("registrationError", ex.getMessage());
+            return "auth/register";
+        }
+
+        return "redirect:/login?registered";
+    }
+
+    
+
+    
     // @Autowired
     // private UserServiceImpl userService;
 
