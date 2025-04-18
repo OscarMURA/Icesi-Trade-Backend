@@ -65,7 +65,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
 
         String password = passwordEncoder.encode(user.getPassword());
-        System.out.println("Password: " + password);
         user.setPassword(password);
 
         user.setCreatedAt(LocalDateTime.now());
