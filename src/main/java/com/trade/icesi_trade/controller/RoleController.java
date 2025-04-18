@@ -106,7 +106,7 @@ public class RoleController {
 
     @PostMapping("/delete/{id}")
     public String deleteRole(@PathVariable Long id) {
-        roleService.deleteRole(id); // Más adelante validamos si tiene permisos
+        roleService.deleteRole(id);
         return "redirect:/roles";
     }
 
