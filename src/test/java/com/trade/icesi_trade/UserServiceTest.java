@@ -270,7 +270,7 @@ public class UserServiceTest {
 
         userService.updateUserRoles(userId, newRoleIds);
 
-        verify(userRoleRepository).deleteAll(Collections.singletonList(existingRole));
+        verify(userRoleRepository).deleteAllInBatch(Collections.singletonList(existingRole)); // ✅
         verify(userRoleRepository, times(2)).save(any(UserRole.class));
     }
 
@@ -304,7 +304,7 @@ public class UserServiceTest {
 
         userService.updateUserRoles(userId, newRoleIds);
 
-        verify(userRoleRepository).deleteAll(Collections.emptyList());
+        verify(userRoleRepository).deleteAllInBatch(Collections.emptyList());
         verify(userRoleRepository, never()).save(any(UserRole.class));
     }
 
