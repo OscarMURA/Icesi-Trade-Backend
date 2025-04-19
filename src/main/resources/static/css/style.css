@@ -69,8 +69,17 @@ body.bandits-body {
     background-color: #732d91;
 }
 
-
-
+/* Sobrescribe botón primario de Bootstrap con tu color morado */
+.btn-primary {
+    background-color: #8e44ad !important;
+    border-color: #8e44ad !important;
+  }
+  
+  .btn-primary:hover {
+    background-color: #732d91 !important;
+    border-color: #732d91 !important;
+  }
+  
 /* Alertas */
 .bandits-alert {
     padding: 0.75rem 1rem;
