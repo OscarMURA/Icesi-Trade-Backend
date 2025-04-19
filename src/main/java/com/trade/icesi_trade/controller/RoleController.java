@@ -6,6 +6,7 @@ import com.trade.icesi_trade.model.RolePermission;
 import com.trade.icesi_trade.repository.PermissionRepository;
 import com.trade.icesi_trade.repository.RolePermissionRepository;
 import com.trade.icesi_trade.Service.Interface.RoleService;
+import com.trade.icesi_trade.repository.RoleRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,9 @@ public class RoleController {
     private RoleService roleService;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private PermissionRepository permissionRepository;
 
     @Autowired
@@ -36,27 +40,26 @@ public class RoleController {
     }
 
     @PostMapping
-    public String createRole(@ModelAttribute Role role, @RequestParam(value = "permissionIds", required = false) List<Long> permissionIds) {
+    public String createRole(@ModelAttribute Role role,
+                             @RequestParam(value = "permissionIds", required = false) List<Long> permissionIds) {
         if (permissionIds == null || permissionIds.isEmpty()) {
             return "redirect:/roles/create?error=Debe+seleccionar+al+menos+un+permiso";
         }
+    
+        // Validación de nombre único (opcional)
+        if (roleRepository.findByName(role.getName()) != null) {
 
-        // Guardar el rol primero (sin validar que tenga permisos)
-        Role savedRole = roleService.updateRole(role.getId(), role);
-
-        // Asignar los permisos al rol
-        for (Long permissionId : permissionIds) {
-            RolePermission rolePermission = RolePermission.builder()
-                    .id(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE)
-                    .role(savedRole)
-                    .permission(permissionRepository.findById(permissionId).orElse(null))
-                    .build();
-
-            rolePermissionRepository.save(rolePermission);
+            return "redirect:/roles/create?error=Ya+existe+un+rol+con+ese+nombre";
         }
-
+    
+        role.setId(null); // forzar inserción
+        List<Permission> selectedPermissions = permissionRepository.findAllById(permissionIds);
+        roleService.saveRole(role, selectedPermissions);
+    
         return "redirect:/roles";
     }
+    
+    
 
     @GetMapping("/{id}/permissions")
     public String showAssignPermissions(@PathVariable Long id, Model model) {

@@ -7,8 +7,8 @@ INSERT INTO USERS ( email, password, name, phone, created_at, updated_at) VALUES
 ( 'andres.rodriguez@example.com', '$2a$10$Eu1oQr5CaMJqZy8U4WO./.NLHkql3AOoZfOX4Ki8Euyu6MXjM3cG6', 'Andrés Rodríguez', '3228889990', CURRENT_TIMESTAMP, NULL);
 
 --- ROLES
-INSERT INTO ROLES (id, name, description) VALUES (1, 'ROLE_ADMIN', 'Administrator');
-INSERT INTO ROLES (id, name, description) VALUES (2, 'ROLE_USER', 'User');
+INSERT INTO ROLES (name, description) VALUES ('ROLE_ADMIN', 'Administrator');
+INSERT INTO ROLES (name, description) VALUES ('ROLE_USER', 'User');
 
 --- PERMISSIONS
 --- USERS

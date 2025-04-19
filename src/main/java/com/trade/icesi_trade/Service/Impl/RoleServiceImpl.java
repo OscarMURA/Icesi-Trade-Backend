@@ -2,13 +2,16 @@ package com.trade.icesi_trade.Service.Impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.trade.icesi_trade.Service.Interface.RoleService;
 import com.trade.icesi_trade.model.Role;
 import com.trade.icesi_trade.repository.RolePermissionRepository;
+import com.trade.icesi_trade.model.Permission;
 import com.trade.icesi_trade.repository.RoleRepository;
 
 @Service
@@ -43,19 +46,36 @@ public class RoleServiceImpl implements RoleService {
      * @throws IllegalArgumentException If the role does not have an ID, a name, 
      *                                  or at least one associated permission.
      */
+    
+    @Transactional
     @Override
-    public Role saveRole(Role role) {
-        if (role.getId() == null || role.getName() == null) {
-            throw new IllegalArgumentException("El rol debe tener al menos un ID y un nombre.");
+    public Role saveRole(Role role, List<Permission> permissions) {
+        if (role.getName() == null || role.getName().isEmpty()) {
+            throw new IllegalArgumentException("El nombre del rol es obligatorio.");
         }
 
-        // Validar que el rol tenga al menos un permiso asociado
-        if (rolePermissionRepository.findByRole_Id(role.getId()).isEmpty()) {
+        if (permissions == null || permissions.isEmpty()) {
             throw new IllegalArgumentException("El rol debe tener al menos un permiso asignado.");
         }
 
-        return roleRepository.save(role);
+        // Guardar el rol
+        Role savedRole = roleRepository.save(role);
+
+        // Asignar permisos
+        for (Permission permission : permissions) {
+            rolePermissionRepository.save(
+                com.trade.icesi_trade.model.RolePermission.builder()
+                    .id(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE)
+                    .role(savedRole)
+                    .permission(permission)
+                    .build()
+            );
+        }
+
+        return savedRole;
     }
+
+    
 
     /**
      * Deletes a role by its ID.
