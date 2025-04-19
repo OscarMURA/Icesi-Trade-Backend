@@ -1,20 +1,19 @@
 package com.trade.icesi_trade;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import com.trade.icesi_trade.Service.Impl.RoleServiceImpl;
-import com.trade.icesi_trade.model.Role;
-import com.trade.icesi_trade.model.RolePermission;
-import com.trade.icesi_trade.model.Permission;
-import com.trade.icesi_trade.repository.RolePermissionRepository;
-import com.trade.icesi_trade.repository.RoleRepository;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,6 +26,14 @@ import org.mockito.quality.Strictness;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
+import com.trade.icesi_trade.Service.Impl.RoleServiceImpl;
+import com.trade.icesi_trade.model.Permission;
+import com.trade.icesi_trade.model.Role;
+import com.trade.icesi_trade.model.RolePermission;
+import com.trade.icesi_trade.repository.RolePermissionRepository;
+import com.trade.icesi_trade.repository.RoleRepository;
+import com.trade.icesi_trade.repository.UserRoleRepository;
+
 @SpringBootTest
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
@@ -35,6 +42,9 @@ public class RoleServiceTest {
 
     @Mock
     private RoleRepository roleRepository;
+
+    @Mock
+    private UserRoleRepository userRoleRepository;
 
     @Mock
     private RolePermissionRepository rolePermissionRepository;
@@ -97,13 +107,16 @@ public class RoleServiceTest {
             roleService.saveRole(validRole, Collections.emptyList());
         });
 
-        assertEquals("El rol debe tener al menos un permiso asignado.", thrown1.getMessage());
-        assertEquals("El rol debe tener al menos un permiso asignado.", thrown2.getMessage());
+        assertEquals("Debe asignar al menos un permiso.", thrown1.getMessage());
+        assertEquals("Debe asignar al menos un permiso.", thrown2.getMessage());
     }
     
     @Test
     void testDeleteRole_Success() {
-        when(roleRepository.existsById(role.getId())).thenReturn(true);
+        when(roleRepository.findById(role.getId())).thenReturn(Optional.of(role));
+        when(roleRepository.findByName("ROLE_USER")).thenReturn(new Role(2L, "ROLE_USER", "Default role"));
+        when(userRoleRepository.findByRole(role)).thenReturn(Collections.emptyList());
+        when(rolePermissionRepository.findByRole_Id(role.getId())).thenReturn(Collections.emptyList());
 
         roleService.deleteRole(role.getId());
 
