@@ -35,7 +35,11 @@ import com.trade.icesi_trade.model.User;
 import com.trade.icesi_trade.model.UserRole;
 import com.trade.icesi_trade.repository.UserRepository;
 import com.trade.icesi_trade.repository.UserRoleRepository;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+@SpringBootTest
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
 public class UserServiceTest {
