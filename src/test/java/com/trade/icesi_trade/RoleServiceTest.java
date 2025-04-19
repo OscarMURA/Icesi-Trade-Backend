@@ -1,6 +1,7 @@
 package com.trade.icesi_trade;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import java.util.Optional;
 import com.trade.icesi_trade.Service.Impl.RoleServiceImpl;
 import com.trade.icesi_trade.model.Role;
 import com.trade.icesi_trade.model.RolePermission;
+import com.trade.icesi_trade.model.Permission;
 import com.trade.icesi_trade.repository.RolePermissionRepository;
 import com.trade.icesi_trade.repository.RoleRepository;
 
@@ -56,58 +58,49 @@ public class RoleServiceTest {
     }
 
     @Test
-    void testFindRoleByName_ThrowsException_WhenNameIsNull() {
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            roleService.findRoleByName(null);
-        });
-        assertEquals("El nombre del rol no puede ser nulo.", thrown.getMessage());
-    }
-/** 
-    @Test
     void testSaveRole_Success() {
-        when(rolePermissionRepository.findByRole_Id(role.getId())).thenReturn(Collections.singletonList(new RolePermission()));
-        when(roleRepository.save(role)).thenReturn(role);
+        Permission permission = new Permission(1L, "CREATE_USER", "Permiso para crear usuarios");
+        List<Permission> permissions = List.of(permission);
 
-        Role savedRole = roleService.saveRole(role);
+        when(roleRepository.save(role)).thenReturn(role);
+        when(rolePermissionRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
+
+        Role savedRole = roleService.saveRole(role, permissions);
 
         assertNotNull(savedRole);
         assertEquals(role.getName(), savedRole.getName());
         verify(roleRepository, times(1)).save(role);
+        verify(rolePermissionRepository, times(1)).save(any());
     }
 
     @Test
-    void testSaveRole_ThrowsException_WhenRoleHasNoId() {
-        Role invalidRole = new Role(null, "NO_ID", "No id");
+    void testSaveRole_ThrowsException_WhenNameIsNull() {
+        Role invalidRole = new Role(1L, null, "sin nombre");
+        List<Permission> permissions = List.of(new Permission(1L, "TEST", "Test"));
 
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            roleService.saveRole(invalidRole);
+            roleService.saveRole(invalidRole, permissions);
         });
 
-        assertEquals("El rol debe tener al menos un ID y un nombre.", thrown.getMessage());
+        assertEquals("El nombre del rol es obligatorio.", thrown.getMessage());
     }
 
     @Test
-    void testSaveRole_ThrowsException_WhenRoleHasNoIdOrName() {
-        Role invalidRole = new Role(3L, null, "No name");
+    void testSaveRole_ThrowsException_WhenPermissionsIsNullOrEmpty() {
+        Role validRole = new Role(1L, "USER", "Rol válido");
 
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            roleService.saveRole(invalidRole);
+        IllegalArgumentException thrown1 = assertThrows(IllegalArgumentException.class, () -> {
+            roleService.saveRole(validRole, null);
         });
 
-        assertEquals("El rol debe tener al menos un ID y un nombre.", thrown.getMessage());
-    }
-
-    @Test
-    void testSaveRole_ThrowsException_WhenNoPermissions() {
-        when(rolePermissionRepository.findByRole_Id(role.getId())).thenReturn(Collections.emptyList());
-
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            roleService.saveRole(role);
+        IllegalArgumentException thrown2 = assertThrows(IllegalArgumentException.class, () -> {
+            roleService.saveRole(validRole, Collections.emptyList());
         });
 
-        assertEquals("El rol debe tener al menos un permiso asignado.", thrown.getMessage());
+        assertEquals("El rol debe tener al menos un permiso asignado.", thrown1.getMessage());
+        assertEquals("El rol debe tener al menos un permiso asignado.", thrown2.getMessage());
     }
-    */
+    
     @Test
     void testDeleteRole_Success() {
         when(roleRepository.existsById(role.getId())).thenReturn(true);
