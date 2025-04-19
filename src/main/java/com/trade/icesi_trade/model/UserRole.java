@@ -7,7 +7,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "USER_ROLES")
+@Table(name = "USER_ROLES", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id", "role_id"})
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

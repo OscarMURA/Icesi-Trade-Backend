@@ -93,21 +93,23 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Transactional
     public void updateUserRoles(Long userId, List<Long> newRoleIds) {
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found"));
-
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    
         List<UserRole> existingRoles = userRoleRepository.findByUser_Id(userId);
-        userRoleRepository.deleteAll(existingRoles);
-
-        List<Role> newRoles =  roleService.findAllById(newRoleIds);
+        userRoleRepository.deleteAllInBatch(existingRoles); 
+    
+        List<Long> distinctIds = newRoleIds.stream().distinct().toList();
+    
+        List<Role> newRoles = roleService.findAllById(distinctIds);
         for (Role role : newRoles) {
-            UserRole userRole = UserRole.builder()
-                .user(user)
-                .role(role)
-                .build();
-            userRoleRepository.save(userRole);
+            UserRole ur = UserRole.builder()
+                    .user(user)
+                    .role(role)
+                    .build();
+            userRoleRepository.save(ur);
         }
     }
-
+    
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email, null));

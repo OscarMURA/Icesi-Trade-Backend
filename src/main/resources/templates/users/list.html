@@ -2,39 +2,64 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Listado de Usuarios</title>
-  <link rel="stylesheet" th:href="@{/css/style.css}" />
+  <title>Usuarios</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" th:href="@{/css/style.css}" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
-<body class="container mt-5">
+<body>
+  <div id="sidebar" class="sidebar d-flex flex-column justify-content-between">
+    <div>
+      <h4 class="text-center fw-bold text-white mt-3 mb-4">
+        <i class="fas fa-house-chimney"></i> ITrade
+      </h4>
+      <a class="nav-link active" th:href="@{/users}"><i class="fas fa-users"></i> Usuarios</a>
+      <a class="nav-link" th:href="@{/roles}"><i class="fas fa-shield-alt"></i> Roles</a>
+    </div>
 
-  <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="fw-bold">Usuarios registrados</h2>
-    <a th:href="@{/roles}" class="btn btn-outline-secondary">Ver Roles</a>
+    <form th:action="@{/logout}" method="post" class="logout-form">
+      <button type="submit" class="sidebar-btn w-100">
+        <i class="fas fa-sign-out-alt me-2"></i> Logout
+      </button>
+    </form> 
   </div>
 
-  <table class="table table-bordered table-hover shadow-sm">
-    <thead class="table-light">
-      <tr>
-        <th>ID</th>
-        <th>Email</th>
-        <th>Nombre</th>
-        <th>Teléfono</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr th:each="u : ${users}">
-        <td th:text="${u.id}">1</td>
-        <td th:text="${u.email}">juan@example.com</td>
-        <td th:text="${u.name}">Juan Pérez</td>
-        <td th:text="${u.phone}">3001234567</td>
-        <td>
-          <a th:href="@{'/users/' + ${u.id} + '/roles'}" class="btn btn-sm btn-primary">Asignar Roles</a>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="main-content p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="fw-bold">Usuarios registrados</h2>
+      <a th:href="@{/users/create}" class="btn btn-success">
+        <i class="fas fa-plus me-1"></i> Crear Usuario
+      </a>
+    </div>
 
+    <table class="table table-bordered table-hover shadow-sm">
+      <thead class="table-light">
+        <tr>
+          <th>ID</th>
+          <th>Email</th>
+          <th>Nombre</th>
+          <th>Teléfono</th>
+          <th>Roles</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="u : ${users}">
+          <td th:text="${u.id}">1</td>
+          <td th:text="${u.email}">juan@example.com</td>
+          <td th:text="${u.name}">Juan Pérez</td>
+          <td th:text="${u.phone}">3001234567</td>
+          <td>
+            <span th:each="ur : ${u.userRoles}" th:text="${ur.role.name}" class="badge bg-primary me-1">ROL</span>
+          </td>
+          <td>
+            <a th:href="@{'/users/' + ${u.id} + '/roles'}" class="btn btn-sm btn-primary">
+              <i class="fas fa-user-cog me-1"></i> Asignar Roles
+            </a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>
