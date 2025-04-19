@@ -80,7 +80,7 @@ public class RoleController {
     @PostMapping("/{id}/permissions")
     public String updatePermissions(@PathVariable Long id,
                                     @RequestParam(value = "permissionIds", required = false) List<Long> permissionIds) {
-            if (permissionIds == null || permissionIds.isEmpty()) {
+        if (permissionIds == null || permissionIds.isEmpty()) {
             return "redirect:/roles/" + id + "/permissions?error=Debe+seleccionar+al+menos+un+permiso";
         }
 
