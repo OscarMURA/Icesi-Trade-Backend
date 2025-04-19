@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.trade.icesi_trade.Service.Interface.RoleService;
 import com.trade.icesi_trade.model.Role;
+import com.trade.icesi_trade.model.RolePermission;
 import com.trade.icesi_trade.repository.RolePermissionRepository;
 import com.trade.icesi_trade.model.Permission;
 import com.trade.icesi_trade.repository.RoleRepository;
@@ -55,25 +56,27 @@ public class RoleServiceImpl implements RoleService {
         }
 
         if (permissions == null || permissions.isEmpty()) {
-            throw new IllegalArgumentException("El rol debe tener al menos un permiso asignado.");
+            throw new IllegalArgumentException("Debe asignar al menos un permiso.");
         }
 
-        // Guardar el rol
         Role savedRole = roleRepository.save(role);
 
-        // Asignar permisos
+        if (savedRole.getId() != null) {
+            rolePermissionRepository.deleteAll(rolePermissionRepository.findByRole_Id(savedRole.getId()));
+        }
+
         for (Permission permission : permissions) {
-            rolePermissionRepository.save(
-                com.trade.icesi_trade.model.RolePermission.builder()
-                    .id(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE)
-                    .role(savedRole)
-                    .permission(permission)
-                    .build()
-            );
+            RolePermission rp = RolePermission.builder()
+                .role(savedRole)
+                .permission(permission)
+                .build(); 
+
+            rolePermissionRepository.save(rp);
         }
 
         return savedRole;
     }
+
 
     
 

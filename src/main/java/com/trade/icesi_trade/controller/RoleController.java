@@ -41,25 +41,24 @@ public class RoleController {
 
     @PostMapping
     public String createRole(@ModelAttribute Role role,
-                             @RequestParam(value = "permissionIds", required = false) List<Long> permissionIds) {
+                            @RequestParam(value = "permissionIds", required = false) List<Long> permissionIds) {
+        
         if (permissionIds == null || permissionIds.isEmpty()) {
             return "redirect:/roles/create?error=Debe+seleccionar+al+menos+un+permiso";
         }
-    
-        // Validación de nombre único (opcional)
-        if (roleRepository.findByName(role.getName()) != null) {
 
+        if (roleRepository.findByName(role.getName()) != null) {
             return "redirect:/roles/create?error=Ya+existe+un+rol+con+ese+nombre";
         }
-    
-        role.setId(null); // forzar inserción
+
+        role.setId(null);
+
         List<Permission> selectedPermissions = permissionRepository.findAllById(permissionIds);
         roleService.saveRole(role, selectedPermissions);
-    
+
         return "redirect:/roles";
     }
-    
-    
+
 
     @GetMapping("/{id}/permissions")
     public String showAssignPermissions(@PathVariable Long id, Model model) {

@@ -20,15 +20,15 @@ INSERT INTO PERMISSIONS (id, name, description) VALUES (5, 'READ_USER', 'Read us
 
 --- ROLE_PERMISSIONS
 --- ADMIN
-INSERT INTO ROLE_PERMISSIONS (id, role, permission) VALUES (1, 1, 1);
-INSERT INTO ROLE_PERMISSIONS (id, role, permission) VALUES (2, 1, 2);
-INSERT INTO ROLE_PERMISSIONS (id, role, permission) VALUES (3, 1, 3);
-INSERT INTO ROLE_PERMISSIONS (id, role, permission) VALUES (4, 1, 4);
-INSERT INTO ROLE_PERMISSIONS (id, role, permission) VALUES (5, 1, 5);
+INSERT INTO ROLE_PERMISSIONS (role, permission) VALUES (1, 1);
+INSERT INTO ROLE_PERMISSIONS (role, permission) VALUES (1, 2);
+INSERT INTO ROLE_PERMISSIONS (role, permission) VALUES (1, 3);
+INSERT INTO ROLE_PERMISSIONS (role, permission) VALUES (1, 4);
+INSERT INTO ROLE_PERMISSIONS (role, permission) VALUES (1, 5);
 --- USER
-INSERT INTO ROLE_PERMISSIONS (id, role, permission) VALUES (6, 2, 1);
-INSERT INTO ROLE_PERMISSIONS (id, role, permission) VALUES (7, 2, 4);
-INSERT INTO ROLE_PERMISSIONS (id, role, permission) VALUES (8, 2, 5);
+INSERT INTO ROLE_PERMISSIONS (role, permission) VALUES (2, 1);
+INSERT INTO ROLE_PERMISSIONS (role, permission) VALUES (2, 4);
+INSERT INTO ROLE_PERMISSIONS (role, permission) VALUES (2, 5);
 
 --- USER_ROLES
 INSERT INTO USER_ROLES ( user_id, role_id) VALUES ( 1, 1);
