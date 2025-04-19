@@ -2,34 +2,36 @@ package com.trade.icesi_trade.Service.Impl;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.trade.icesi_trade.Service.Interface.RoleService;
+import com.trade.icesi_trade.model.Permission;
 import com.trade.icesi_trade.model.Role;
 import com.trade.icesi_trade.model.RolePermission;
+import com.trade.icesi_trade.model.UserRole;
+import com.trade.icesi_trade.repository.PermissionRepository;
 import com.trade.icesi_trade.repository.RolePermissionRepository;
-import com.trade.icesi_trade.model.Permission;
 import com.trade.icesi_trade.repository.RoleRepository;
+import com.trade.icesi_trade.repository.UserRoleRepository;
 
 @Service
 public class RoleServiceImpl implements RoleService {
 
     @Autowired
-    private  RoleRepository roleRepository;
+    private RoleRepository roleRepository;
+
     @Autowired
     private RolePermissionRepository rolePermissionRepository;
-    
-    /**
-     * Finds a role by its name.
-     *
-     * @param name the name of the role to find; must not be null.
-     * @return the Role object corresponding to the given name.
-     * @throws IllegalArgumentException if the provided name is null.
-     */
+
+    @Autowired
+    private UserRoleRepository userRoleRepository;
+
+    @Autowired
+    private PermissionRepository permissionRepository;
+
     @Override
     public Role findRoleByName(String name) {
         if (name == null) {
@@ -37,17 +39,7 @@ public class RoleServiceImpl implements RoleService {
         }
         return roleRepository.findByName(name);
     }
-    
 
-    /**
-     * Saves a role to the repository after performing necessary validations.
-     *
-     * @param role The {@link Role} object to be saved. It must have a non-null ID and name.
-     * @return The saved {@link Role} object.
-     * @throws IllegalArgumentException If the role does not have an ID, a name, 
-     *                                  or at least one associated permission.
-     */
-    
     @Transactional
     @Override
     public Role saveRole(Role role, List<Permission> permissions) {
@@ -69,28 +61,44 @@ public class RoleServiceImpl implements RoleService {
             RolePermission rp = RolePermission.builder()
                 .role(savedRole)
                 .permission(permission)
-                .build(); 
-
+                .build();
             rolePermissionRepository.save(rp);
         }
 
         return savedRole;
     }
 
-
-    
-
-    /**
-     * Deletes a role by its ID.
-     *
-     * @param roleId the ID of the role to be deleted
-     * @throws IllegalArgumentException if the role with the specified ID does not exist
-     */
+    @Transactional
     @Override
     public void deleteRole(Long roleId) {
-        if (!roleRepository.existsById(roleId)) {
-            throw new IllegalArgumentException("El rol no existe.");
+        Role roleToDelete = roleRepository.findById(roleId)
+            .orElseThrow(() -> new IllegalArgumentException("El rol no existe."));
+
+        Role defaultRole = roleRepository.findByName("ROLE_USER");
+        if (defaultRole == null) {
+            throw new IllegalStateException("No se encontró el rol por defecto (ROLE_USER).");
         }
+
+        List<UserRole> userRoles = userRoleRepository.findByRole(roleToDelete);
+        for (UserRole ur : userRoles) {
+            Long userId = ur.getUser().getId();
+
+            userRoleRepository.delete(ur);
+
+            List<UserRole> remainingRoles = userRoleRepository.findByUser_Id(userId);
+            if (remainingRoles.isEmpty()) {
+                userRoleRepository.save(UserRole.builder()
+                    .user(ur.getUser())
+                    .role(defaultRole)
+                    .build());
+            }
+        }
+
+        List<RolePermission> rolePermissions = rolePermissionRepository.findByRole_Id(roleId);
+        if (!rolePermissions.isEmpty()) {
+            rolePermissionRepository.deleteAll(rolePermissions);
+        }
+
         roleRepository.deleteById(roleId);
     }
 
