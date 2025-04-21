@@ -37,7 +37,7 @@ Puedes abrirlo en un navegador para revisar la cobertura de código.
 
 Los servicios JwtService y JwtAuthenticationFilter no tienen tests ya que no hacen parte de esta entrega.
 
-# Para probar el despliegue o la aplicacion en local
+# Para probar la aplicación desplegada
 
 Visitar: 
 http://10.147.19.21:8080/g1/losbandalos/
