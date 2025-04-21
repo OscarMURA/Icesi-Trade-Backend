@@ -18,14 +18,15 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public Permission findPermissionByName(String name) {
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("El nombre del permiso no puede ser nulo o vacío.");
+        }
         Permission permission = permissionRepository.findByName(name);
         if (permission == null) {
             throw new NoSuchElementException("Permiso no encontrado.");
         }
         return permission;
     }
-    
-    
 
     @Override
     public Permission savePermission(Permission permission) {
@@ -44,16 +45,23 @@ public class PermissionServiceImpl implements PermissionService {
         permissionRepository.deleteById(permissionId);
     }
 
-    @Override
     public Permission updatePermission(Permission permission, Long id) {
+        if (permission == null) {
+            throw new IllegalArgumentException("El permiso no puede ser nulo.");
+        }
+        if (id == null) {
+            throw new IllegalArgumentException("El ID del permiso no puede ser nulo.");
+        }
         if (permission.getName() == null || permission.getName().isEmpty()) {
             throw new IllegalArgumentException("El permiso debe tener un nombre.");
         }
-        Permission existingPermission = permissionRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Permiso no encontrado."));
-        existingPermission.setName(permission.getName());
-        existingPermission.setDescription(permission.getDescription());
-        
-        return permissionRepository.save(existingPermission);
-    }
     
+        Permission existing = permissionRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Permiso no encontrado."));
+    
+        existing.setName(permission.getName());
+        existing.setDescription(permission.getDescription());
+    
+        return permissionRepository.save(existing);
+    }    
 }

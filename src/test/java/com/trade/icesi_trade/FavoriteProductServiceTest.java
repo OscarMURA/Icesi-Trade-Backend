@@ -1,6 +1,7 @@
 package com.trade.icesi_trade;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
@@ -17,7 +18,6 @@ import com.trade.icesi_trade.repository.FavoriteProductRepository;
 import com.trade.icesi_trade.repository.ProductRepository;
 import com.trade.icesi_trade.repository.UserRepository;
 import com.trade.icesi_trade.Service.Impl.FavoriteProductServiceImpl;
-import com.trade.icesi_trade.Service.Interface.FavoriteProductService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -195,4 +195,44 @@ public class FavoriteProductServiceTest {
         }
         verify(favoriteProductRepository, times(1)).findAll();
     }
+
+    @Test
+        public void testAddFavoriteProduct_NullIds() {
+        Exception ex1 = assertThrows(IllegalArgumentException.class, () ->
+                favoriteProductService.addFavoriteProduct(null, 100L));
+        assertEquals("El ID del usuario y del producto no pueden ser nulos.", ex1.getMessage());
+
+        Exception ex2 = assertThrows(IllegalArgumentException.class, () ->
+                favoriteProductService.addFavoriteProduct(1L, null));
+        assertEquals("El ID del usuario y del producto no pueden ser nulos.", ex2.getMessage());
+        }
+
+        @Test
+        public void testRemoveFavoriteProduct_NullIds() {
+        Exception ex1 = assertThrows(IllegalArgumentException.class, () ->
+                favoriteProductService.removeFavoriteProduct(null, 100L));
+        assertEquals("El ID del usuario y del producto no pueden ser nulos.", ex1.getMessage());
+
+        Exception ex2 = assertThrows(IllegalArgumentException.class, () ->
+                favoriteProductService.removeFavoriteProduct(1L, null));
+        assertEquals("El ID del usuario y del producto no pueden ser nulos.", ex2.getMessage());
+        }
+
+        @Test
+        public void testGetFavoriteProduct_NullIds() {
+        Exception ex1 = assertThrows(IllegalArgumentException.class, () ->
+                favoriteProductService.getFavoriteProduct(null, 100L));
+        assertEquals("El ID del usuario y del producto no pueden ser nulos.", ex1.getMessage());
+
+        Exception ex2 = assertThrows(IllegalArgumentException.class, () ->
+                favoriteProductService.getFavoriteProduct(1L, null));
+        assertEquals("El ID del usuario y del producto no pueden ser nulos.", ex2.getMessage());
+        }
+
+        @Test
+        public void testGetFavoriteProductsByUser_NullId() {
+        Exception ex = assertThrows(IllegalArgumentException.class, () ->
+                favoriteProductService.getFavoriteProductsByUser(null));
+        assertEquals("El ID del usuario no puede ser nulo.", ex.getMessage());
+        }
 }

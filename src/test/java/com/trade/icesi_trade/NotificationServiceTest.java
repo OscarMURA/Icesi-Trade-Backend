@@ -1,8 +1,10 @@
 package com.trade.icesi_trade;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -196,4 +198,92 @@ public class NotificationServiceTest {
         assertFalse(pending.get(0).getRead());
         verify(notificationRepository, times(1)).findAll();
     }
+
+    /**
+     * Tests the behavior of markNotificationAsRead when a null ID is provided.
+     * Expects IllegalArgumentException.
+     */
+    @Test
+    public void testMarkNotificationAsRead_NullId() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            notificationService.markNotificationAsRead(null);
+        });
+
+        assertEquals("El ID de la notificación no puede ser nulo.", exception.getMessage());
+    }
+
+    /**
+     * Tests getNotificationsByUser when the user has no notifications.
+     */
+    @Test
+    public void testGetNotificationsByUser_EmptyList() {
+        when(notificationRepository.findAll()).thenReturn(List.of());
+
+        List<Notification> result = notificationService.getNotificationsByUser(99L);
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+        verify(notificationRepository).findAll();
+    }
+
+    /**
+     * Tests getPendingNotificationsByUser when all notifications are already read.
+     */
+    @Test
+    public void testGetPendingNotificationsByUser_NonePending() {
+        Notification read1 = Notification.builder()
+                .id(3L)
+                .read(true)
+                .message("Leída 1")
+                .user(User.builder().id(20L).build())
+                .build();
+
+        Notification read2 = Notification.builder()
+                .id(4L)
+                .read(true)
+                .message("Leída 2")
+                .user(User.builder().id(20L).build())
+                .build();
+
+        when(notificationRepository.findAll()).thenReturn(List.of(read1, read2));
+
+        List<Notification> result = notificationService.getPendingNotificationsByUser(20L);
+
+        assertNotNull(result);
+        assertEquals(0, result.size());
+        verify(notificationRepository).findAll();
+    }
+
+    @Test
+    public void testCreateNotification_SetsCreatedAtIfNull() {
+        Notification not = Notification.builder()
+            .id(5L)
+            .message("Sin fecha")
+            .user(User.builder().id(3L).build())
+            .build(); // createdAt es null por defecto
+
+        when(notificationRepository.save(any(Notification.class)))
+            .thenAnswer(invocation -> invocation.getArgument(0));
+
+        Notification result = notificationService.createNotification(not);
+        assertNotNull(result.getCreatedAt(), "createdAt debería haberse inicializado automáticamente");
+    }
+
+    @Test
+    public void testCreateNotification_SetsReadFalseIfNull() {
+        Notification not = Notification.builder()
+            .id(6L)
+            .message("Sin estado de lectura")
+            .createdAt(LocalDateTime.now())
+            .user(User.builder().id(3L).build())
+            .build(); // read es null
+
+        when(notificationRepository.save(any(Notification.class)))
+            .thenAnswer(invocation -> invocation.getArgument(0));
+
+        Notification result = notificationService.createNotification(not);
+        assertFalse(result.getRead(), "El estado 'read' debe ser false por defecto");
+    }
+
+
 }

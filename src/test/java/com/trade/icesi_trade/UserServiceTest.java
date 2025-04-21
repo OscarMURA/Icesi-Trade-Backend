@@ -26,10 +26,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.trade.icesi_trade.Service.Impl.RoleServiceImpl;
 import com.trade.icesi_trade.Service.Impl.UserServiceImpl;
+import com.trade.icesi_trade.dtos.RegisterDto;
 import com.trade.icesi_trade.model.Role;
 import com.trade.icesi_trade.model.User;
 import com.trade.icesi_trade.model.UserRole;
@@ -342,4 +345,93 @@ public class UserServiceTest {
 
         assertEquals("El usuario no existe.", thrown.getMessage());
     }
+
+    @Test
+    void testRegister_Success() {
+        RegisterDto dto = new RegisterDto(
+            "jane.doe@example.com",
+            "securePass",
+            "securePass",  // confirmPassword
+            "Jane Doe",
+            "1112223333"
+        );
+
+        User newUser = new User();
+        newUser.setEmail(dto.getEmail());
+        newUser.setPassword("hashedPass");
+        newUser.setName(dto.getName());
+        newUser.setPhone(dto.getPhone());
+
+        Role defaultRole = new Role();
+        defaultRole.setId(1L);
+        defaultRole.setName("ROLE_USER");
+
+        when(userRepository.findByEmail(dto.getEmail())).thenReturn(Optional.empty());
+        when(passwordEncoder.encode(dto.getPassword())).thenReturn("hashedPass");
+        when(userRepository.save(any(User.class))).thenAnswer(i -> {
+            User u = i.getArgument(0);
+            u.setId(1L); // simulamos persistencia con ID
+            return u;
+        });
+        when(roleService.findRoleByName("ROLE_USER")).thenReturn(defaultRole);
+
+        User result = userService.register(dto);
+
+        assertNotNull(result);
+        assertEquals(dto.getEmail(), result.getEmail());
+        assertEquals("hashedPass", result.getPassword());
+        verify(userRoleRepository, times(1)).save(any(UserRole.class));
+    }
+
+    @Test
+    void testRegister_ThrowsException_WhenEmailAlreadyExists() {
+        RegisterDto dto = new RegisterDto(
+            "jane.doe@example.com",
+            "securePass",
+            "securePass",
+            "Jane Doe",
+            "1112223333"
+        );
+
+        when(userRepository.findByEmail(dto.getEmail())).thenReturn(Optional.of(new User()));
+
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            userService.register(dto);
+        });
+
+        assertEquals("Ya existe un usuario con ese correo", thrown.getMessage());
+        verify(userRepository, never()).save(any(User.class));
+    }
+
+    @Test
+    void testLoadUserByUsername_Success() {
+        Role role = Role.builder().id(1L).name("ROLE_USER").build();
+        UserRole userRole = UserRole.builder().role(role).build();
+        User user = User.builder()
+                .email("jane.doe@example.com")
+                .password("hashedPass")
+                .userRoles(Collections.singletonList(userRole))
+                .build();
+
+        when(userRepository.findByEmail("jane.doe@example.com")).thenReturn(Optional.of(user));
+
+        UserDetails userDetails = userService.loadUserByUsername("jane.doe@example.com");
+
+        assertNotNull(userDetails);
+        assertEquals("jane.doe@example.com", userDetails.getUsername());
+        assertEquals("hashedPass", userDetails.getPassword());
+        assertEquals(1, userDetails.getAuthorities().size());
+    }
+
+    @Test
+    void testLoadUserByUsername_ThrowsException_WhenUserNotFound() {
+        when(userRepository.findByEmail("notfound@example.com")).thenReturn(Optional.empty());
+
+        UsernameNotFoundException exception = assertThrows(UsernameNotFoundException.class, () -> {
+            userService.loadUserByUsername("notfound@example.com");
+        });
+
+        assertEquals("notfound@example.com", exception.getMessage());
+    }
+
 }

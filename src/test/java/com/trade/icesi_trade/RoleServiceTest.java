@@ -30,6 +30,7 @@ import com.trade.icesi_trade.Service.Impl.RoleServiceImpl;
 import com.trade.icesi_trade.model.Permission;
 import com.trade.icesi_trade.model.Role;
 import com.trade.icesi_trade.model.RolePermission;
+import com.trade.icesi_trade.model.UserRole;
 import com.trade.icesi_trade.repository.RolePermissionRepository;
 import com.trade.icesi_trade.repository.RoleRepository;
 import com.trade.icesi_trade.repository.UserRoleRepository;
@@ -241,5 +242,71 @@ public class RoleServiceTest {
         Optional<Role> foundRole = roleService.findById(1L);
 
         assertFalse(foundRole.isPresent());
+    }
+
+    @Test
+    void testDeleteRole_ThrowsException_WhenDefaultRoleNotFound() {
+        when(roleRepository.findById(role.getId())).thenReturn(Optional.of(role));
+        when(roleRepository.findByName("ROLE_USER")).thenReturn(null); // <- Default role no existe
+
+        IllegalStateException thrown = assertThrows(IllegalStateException.class, () -> {
+            roleService.deleteRole(role.getId());
+        });
+
+        assertEquals("No se encontró el rol por defecto (ROLE_USER).", thrown.getMessage());
+    }
+
+    @Test
+    void testDeleteRole_ReassignsDefaultRoleToUsersWithoutRoles() {
+        Role defaultRole = new Role(2L, "ROLE_USER", "Default user role");
+
+        UserRole userRole = new UserRole();
+        userRole.setRole(role);
+        userRole.setUser(new com.trade.icesi_trade.model.User());
+        userRole.getUser().setId(10L); // Simulamos un usuario
+
+        when(roleRepository.findById(role.getId())).thenReturn(Optional.of(role));
+        when(roleRepository.findByName("ROLE_USER")).thenReturn(defaultRole);
+        when(userRoleRepository.findByRole(role)).thenReturn(Collections.singletonList(userRole));
+        when(userRoleRepository.findByUser_Id(10L)).thenReturn(Collections.emptyList()); // No tiene otros roles
+        when(rolePermissionRepository.findByRole_Id(role.getId())).thenReturn(Collections.emptyList());
+
+        roleService.deleteRole(role.getId());
+
+        verify(userRoleRepository, times(1)).delete(userRole);
+        verify(userRoleRepository, times(1)).save(any(UserRole.class)); // Se reasigna ROLE_USER
+        verify(roleRepository, times(1)).deleteById(role.getId());
+    }
+
+    @Test
+    void testFindRoleByName_ThrowsException_WhenNameIsNull() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            roleService.findRoleByName(null);
+        });
+
+        assertEquals("El nombre del rol no puede ser nulo.", exception.getMessage());
+    }
+
+    @Test
+    void testDeleteRole_DeletesPermissions_WhenExist() {
+        Role defaultRole = new Role(2L, "ROLE_USER", "Default role");
+
+        UserRole userRole = new UserRole();
+        userRole.setRole(role);
+        userRole.setUser(new com.trade.icesi_trade.model.User());
+        userRole.getUser().setId(100L);
+
+        RolePermission rp1 = new RolePermission();
+        rp1.setId(1L);
+
+        when(roleRepository.findById(role.getId())).thenReturn(Optional.of(role));
+        when(roleRepository.findByName("ROLE_USER")).thenReturn(defaultRole);
+        when(userRoleRepository.findByRole(role)).thenReturn(Collections.singletonList(userRole));
+        when(userRoleRepository.findByUser_Id(100L)).thenReturn(Collections.emptyList());
+        when(rolePermissionRepository.findByRole_Id(role.getId())).thenReturn(Collections.singletonList(rp1));
+
+        roleService.deleteRole(role.getId());
+
+        verify(rolePermissionRepository).deleteAll(Collections.singletonList(rp1));
     }
 }
