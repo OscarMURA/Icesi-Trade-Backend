@@ -1,6 +1,7 @@
 package com.trade.icesi_trade;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
@@ -24,7 +25,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+@SpringBootTest
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class ProductServiceTest {
 
@@ -281,5 +286,48 @@ public class ProductServiceTest {
         assertNotNull(resultPage);
         assertEquals(2, resultPage.getTotalElements());
         verify(productRepository, times(1)).findAll(pageable);
+    }
+
+    @Test
+    public void testCreateProduct_EmptyTitle() {
+        product.setTitle("");
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+            productService.createProduct(product)
+        );
+        assertEquals("El producto debe tener un título.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateProduct_NullId() {
+        Product updatedData = Product.builder().title("Nuevo título").build();
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+            productService.updateProduct(null, updatedData)
+        );
+        assertEquals("El ID del producto y los datos a actualizar no pueden ser nulos.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateProduct_NullProduct() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+            productService.updateProduct(1L, null)
+        );
+        assertEquals("El ID del producto y los datos a actualizar no pueden ser nulos.", exception.getMessage());
+    }
+
+    @Test
+    public void testDeleteProduct_NullId() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+            productService.deleteProduct(null)
+        );
+        assertEquals("El ID del producto no puede ser nulo.", exception.getMessage());
+    }
+
+    @Test
+    public void testGetProductById_NullId() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+            productService.getProductById(null)
+        );
+        assertEquals("El ID del producto no puede ser nulo.", exception.getMessage());
     }
 }

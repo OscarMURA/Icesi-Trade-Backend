@@ -1,19 +1,18 @@
 package com.trade.icesi_trade;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import com.trade.icesi_trade.model.Message;
 import com.trade.icesi_trade.model.User;
 import com.trade.icesi_trade.repository.MessageRepository;
 import com.trade.icesi_trade.Service.Impl.MessageServiceImpl;
-import com.trade.icesi_trade.Service.Interface.MessageService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+@SpringBootTest
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class MessageServiceTest {
 
@@ -171,5 +174,59 @@ public class MessageServiceTest {
         List<Message> messages = messageService.getMessagesBySender(sender.getId());
         assertNotNull(messages);
         assertTrue(messages.isEmpty());
+    }
+
+    @Test
+    public void testSendMessage_EmptyContent() {
+        Message message = Message.builder()
+                .sender(sender)
+                .receiver(receiver)
+                .content("   ")
+                .build();
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                messageService.sendMessage(message));
+        assertEquals("El mensaje debe tener contenido", exception.getMessage());
+    }
+
+    @Test
+    public void testGetMessagesBySender_NullId() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                messageService.getMessagesBySender(null));
+        assertEquals("El ID del remitente no puede ser nulo", exception.getMessage());
+    }
+
+    @Test
+    public void testGetMessagesByReceiver_NullId() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                messageService.getMessagesByReceiver(null));
+        assertEquals("El ID del receptor no puede ser nulo", exception.getMessage());
+    }
+
+    @Test
+    public void testGetConversation_NullSenderId() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                messageService.getConversation(null, receiver.getId()));
+        assertEquals("Los IDs de remitente y receptor no pueden ser nulos", exception.getMessage());
+    }
+
+    @Test
+    public void testGetConversation_NullReceiverId() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                messageService.getConversation(sender.getId(), null));
+        assertEquals("Los IDs de remitente y receptor no pueden ser nulos", exception.getMessage());
+    }
+
+    @Test
+    public void testSendMessage_NullContent() {
+        Message message = Message.builder()
+                .sender(sender)
+                .receiver(receiver)
+                .content(null)
+                .build();
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+                messageService.sendMessage(message));
+        assertEquals("El mensaje debe tener contenido", exception.getMessage());
     }
 }

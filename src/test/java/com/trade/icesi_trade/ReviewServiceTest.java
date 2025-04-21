@@ -22,7 +22,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+@SpringBootTest
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class ReviewServiceTest {
 
@@ -199,5 +203,69 @@ public class ReviewServiceTest {
         Double average = reviewService.calculateAverageRatingByProduct(product.getId());
         assertNotNull(average);
         assertEquals(0.0, average);
+    }
+
+    @Test
+    public void testUpdateReview_NullId() {
+        Review updated = Review.builder().rating(4).comment("Test").build();
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+            reviewService.updateReview(null, updated)
+        );
+
+        assertEquals("El ID de la reseña y los datos de actualización no pueden ser nulos.", ex.getMessage());
+    }
+
+    @Test
+    public void testUpdateReview_NullReview() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+            reviewService.updateReview(10L, null)
+        );
+
+        assertEquals("El ID de la reseña y los datos de actualización no pueden ser nulos.", ex.getMessage());
+    }
+
+    @Test
+    public void testDeleteReview_NullId() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+            reviewService.deleteReview(null)
+        );
+    
+        assertEquals("El ID de la reseña no puede ser nulo.", ex.getMessage());
+    }
+    
+    @Test
+    public void testGetReviewsByProduct_NullId() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+            reviewService.getReviewsByProduct(null)
+        );
+    
+        assertEquals("El ID del producto no puede ser nulo.", ex.getMessage());
+    }
+
+    @Test
+    public void testGetReviewsByReviewee_NullId() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+            reviewService.getReviewsByReviewee(null)
+        );
+
+        assertEquals("El ID del reviewee no puede ser nulo.", ex.getMessage());
+    }
+
+    @Test
+    public void testCalculateAverageRatingByProduct_NullId() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+            reviewService.calculateAverageRatingByProduct(null)
+        );
+
+        assertEquals("El ID del producto no puede ser nulo.", ex.getMessage());
+    }
+
+    @Test
+    public void testGetReviewsByReviewer_NullId() {
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class, () ->
+            reviewService.getReviewsByReviewer(null)
+        );
+        assertEquals("El ID del revisor no puede ser nulo.", ex.getMessage());
     }
 }

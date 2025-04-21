@@ -1,6 +1,7 @@
 package com.trade.icesi_trade;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.util.NoSuchElementException;
@@ -40,10 +41,10 @@ public class PermissionServiceTest {
     void testFindPermissionByName_Success() {
         when(permissionRepository.findByName("CREATE_USER")).thenReturn(permission);
 
-        Permission foundPermission = permissionService.findPermissionByName("CREATE_USER");
+        Permission result = permissionService.findPermissionByName("CREATE_USER");
 
-        assertNotNull(foundPermission);
-        assertEquals("CREATE_USER", foundPermission.getName());
+        assertNotNull(result);
+        assertEquals("CREATE_USER", result.getName());
     }
 
     @Test
@@ -58,22 +59,34 @@ public class PermissionServiceTest {
     }
 
     @Test
+    void testFindPermissionByName_ThrowsException_WhenNameIsNull() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            permissionService.findPermissionByName(null);
+        });
+
+        assertEquals("El nombre del permiso no puede ser nulo o vacío.", thrown.getMessage());
+    }
+
+    @Test
     void testSavePermission_Success() {
-        when(permissionRepository.save(permission)).thenReturn(permission);
+        Permission toSave = new Permission(null, "CREATE_USER", "Allows creating users");
+        Permission saved = new Permission(1L, "CREATE_USER", "Allows creating users");
 
-        Permission savedPermission = permissionService.savePermission(permission);
+        when(permissionRepository.save(any(Permission.class))).thenReturn(saved);
 
-        assertNotNull(savedPermission);
-        assertEquals("CREATE_USER", savedPermission.getName());
-        verify(permissionRepository, times(1)).save(permission);
+        Permission result = permissionService.savePermission(toSave);
+
+        assertNotNull(result);
+        assertEquals("CREATE_USER", result.getName());
+        verify(permissionRepository).save(any(Permission.class));
     }
 
     @Test
     void testSavePermission_ThrowsException_WhenNameIsNull() {
-        Permission invalidPermission = new Permission(2L, null, "No name");
+        Permission invalid = new Permission(null, null, "desc");
 
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            permissionService.savePermission(invalidPermission);
+            permissionService.savePermission(invalid);
         });
 
         assertEquals("El permiso debe tener un nombre.", thrown.getMessage());
@@ -81,10 +94,10 @@ public class PermissionServiceTest {
 
     @Test
     void testSavePermission_ThrowsException_WhenNameIsEmpty() {
-        Permission invalidPermission = new Permission(2L, "", "No name");
+        Permission invalid = new Permission(null, "", "desc");
 
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            permissionService.savePermission(invalidPermission);
+            permissionService.savePermission(invalid);
         });
 
         assertEquals("El permiso debe tener un nombre.", thrown.getMessage());
@@ -92,19 +105,19 @@ public class PermissionServiceTest {
 
     @Test
     void testDeletePermission_Success() {
-        when(permissionRepository.existsById(permission.getId())).thenReturn(true);
+        when(permissionRepository.existsById(1L)).thenReturn(true);
 
-        permissionService.deletePermission(permission.getId());
+        permissionService.deletePermission(1L);
 
-        verify(permissionRepository, times(1)).deleteById(permission.getId());
+        verify(permissionRepository).deleteById(1L);
     }
 
     @Test
-    void testDeletePermission_ThrowsException_WhenPermissionNotFound() {
-        when(permissionRepository.existsById(permission.getId())).thenReturn(false);
+    void testDeletePermission_ThrowsException_WhenNotExists() {
+        when(permissionRepository.existsById(1L)).thenReturn(false);
 
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            permissionService.deletePermission(permission.getId());
+            permissionService.deletePermission(1L);
         });
 
         assertEquals("El permiso no existe.", thrown.getMessage());
@@ -114,23 +127,42 @@ public class PermissionServiceTest {
     void testUpdatePermission_Success() {
         Permission updated = new Permission(1L, "UPDATE_USER", "Allows updating users");
 
-        when(permissionRepository.findById(permission.getId())).thenReturn(Optional.of(permission));
-        when(permissionRepository.save(any(Permission.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        when(permissionRepository.findById(1L)).thenReturn(Optional.of(permission));
+        when(permissionRepository.save(any())).thenAnswer(inv -> inv.getArgument(0));
 
-        Permission result = permissionService.updatePermission(updated, permission.getId());
+        Permission result = permissionService.updatePermission(updated, 1L);
 
         assertNotNull(result);
         assertEquals("UPDATE_USER", result.getName());
         assertEquals("Allows updating users", result.getDescription());
-        verify(permissionRepository, times(1)).save(any(Permission.class));
+    }
+
+    @Test
+    void testUpdatePermission_ThrowsException_WhenPermissionIsNull() {
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            permissionService.updatePermission(null, 1L);
+        });
+
+        assertEquals("El permiso no puede ser nulo.", thrown.getMessage());
+    }
+
+    @Test
+    void testUpdatePermission_ThrowsException_WhenIdIsNull() {
+        Permission valid = new Permission(1L, "READ_USER", "Desc");
+
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
+            permissionService.updatePermission(valid, null);
+        });
+
+        assertEquals("El ID del permiso no puede ser nulo.", thrown.getMessage());
     }
 
     @Test
     void testUpdatePermission_ThrowsException_WhenNameIsNull() {
-        Permission invalid = new Permission(1L, null, "Desc");
+        Permission invalid = new Permission(1L, null, "desc");
 
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            permissionService.updatePermission(invalid, permission.getId());
+            permissionService.updatePermission(invalid, 1L);
         });
 
         assertEquals("El permiso debe tener un nombre.", thrown.getMessage());
@@ -138,23 +170,23 @@ public class PermissionServiceTest {
 
     @Test
     void testUpdatePermission_ThrowsException_WhenNameIsEmpty() {
-        Permission invalid = new Permission(1L, "", "Desc");
+        Permission invalid = new Permission(1L, "", "desc");
 
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
-            permissionService.updatePermission(invalid, permission.getId());
+            permissionService.updatePermission(invalid, 1L);
         });
 
         assertEquals("El permiso debe tener un nombre.", thrown.getMessage());
     }
 
     @Test
-    void testUpdatePermission_ThrowsException_WhenPermissionNotFound() {
-        Permission updated = new Permission(1L, "ANY", "desc");
+    void testUpdatePermission_ThrowsException_WhenNotFound() {
+        Permission updated = new Permission(1L, "NEW", "desc");
 
-        when(permissionRepository.findById(permission.getId())).thenReturn(Optional.empty());
+        when(permissionRepository.findById(1L)).thenReturn(Optional.empty());
 
         NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () -> {
-            permissionService.updatePermission(updated, permission.getId());
+            permissionService.updatePermission(updated, 1L);
         });
 
         assertEquals("Permiso no encontrado.", thrown.getMessage());

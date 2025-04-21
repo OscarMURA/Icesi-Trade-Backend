@@ -1,6 +1,7 @@
 package com.trade.icesi_trade;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 import java.util.Arrays;
@@ -11,7 +12,6 @@ import java.util.Optional;
 import com.trade.icesi_trade.model.Category;
 import com.trade.icesi_trade.repository.CategoryRepository;
 import com.trade.icesi_trade.Service.Impl.CategoryServiceImpl;
-import com.trade.icesi_trade.Service.Interface.CategoryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+@SpringBootTest
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceTest {
 
@@ -244,5 +248,67 @@ public class CategoryServiceTest {
         assertNotNull(allCategories, "The list of categories should not be null");
         assertEquals(2, allCategories.size(), "The size of the category list should be 2");
         verify(categoryRepository, times(1)).findAll();
+    }
+
+    /**
+     * Verifica que se lance una excepción cuando el nombre de la categoría es null.
+     */
+    @Test
+    public void testCreateCategory_ThrowsException_WhenNameIsNull() {
+        category.setName(null);
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            categoryService.createCategory(category);
+        });
+        assertEquals("La categoría debe tener un nombre.", exception.getMessage());
+    }
+
+    /**
+     * Verifica que se lance una excepción cuando el nombre de la categoría está vacío.
+     */
+    @Test
+    public void testCreateCategory_ThrowsException_WhenNameIsEmpty() {
+        category.setName("   ");
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            categoryService.createCategory(category);
+        });
+        assertEquals("La categoría debe tener un nombre.", exception.getMessage());
+    }
+
+    /**
+     * Verifica que se lance excepción si el ID o categoría es null al actualizar.
+     */
+    @Test
+    public void testUpdateCategory_ThrowsException_WhenIdOrCategoryIsNull() {
+        Category valid = Category.builder().name("Ropa").build();
+
+        IllegalArgumentException ex1 = assertThrows(IllegalArgumentException.class, () ->
+            categoryService.updateCategory(null, valid));
+        assertEquals("El ID y la categoría actualizada no pueden ser nulos.", ex1.getMessage());
+
+        IllegalArgumentException ex2 = assertThrows(IllegalArgumentException.class, () ->
+            categoryService.updateCategory(1L, null));
+        assertEquals("El ID y la categoría actualizada no pueden ser nulos.", ex2.getMessage());
+    }
+
+    /**
+     * Verifica que se lance excepción si el ID es null al eliminar.
+     */
+    @Test
+    public void testDeleteCategory_ThrowsException_WhenIdIsNull() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            categoryService.deleteCategory(null);
+        });
+        assertEquals("El ID de la categoría no puede ser nulo.", exception.getMessage());
+    }
+
+    /**
+     * Verifica que se lance excepción si el ID es null al consultar.
+     */
+    @Test
+    public void testGetCategoryById_ThrowsException_WhenIdIsNull() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            categoryService.getCategoryById(null);
+        });
+        assertEquals("El ID de la categoría no puede ser nulo.", exception.getMessage());
     }
 }

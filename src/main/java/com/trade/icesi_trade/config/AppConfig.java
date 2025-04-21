@@ -24,10 +24,10 @@ public class AppConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
-	public JwtAuthenticationFilter authenticationTokenFilterBean() {
-		return new JwtAuthenticationFilter();
-	}
+    // @Bean
+	// public JwtAuthenticationFilter authenticationTokenFilterBean() {
+	// 	return new JwtAuthenticationFilter();
+	// }
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -35,15 +35,28 @@ public class AppConfig {
     }
 
     @Bean
-	SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors(t -> t.disable())
-            .csrf(c -> c.disable())
-            .authorizeHttpRequests(requests -> requests
-                            .requestMatchers("/public/**").permitAll()
-                            .anyRequest().authenticated())
-            .sessionManagement(t -> t.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/login", "/register","/css/**", "/js/**").permitAll()
+                .anyRequest().authenticated()
+            )
+            .formLogin(form -> form
+                .loginPage("/login")
+                .defaultSuccessUrl("/default", true)
+                .permitAll()
+            )
+            .logout(logout -> logout
+                .logoutSuccessUrl("/login?logout")
+                .permitAll()
+            )
+            .sessionManagement(sess -> sess
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+            );
+
+        // http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
-	}
+    }
 }

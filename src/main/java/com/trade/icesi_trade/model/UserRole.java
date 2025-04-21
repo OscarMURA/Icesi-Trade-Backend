@@ -1,26 +1,27 @@
 package com.trade.icesi_trade.model;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "USER_ROLES")
+@Table(name = "USER_ROLES", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"user_id", "role_id"})
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class UserRole {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
 

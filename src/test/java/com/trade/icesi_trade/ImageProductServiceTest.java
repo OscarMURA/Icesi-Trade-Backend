@@ -13,7 +13,6 @@ import com.trade.icesi_trade.model.Product;
 import com.trade.icesi_trade.repository.ImageProductRepository;
 import com.trade.icesi_trade.repository.ProductRepository;
 import com.trade.icesi_trade.Service.Impl.ImageProductServiceImpl;
-import com.trade.icesi_trade.Service.Interface.ImageProductService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +23,11 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+@SpringBootTest
+@ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class ImageProductServiceTest {
 
@@ -224,5 +227,81 @@ public class ImageProductServiceTest {
         // Assert
         assertFalse(result);
         verify(imageProductRepository, never()).deleteById(imageId);
+    }
+
+    /**
+     * Test for uploadImage when the MultipartFile is null.
+     */
+    @Test
+    public void testUploadImage_NullFile() {
+        Long productId = 1L;
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+            imageProductService.uploadImage(null, productId)
+        );
+        assertEquals("El archivo no puede ser nulo o estar vacío", exception.getMessage());
+    }
+
+    /**
+     * Test for uploadImage when the MultipartFile is empty.
+     */
+    @Test
+    public void testUploadImage_EmptyFile() {
+        MultipartFile file = new MockMultipartFile("file", "", "image/jpeg", new byte[0]);
+        Long productId = 1L;
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+            imageProductService.uploadImage(file, productId)
+        );
+        assertEquals("El archivo no puede ser nulo o estar vacío", exception.getMessage());
+    }
+
+    /**
+     * Test for uploadImage when the file has no extension.
+     */
+    @Test
+    public void testUploadImage_NoExtension() {
+        MultipartFile file = new MockMultipartFile("file", "imagen", "image/jpeg", "content".getBytes());
+        Long productId = 1L;
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+            imageProductService.uploadImage(file, productId)
+        );
+        assertEquals("El archivo debe tener una extensión válida", exception.getMessage());
+    }
+
+    /**
+     * Test for uploadImage when the productId is null.
+     */
+    @Test
+    public void testUploadImage_NullProductId() {
+        MultipartFile file = new MockMultipartFile("file", "image.jpg", "image/jpeg", "data".getBytes());
+
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+            imageProductService.uploadImage(file, null)
+        );
+        assertEquals("El ID del producto no puede ser nulo", exception.getMessage());
+    }
+
+    /**
+     * Test for getImageByProductId with null ID.
+     */
+    @Test
+    public void testGetImageByProductId_Null() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+            imageProductService.getImageByProductId(null)
+        );
+        assertEquals("El ID del producto no puede ser nulo", exception.getMessage());
+    }
+
+    /**
+     * Test for deleteImage when imageId is null.
+     */
+    @Test
+    public void testDeleteImage_NullId() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () ->
+            imageProductService.deleteImage(null)
+        );
+        assertEquals("El ID de la imagen no puede ser nulo", exception.getMessage());
     }
 }
