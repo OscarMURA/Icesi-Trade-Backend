@@ -14,7 +14,8 @@
             Registro exitoso. ¡Ya puedes iniciar sesión!
         </div>
 
-        <form th:action="@{/login}" method="post" class="bandits-form">
+        <!-- 🔧 Cambiado /login → /public/login -->
+        <form th:action="@{/public/login}" method="post" class="bandits-form">
             <label for="username">Correo</label>
             <input type="text" id="username" name="username" required />
 
@@ -25,7 +26,6 @@
             </div>
 
             <button type="submit" class="bandits-submit">Ingresar</button>
-
         </form>
 
         <div th:if="${param.error}" class="bandits-alert error">
@@ -37,7 +37,7 @@
         </div>
 
         <p class="bandits-footer">
-            ¿No tienes cuenta? <a th:href="@{/register}">Regístrate aquí</a>
+            ¿No tienes cuenta? <a th:href="@{/public/register}">Regístrate aquí</a>
         </p>
     </div>
 

@@ -2,6 +2,7 @@ package com.trade.icesi_trade.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -24,10 +25,10 @@ public class AppConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // @Bean
-	// public JwtAuthenticationFilter authenticationTokenFilterBean() {
-	// 	return new JwtAuthenticationFilter();
-	// }
+    @Bean
+	public JwtAuthenticationFilter authenticationTokenFilterBean() {
+		return new JwtAuthenticationFilter();
+	}
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
@@ -39,24 +40,44 @@ public class AppConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login", "/register","/css/**", "/js/**").permitAll()
+                .requestMatchers(
+                    "/public/login", 
+                    "/public/register", 
+                    "/css/**", 
+                    "/js/**"
+                ).permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                .loginPage("/login")
-                .defaultSuccessUrl("/default", true)
+                .loginPage("/public/login") // ⬅️ coincide con tu controlador MVC
+                .defaultSuccessUrl("/public/default", true)
                 .permitAll()
             )
             .logout(logout -> logout
-                .logoutSuccessUrl("/login?logout")
+                .logoutSuccessUrl("/public/login?logout")
                 .permitAll()
             )
             .sessionManagement(sess -> sess
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
             );
+    
+        return http.build();
+    }    
 
-        // http.addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+    @Bean
+    @Order(1)
+    public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
+        http
+            .securityMatcher("/api/**")
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                .anyRequest().authenticated()
+            )
+            .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
 }

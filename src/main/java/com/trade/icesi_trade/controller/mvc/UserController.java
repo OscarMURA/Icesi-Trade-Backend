@@ -1,4 +1,4 @@
-package com.trade.icesi_trade.controller;
+package com.trade.icesi_trade.controller.mvc;
 
 import java.util.List;
 
