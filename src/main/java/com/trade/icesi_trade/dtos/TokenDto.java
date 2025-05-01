@@ -8,7 +8,10 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class TokenDto {
+    private String name;
     private String email;
-    private String token;
     private List<String> roles;
+    private String token;
+    private long creationDate;
+    private long expirationDate;
 }

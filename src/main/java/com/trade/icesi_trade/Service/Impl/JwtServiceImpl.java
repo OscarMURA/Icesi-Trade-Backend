@@ -15,7 +15,7 @@ import java.util.function.Function;
 public class JwtServiceImpl {
 
     private static final String SECRET_KEY = "p5rT9$wKm3#sV1q8ZbX4Lk2!uYhEjR6M"; 
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 24; // 1 día
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60;
 
     private final UserDetailsService userDetailsService;
 
@@ -63,5 +63,13 @@ public class JwtServiceImpl {
     private boolean isTokenExpired(String token) {
         Date expiration = extractClaim(token, Claims::getExpiration);
         return expiration.before(new Date());
+    }    
+
+    public long getTokenCreationTime(String token) {
+        return extractClaim(token, Claims::getIssuedAt).getTime();
+    }
+
+    public long getTokenExpirationTime(String token) {
+        return extractClaim(token, Claims::getExpiration).getTime();
     }
 }

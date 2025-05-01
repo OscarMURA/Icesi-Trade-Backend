@@ -37,7 +37,11 @@ public class AuthApiController {
             .map(a -> a.getAuthority())
             .toList();
 
-        TokenDto tokenDto = new TokenDto(loginDto.getEmail(), token, roles);
+        String username = authentication.getName();
+        long creationTime = jwtService.getTokenCreationTime(token);
+        long expirationTime = jwtService.getTokenExpirationTime(token);
+
+        TokenDto tokenDto = new TokenDto(username, loginDto.getEmail(), roles, token, creationTime, expirationTime);
         return ResponseEntity.ok(tokenDto);
     }
 }
