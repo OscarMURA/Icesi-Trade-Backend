@@ -44,12 +44,15 @@ public class AppConfig {
                     "/public/login", 
                     "/public/register", 
                     "/css/**", 
-                    "/js/**"
+                    "/js/**",
+                    "/swagger-ui/**",
+                    "/v3/api-docs/**",
+                    "/swagger-ui.html"
                 ).permitAll()
                 .anyRequest().authenticated()
             )
             .formLogin(form -> form
-                .loginPage("/public/login") // ⬅️ coincide con tu controlador MVC
+                .loginPage("/public/login") 
                 .defaultSuccessUrl("/public/default", true)
                 .permitAll()
             )
