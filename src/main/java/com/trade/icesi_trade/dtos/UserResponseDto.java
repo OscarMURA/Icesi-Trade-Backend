@@ -16,9 +16,6 @@ public class UserResponseDto {
     @Schema(description = "User email", example = "user@example.com")
     private String email;
 
-    @Schema(description = "User password (hashed)", example = "$2a$10$...")
-    private String password;
-
     @Schema(description = "User full name", example = "John Doe")
     private String name;
 

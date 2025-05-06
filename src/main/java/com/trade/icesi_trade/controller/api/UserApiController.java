@@ -28,10 +28,7 @@ public class UserApiController {
     @Autowired
     private UserService userService;
 
-    @Operation(
-        summary = "Get all users",
-        description = "Retrieve a list of all registered users. You can optionally filter users by role."
-    )
+    @Operation(summary = "Get all users", description = "Retrieve a list of all registered users.")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "Users retrieved successfully"),
         @ApiResponse(responseCode = "400", description = "Invalid role filter")
@@ -50,25 +47,21 @@ public class UserApiController {
                 .toList();
         }
 
-        List<UserResponseDto> result = users.stream()
-            .map(this::mapToDto)
+        List<UserResponseDto> userDtos = users.stream()
+            .map(user -> userService.getUserById(user.getId()))
             .toList();
 
-        return ResponseEntity.ok(result);
-    }
+        return ResponseEntity.ok(userDtos);
+    }   
 
     @Operation(summary = "Get user by ID", description = "Retrieve a user using their unique ID")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "User found"),
         @ApiResponse(responseCode = "404", description = "User not found")
     })
-    @GetMapping("/id/{id}")
-    public ResponseEntity<UserResponseDto> getUserById(
-        @Parameter(description = "User ID", required = true)
-        @PathVariable Long id
-    ) {
-        User user = userService.findUserById(id);
-        return ResponseEntity.ok(mapToDto(user));
+    @GetMapping("/{id}")
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable Long id) {
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @Operation(summary = "Register new user", description = "Create a new user with the provided information")
@@ -78,14 +71,13 @@ public class UserApiController {
     })
     @PostMapping
     public ResponseEntity<UserResponseDto> createUser(
-        @Parameter(description = "User registration data", required = true)
         @Valid @RequestBody RegisterDto dto
     ) {
-        User createdUser = userService.register(dto);
-        return new ResponseEntity<>(mapToDto(createdUser), HttpStatus.CREATED);
+        User created = userService.register(dto);
+        return new ResponseEntity<>(userService.getUserById(created.getId()), HttpStatus.CREATED);
     }
 
-    @Operation(summary = "Update existing user", description = "Update the information of an existing user")
+    @Operation(summary = "Update existing user", description = "Update only the email, name, password and phone fields of a user")
     @ApiResponses({
         @ApiResponse(responseCode = "200", description = "User updated successfully"),
         @ApiResponse(responseCode = "404", description = "User not found")
@@ -94,11 +86,11 @@ public class UserApiController {
     public ResponseEntity<UserResponseDto> updateUser(
         @Parameter(description = "ID of the user to update", required = true)
         @PathVariable Long id,
-        @Parameter(description = "Updated user data", required = true)
-        @RequestBody User user
+        @Parameter(description = "User fields to update", required = true)
+        @RequestBody UserResponseDto userDto
     ) {
-        User updated = userService.updateUser(user, id);
-        return ResponseEntity.ok(mapToDto(updated));
+        UserResponseDto updated = userService.updateUser(userDto, id);
+        return ResponseEntity.ok(updated);
     }
 
     @Operation(summary = "Delete user by ID", description = "Remove a user from the system using their ID")
@@ -107,21 +99,8 @@ public class UserApiController {
         @ApiResponse(responseCode = "404", description = "User not found")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(
-        @Parameter(description = "ID of the user to delete", required = true)
-        @PathVariable Long id
-    ) {
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.ok("User deleted successfully");
-    }
-
-    private UserResponseDto mapToDto(User user) {
-        return UserResponseDto.builder()
-            .id(user.getId())
-            .email(user.getEmail())
-            .password(user.getPassword())
-            .name(user.getName())
-            .phone(user.getPhone())
-            .build();
     }
 }
