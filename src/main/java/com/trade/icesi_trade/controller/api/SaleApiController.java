@@ -52,8 +52,8 @@ public class SaleApiController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id) {
-        saleService.delete(id);|
-        return ResponseEntity.ok("Venta eliminado de favoritos.");
+        saleService.delete(id);
+        return ResponseEntity.ok("Venta eliminada.");
     }
 
     @GetMapping("/buyer/{buyerId}")
