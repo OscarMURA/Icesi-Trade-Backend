@@ -34,8 +34,7 @@ public class Product {
     @Column(nullable = false)
     private String status;
 
-    @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
     private Double price;
