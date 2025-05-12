@@ -72,6 +72,8 @@ Postman\IcesiTrade Environment.postman_environment.json
 Direccion despliegue: http://10.147.19.21:8080/g1/losbandalos
 Direccion local: http://localhost:8080/g1/losbandalos
 
+(Sin importar donde los despliegues, esta conectado a la misma base de datos postgres) 
+
 ## Para correr las pruebas debes hacer lo siguiente:
 
 - Presionar a los tres punticos:
