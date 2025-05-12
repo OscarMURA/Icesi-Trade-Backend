@@ -50,3 +50,48 @@ https://www.youtube.com/watch?v=tsSkeuL3_y8
 
 Pruebas Postman: 
 https://drive.google.com/file/d/15BhOAzbI6BS4Aa5M5-sNW92twxssAVIq/view
+
+# Para correr postman debes importar en collection el archivo: 
+Postman\IcesiTrade -  API.postman_collection.json
+
+![image](https://github.com/user-attachments/assets/474a1686-9f80-49d5-bc23-e8dd2026da0d)
+
+# E importart las variables de env: 
+Postman\IcesiTrade Environment.postman_environment.json
+
+![image](https://github.com/user-attachments/assets/de0b7ae9-c187-4beb-a1a3-0df09c68e633)
+
+ ! Debes tener activos las variables activadas con el chulito
+
+
+# En variables de env debes agregar la ruta del proyecto. Para initial y current value. Y guardar
+
+![image](https://github.com/user-attachments/assets/21616c55-030a-4955-9039-846371932a04)
+
+Direccion despliegue: http://10.147.19.21:8080/g1/losbandalos
+Direccion local: http://localhost:8080/g1/losbandalos
+
+# Para correr las pruebas debes hacer lo siguiente:
+
+- Presionar a los tres punticos:
+
+![image](https://github.com/user-attachments/assets/7398f873-1af9-4e72-8581-b3e014456a75)
+
+- Luego presionar run:
+
+![image](https://github.com/user-attachments/assets/4df95709-af4e-4661-aff1-f6f42257b1d4)
+
+- Para al final presionar Run Icesi Trade Api
+
+![image](https://github.com/user-attachments/assets/4fa5296c-1f74-48a6-bb33-3c0dd0d002b9)
+
+
+
+
+
+
+ 
+
+
+
+
