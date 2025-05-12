@@ -43,8 +43,10 @@ Visitar:
 http://10.147.19.21:8080/g1/losbandalos/
 
 Usuario admin:
-
 - juan.perez@example.com Password: 1234
 
 Manual de uso:
 https://www.youtube.com/watch?v=tsSkeuL3_y8
+
+Pruebas Postman: 
+https://drive.google.com/file/d/15BhOAzbI6BS4Aa5M5-sNW92twxssAVIq/view
