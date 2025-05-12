@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -13,7 +12,6 @@ import java.util.Optional;
 import com.trade.icesi_trade.model.Product;
 import com.trade.icesi_trade.repository.ProductRepository;
 import com.trade.icesi_trade.Service.Impl.ProductServiceImpl;
-import com.trade.icesi_trade.Service.Interface.ProductService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
