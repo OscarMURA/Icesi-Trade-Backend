@@ -1,6 +1,7 @@
 package com.trade.icesi_trade.model;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
@@ -28,6 +29,7 @@ public class UserRole {
     private User user;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "role_id")
     private Role role;
 }
