@@ -48,15 +48,15 @@ Usuario admin:
 Manual de uso:
 https://www.youtube.com/watch?v=tsSkeuL3_y8
 
-Pruebas Postman: 
+# VIDEO PRUEBAS POSTMAN: 
 https://drive.google.com/file/d/15BhOAzbI6BS4Aa5M5-sNW92twxssAVIq/view
 
-# Para correr postman debes importar en collection el archivo: 
+## Para correr postman debes importar en collection el archivo: 
 Postman\IcesiTrade -  API.postman_collection.json
 
 ![image](https://github.com/user-attachments/assets/474a1686-9f80-49d5-bc23-e8dd2026da0d)
 
-# E importart las variables de env: 
+## E importart las variables de env: 
 Postman\IcesiTrade Environment.postman_environment.json
 
 ![image](https://github.com/user-attachments/assets/de0b7ae9-c187-4beb-a1a3-0df09c68e633)
@@ -64,14 +64,15 @@ Postman\IcesiTrade Environment.postman_environment.json
  ! Debes tener activos las variables activadas con el chulito
 
 
-# En variables de env debes agregar la ruta del proyecto. Para initial y current value. Y guardar
+## En variables de env debes agregar la ruta del proyecto. Para initial y current value. Y guardar
 
 ![image](https://github.com/user-attachments/assets/21616c55-030a-4955-9039-846371932a04)
+
 
 Direccion despliegue: http://10.147.19.21:8080/g1/losbandalos
 Direccion local: http://localhost:8080/g1/losbandalos
 
-# Para correr las pruebas debes hacer lo siguiente:
+## Para correr las pruebas debes hacer lo siguiente:
 
 - Presionar a los tres punticos:
 
@@ -86,7 +87,7 @@ Direccion local: http://localhost:8080/g1/losbandalos
 ![image](https://github.com/user-attachments/assets/4fa5296c-1f74-48a6-bb33-3c0dd0d002b9)
 
 
-
+# SIEMPRE CONTROL + S. PARA GUARDAR CAMBIOS EN POSTMAN. NOS LO AGRADECERA
 
 
 
