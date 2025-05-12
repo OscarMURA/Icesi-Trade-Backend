@@ -63,4 +63,21 @@ public class MessageServiceImpl implements MessageService {
         messagesSent.sort((m1, m2) -> m1.getCreatedAt().compareTo(m2.getCreatedAt()));
         return messagesSent;
     }
+
+    @Override
+    public void deleteMessage(Long id) {
+        messageRepository.deleteById(id);    
+    }
+
+    @Override
+    public List<Message> getAllMessages() {
+        return messageRepository.findAll();
+    }
+
+    @Override
+    public List<Message> getMessageById(Long id) {
+        return messageRepository.findById(id)
+                .map(List::of)
+                .orElseGet(List::of);
+    }
 }
