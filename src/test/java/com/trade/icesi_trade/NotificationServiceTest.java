@@ -15,7 +15,6 @@ import com.trade.icesi_trade.model.Notification;
 import com.trade.icesi_trade.model.User;
 import com.trade.icesi_trade.repository.NotificationRepository;
 import com.trade.icesi_trade.Service.Impl.NotificationServiceImpl;
-import com.trade.icesi_trade.Service.Interface.NotificationService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

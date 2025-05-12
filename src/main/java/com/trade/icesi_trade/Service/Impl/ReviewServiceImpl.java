@@ -85,4 +85,9 @@ public class ReviewServiceImpl implements ReviewService {
         Double averageRating = reviewRepository.findAverageRatingByProductId(productId);
         return averageRating != null ? averageRating : 0.0;
     }
+
+    @Override
+    public List<Review> getAllReviews() {
+        return reviewRepository.findAll();
+    }
 }
