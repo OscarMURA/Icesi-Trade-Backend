@@ -56,6 +56,9 @@ Postman\IcesiTrade -  API.postman_collection.json
 
 ![image](https://github.com/user-attachments/assets/474a1686-9f80-49d5-bc23-e8dd2026da0d)
 
+![image](https://github.com/user-attachments/assets/5dc8f027-b673-46a0-b530-78602142dcc3)
+
+
 ## E importart las variables de env: 
 Postman\IcesiTrade Environment.postman_environment.json
 
