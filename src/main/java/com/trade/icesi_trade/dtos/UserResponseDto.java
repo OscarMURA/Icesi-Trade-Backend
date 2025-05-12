@@ -1,3 +1,7 @@
+/**
+ * This class represents a public user response DTO with fields for user ID, email, hashed password,
+ * full name, and phone number.
+ */
 package com.trade.icesi_trade.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;

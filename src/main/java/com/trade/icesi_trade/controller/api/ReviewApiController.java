@@ -15,9 +15,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/reviews")
 @RequiredArgsConstructor
+@Tag(name = "Reviews", description = "CRUD operations for reviews")
 public class ReviewApiController {
 
     private final ReviewService reviewService;
@@ -25,6 +29,7 @@ public class ReviewApiController {
     private final ProductService productService;
     private final ReviewMapper reviewMapper;
 
+    @Operation(summary = "Get all reviews")
     @GetMapping
     public ResponseEntity<List<ReviewDto>> getAllReviews() {
         List<ReviewDto> dtos = reviewService.getAllReviews().stream()
@@ -33,6 +38,7 @@ public class ReviewApiController {
         return ResponseEntity.ok(dtos);
     }
 
+    @Operation(summary = "Get review by ID")
     @GetMapping("/{id}")
     public ResponseEntity<ReviewDto> getReviewById(@PathVariable Long id) {
         List<Review> all = reviewService.getAllReviews();
@@ -44,6 +50,7 @@ public class ReviewApiController {
         return ResponseEntity.ok(reviewMapper.entityToDto(review));
     }
 
+    @Operation(summary = "Get reviews by product ID")
     @PostMapping
     public ResponseEntity<ReviewDto> createReview(@RequestBody ReviewDto dto) {
         Review review = reviewMapper.dtoToEntity(dto);
@@ -57,6 +64,7 @@ public class ReviewApiController {
         return ResponseEntity.status(201).body(reviewMapper.entityToDto(created));
     }
 
+    @Operation(summary = "Update review by ID")
     @PutMapping("/{id}")
     public ResponseEntity<ReviewDto> updateReview(@PathVariable Long id, @RequestBody ReviewDto dto) {
         Review review = reviewMapper.dtoToEntity(dto);
@@ -70,6 +78,7 @@ public class ReviewApiController {
         return ResponseEntity.ok(reviewMapper.entityToDto(updated));
     }
 
+    @Operation(summary = "Delete review by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReview(@PathVariable Long id) {
         reviewService.deleteReview(id);

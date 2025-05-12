@@ -1,3 +1,6 @@
+// This code snippet is defining a Java interface named `ReviewMapper` that uses MapStruct for mapping
+// between `Review` entities and `ReviewDto` data transfer objects (DTOs). MapStruct is a code
+// generator that simplifies the implementation of mappings between Java bean types.
 package com.trade.icesi_trade.mappers;
 
 import com.trade.icesi_trade.dtos.ReviewDto;

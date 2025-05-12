@@ -11,11 +11,15 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
 @CrossOrigin
+@Tag(name = "Authentication", description = "Authentication operations")
 public class AuthApiController {
 
     @Autowired
@@ -24,6 +28,7 @@ public class AuthApiController {
     @Autowired
     private JwtServiceImpl jwtService;
 
+    @Operation(summary = "User login")
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody LogInDto loginDto) {
         Authentication authentication = authenticationManager.authenticate(

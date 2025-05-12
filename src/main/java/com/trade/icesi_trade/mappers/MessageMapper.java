@@ -1,3 +1,6 @@
+// This code snippet is defining a Java interface named `MessageMapper` that uses MapStruct for mapping
+// between `Message` entities and `MessageDto` data transfer objects (DTOs). MapStruct is a Java
+// annotation processor that simplifies the implementation of mappings between Java bean types.
 package com.trade.icesi_trade.mappers;
 
 import com.trade.icesi_trade.dtos.MessageDto;

@@ -1,3 +1,7 @@
+// This code snippet is defining a MapStruct mapper interface in Java. MapStruct is a code generator
+// that simplifies the implementation of mappings between Java bean types. In this specific case, the
+// `NotificationMapper` interface is responsible for mapping between `Notification` entities and
+// `NotificationDto` data transfer objects.
 package com.trade.icesi_trade.mappers;
 
 import org.mapstruct.Mapper;

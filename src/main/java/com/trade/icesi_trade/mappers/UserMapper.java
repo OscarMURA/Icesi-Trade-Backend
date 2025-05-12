@@ -1,3 +1,6 @@
+// This code snippet is defining a Java interface named `UserMapper` that uses MapStruct for mapping
+// between entity objects and DTOs (Data Transfer Objects) in a Spring application. Here's a breakdown
+// of what the code is doing:
 package com.trade.icesi_trade.mappers;
 
 import com.trade.icesi_trade.dtos.UserResponseDto;

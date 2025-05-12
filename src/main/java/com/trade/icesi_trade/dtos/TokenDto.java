@@ -1,3 +1,7 @@
+/**
+ * The TokenDto class represents a data transfer object containing information about a user's token,
+ * including name, email, roles, token value, creation date, and expiration date.
+ */
 package com.trade.icesi_trade.dtos;
 
 import java.util.List;

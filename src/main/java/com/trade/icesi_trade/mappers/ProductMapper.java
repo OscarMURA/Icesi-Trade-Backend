@@ -1,3 +1,6 @@
+// This Java code snippet defines a mapper interface named `ProductMapper` using MapStruct library.
+// MapStruct is a code generator that simplifies the implementation of mappings between Java bean
+// types.
 package com.trade.icesi_trade.mappers;
 
 import com.trade.icesi_trade.dtos.ProductDto;

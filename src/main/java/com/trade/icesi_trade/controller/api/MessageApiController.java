@@ -16,9 +16,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/messages")
 @RequiredArgsConstructor
+@Tag(name = "Messages", description = "CRUD operations for messages")
 public class MessageApiController {
     @Autowired
     private final MessageService messageService;
@@ -29,6 +33,7 @@ public class MessageApiController {
     @Autowired
     private final MessageMapper messageMapper;
 
+    @Operation(summary = "Get all messages")
     @GetMapping
     public ResponseEntity<List<MessageDto>> getAllMessages() {
         List<MessageDto> messages = messageService.getAllMessages().stream()
@@ -37,6 +42,7 @@ public class MessageApiController {
         return ResponseEntity.ok(messages);
     }
 
+    @Operation(summary = "Get message by ID")
     @GetMapping("/{id}")
     public ResponseEntity<MessageDto> getMessageById(@PathVariable Long id) {
         return messageService.getMessageById(id).stream()
@@ -46,6 +52,7 @@ public class MessageApiController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @Operation(summary = "Get messages by sender ID")
     @PostMapping
     public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto dto) {
         Message message = messageMapper.dtoToEntity(dto);
@@ -57,6 +64,7 @@ public class MessageApiController {
         return ResponseEntity.status(201).body(messageMapper.entityToDto(saved));
     }
 
+    @Operation(summary = "Update message by ID")
     @PutMapping("/{id}")
     public ResponseEntity<MessageDto> updateMessage(@PathVariable Long id, @RequestBody MessageDto dto) {
         Message message = messageMapper.dtoToEntity(dto);
@@ -69,6 +77,7 @@ public class MessageApiController {
         return ResponseEntity.ok(messageMapper.entityToDto(updated));
     }
 
+    @Operation(summary = "Delete message by ID")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMessage(@PathVariable Long id) {
         messageService.deleteMessage(id);
