@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/messages")
 @RequiredArgsConstructor
 public class MessageApiController {
-
     @Autowired
     private final MessageService messageService;
 
@@ -40,20 +39,16 @@ public class MessageApiController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MessageDto> getMessageById(@PathVariable Long id) {
-        List<MessageDto> messages = messageService.getMessageById(id).stream()
+        return messageService.getMessageById(id).stream()
+                .findFirst()
                 .map(messageMapper::entityToDto)
-                .filter(dto -> dto.getId().equals(id))
-                .toList();
-        if (messages.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(messages.get(0));
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
     public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto dto) {
         Message message = messageMapper.dtoToEntity(dto);
-
         message.setSender(userService.findUserById(dto.getSenderId()));
         message.setReceiver(userService.findUserById(dto.getReceiverId()));
         message.setCreatedAt(LocalDateTime.now());
@@ -65,11 +60,10 @@ public class MessageApiController {
     @PutMapping("/{id}")
     public ResponseEntity<MessageDto> updateMessage(@PathVariable Long id, @RequestBody MessageDto dto) {
         Message message = messageMapper.dtoToEntity(dto);
-
+        message.setId(id);
         message.setSender(userService.findUserById(dto.getSenderId()));
         message.setReceiver(userService.findUserById(dto.getReceiverId()));
         message.setCreatedAt(LocalDateTime.now());
-        message.setId(id);
 
         Message updated = messageService.sendMessage(message);
         return ResponseEntity.ok(messageMapper.entityToDto(updated));

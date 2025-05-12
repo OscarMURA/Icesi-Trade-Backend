@@ -6,7 +6,6 @@ import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface MessageMapper {
-
     @Mapping(source = "sender.id", target = "senderId")
     @Mapping(source = "receiver.id", target = "receiverId")
     @Mapping(source = "createdAt", target = "createdAt", dateFormat = "yyyy-MM-dd'T'HH:mm:ss")
