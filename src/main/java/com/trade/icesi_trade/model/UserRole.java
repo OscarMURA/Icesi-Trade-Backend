@@ -2,6 +2,7 @@ package com.trade.icesi_trade.model;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -10,22 +11,25 @@ import lombok.*;
 @Table(name = "USER_ROLES", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"user_id", "role_id"})
 })
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString(exclude = "user")
 public class UserRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    
     @ManyToOne
-    @JsonBackReference
+    @JsonIgnore
     @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "role_id")
     private Role role;
 }

@@ -6,6 +6,7 @@ import com.trade.icesi_trade.repository.NotificationRepository;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -95,5 +96,20 @@ public class NotificationServiceImpl implements NotificationService {
         return allNotifications.stream()
                 .filter(n -> n.getRead() == null || !n.getRead())
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Notification> getAllNotifications() {
+        return notificationRepository.findAll();
+    }
+
+    @Override
+    public Optional<Notification> getNotificationById(Long id) {
+        return notificationRepository.findById(id);
+    }
+
+    @Override
+    public void deleteNotification(Long id) {
+        notificationRepository.deleteById(id);
     }
 }

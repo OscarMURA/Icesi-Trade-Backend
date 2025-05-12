@@ -4,6 +4,12 @@ import java.util.List;
 import com.trade.icesi_trade.model.Message;
 
 public interface MessageService {
+    List<Message> getAllMessages();
+
+    List<Message> getMessageById(Long id);
+
+    void deleteMessage(Long id);
+
     // Envía un mensaje y lo guarda en la base de datos
     Message sendMessage(Message message);
 
