@@ -19,7 +19,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 
 @RestController
-@RequestMapping("/g1/losbandalos/api/auth")
+@RequestMapping("/api/auth")
 @CrossOrigin(origins = { "http://localhost:5173", "http://localhost:3000" })
 @Tag(name = "Authentication", description = "Authentication operations")
 public class AuthApiController {
