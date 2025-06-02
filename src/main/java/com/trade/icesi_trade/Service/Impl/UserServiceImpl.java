@@ -158,6 +158,5 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         userRoleRepository.save(ur);
 
         return saved;
-    }
-    
+    } 
 }

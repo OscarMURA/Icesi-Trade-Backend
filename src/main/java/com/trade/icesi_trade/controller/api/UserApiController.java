@@ -1,26 +1,36 @@
 package com.trade.icesi_trade.controller.api;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.trade.icesi_trade.Service.Impl.JwtServiceImpl;
 import com.trade.icesi_trade.Service.Interface.UserService;
 import com.trade.icesi_trade.dtos.RegisterDto;
 import com.trade.icesi_trade.dtos.UserResponseDto;
-import com.trade.icesi_trade.model.User;
 import com.trade.icesi_trade.mappers.UserMapper;
+import com.trade.icesi_trade.model.User;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import jakarta.validation.Valid;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/users")
@@ -34,11 +44,15 @@ public class UserApiController {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private JwtServiceImpl jwtService;
+
     @Operation(summary = "Get all users", description = "Retrieve a list of all registered users. You can optionally filter users by role.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Users retrieved successfully"),
             @ApiResponse(responseCode = "400", description = "Invalid role filter")
     })
+
     @GetMapping
     public ResponseEntity<List<UserResponseDto>> getAllUsers(
             @Parameter(description = "Optional role name to filter users") @RequestParam(required = false) String roleName) {
@@ -58,12 +72,26 @@ public class UserApiController {
         return ResponseEntity.ok(result);
     }
 
+    @GetMapping("/profile")
+    @Operation(summary = "Get logged-in user's profile")
+        public ResponseEntity<UserResponseDto> getProfile(@RequestHeader("Authorization") String authHeader) {
+        String token = authHeader.replace("Bearer ", "");
+        String username = jwtService.extractUsername(token);
+
+        User user = userService.findUserByEmail(username); // usa el método del paso 1.1
+        UserResponseDto userDto = userMapper.entityToDto(user); // Usa MapStruct
+
+        return ResponseEntity.ok(userDto);
+}
+
+
     @Operation(summary = "Get user by ID", description = "Retrieve a user using their unique ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "User found"),
             @ApiResponse(responseCode = "404", description = "User not found")
     })
-    @GetMapping("/id/{id}")
+
+    @GetMapping("/{id}")
     public ResponseEntity<UserResponseDto> getUserById(
             @Parameter(description = "User ID", required = true) @PathVariable Long id) {
         User user = userService.findUserById(id);
