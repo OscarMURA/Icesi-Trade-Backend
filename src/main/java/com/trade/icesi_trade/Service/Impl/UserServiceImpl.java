@@ -85,8 +85,12 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         existingUser.setEmail(user.getEmail());
         existingUser.setName(user.getName());
         existingUser.setPhone(user.getPhone());
-        existingUser.setPassword(user.getPassword());
         existingUser.setUpdatedAt(LocalDateTime.now());
+
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+        }       
+
         return userRepository.save(existingUser);
     }
 

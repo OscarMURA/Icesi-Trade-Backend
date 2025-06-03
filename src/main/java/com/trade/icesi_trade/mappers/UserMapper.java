@@ -13,12 +13,12 @@ public interface UserMapper {
         @Mapping(target = "id", source = "id"),
         @Mapping(target = "email", source = "email"),
         @Mapping(target = "name", source = "name"),
-        @Mapping(target = "phone", source = "phone")
+        @Mapping(target = "phone", source = "phone"),
+        @Mapping(target = "password", source = "password")
     })
     UserResponseDto entityToDto(User user);
 
     @InheritInverseConfiguration
-    @Mapping(target = "password", ignore = true)    
     @Mapping(target = "userRoles", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
