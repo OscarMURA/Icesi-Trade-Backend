@@ -11,6 +11,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,16 +40,27 @@ public class ChatMessageController {
         return ResponseEntity.ok(messageDtos);
     }
 
-    @MessageMapping("/chat/sendMessage")
-    public void sendMessage(ChatMessageDto messageDto) {
+    @MessageMapping("/chat.private")
+    public void handlePrivateMessage(ChatMessageDto messageDto) {
         ChatMessage message = messageMapper.dtoToEntity(messageDto);
         message.setSender(userService.findUserById(messageDto.getSenderId()));
         message.setReceiver(userService.findUserById(messageDto.getReceiverId()));
+        message.setCreatedAt(LocalDateTime.now());
 
         ChatMessage savedMessage = chatMessageService.saveMessage(message);
         ChatMessageDto savedMessageDto = messageMapper.entityToDto(savedMessage);
 
-        messagingTemplate.convertAndSend("/topic/" + message.getReceiver().getId(), savedMessageDto);
+        // Enviar mensaje al destinatario
+        messagingTemplate.convertAndSendToUser(
+                message.getReceiver().getName(),
+                "/queue/messages",
+                savedMessageDto);
+
+        // Enviar mensaje al remitente (para confirmación)
+        messagingTemplate.convertAndSendToUser(
+                message.getSender().getName(),
+                "/queue/messages",
+                savedMessageDto);
     }
 
     @PostMapping

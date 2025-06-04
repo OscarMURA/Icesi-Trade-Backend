@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,9 +19,6 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/chat")
 public class ChatController {
-
-    @Autowired
-    private SimpMessagingTemplate messagingTemplate;
 
     @Autowired
     private UserService userService;
@@ -41,20 +37,5 @@ public class ChatController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
-    }
-
-    @MessageMapping("/chat.sendMessage")
-    @SendTo("/topic/public")
-    public String sendMessage(@Payload String message) {
-        return message;
-    }
-
-    @MessageMapping("/chat.private")
-    public void sendPrivateMessage(@Payload String message) {
-        // Aquí procesarías el mensaje y lo enviarías al destinatario específico
-        messagingTemplate.convertAndSendToUser(
-                "destinatario", // Esto debería venir en el mensaje
-                "/queue/private",
-                message);
     }
 }
