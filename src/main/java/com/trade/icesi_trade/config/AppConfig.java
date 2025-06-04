@@ -48,6 +48,7 @@ public class AppConfig {
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/g1/losbandalos/api/auth/**").permitAll()
+                        .requestMatchers("/g1/losbandalos/ws/**").permitAll() // Permite acceso al WebSocket
                         .anyRequest().authenticated())
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 

@@ -24,6 +24,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequiredArgsConstructor
 @Tag(name = "Messages", description = "CRUD operations for messages")
 public class MessageApiController {
+
     @Autowired
     private final MessageService messageService;
 
@@ -52,7 +53,7 @@ public class MessageApiController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Get messages by sender ID")
+    @Operation(summary = "Create new message")
     @PostMapping
     public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto dto) {
         Message message = messageMapper.dtoToEntity(dto);

@@ -40,6 +40,8 @@ public class CorsConfig {
 
         // Aplicar la configuración a todas las rutas
         source.registerCorsConfiguration("/**", config);
+        source.registerCorsConfiguration("/ws/**", config);  // Asegúrate de permitir WebSocket también
+
         return new CorsFilter(source);
     }
 }

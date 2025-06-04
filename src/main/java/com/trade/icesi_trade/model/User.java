@@ -55,4 +55,10 @@ public class User {
     @JsonIgnore
     private List<UserRole> userRoles;
 
+    @OneToMany(mappedBy = "sender")
+    private List<ChatMessage> sentMessages; // Mensajes enviados por el usuario
+
+    @OneToMany(mappedBy = "receiver")
+    private List<ChatMessage> receivedMessages; // Mensajes recibidos por el usuario
+
 }
