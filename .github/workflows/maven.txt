@@ -1,0 +1,40 @@
+# name: Java CI with Maven
+# Este flujo de trabajo está configurado para ejecutar pruebas de Java con Maven en GitHub Actions.
+
+# on:
+#   push:
+#     branches:
+#       - '**'  # Ejecutar el flujo de trabajo cuando haya un 'push' en cualquier rama
+#   pull_request:
+#     branches:
+#       - '**'  # Ejecutar el flujo de trabajo cuando haya un 'pull request' desde cualquier rama
+#   workflow_dispatch:  # Permite ejecutar manualmente el flujo de trabajo desde la interfaz de GitHub
+
+# jobs:
+#   build:  # Definición del job de construcción (compilación y pruebas)
+#     runs-on: ubuntu-latest  # El job se ejecuta en un runner con Ubuntu más reciente
+
+#     steps:  # Los pasos que ejecutará el job
+#       - name: Checkout Repository
+#         uses: actions/checkout@v4  # Clona el repositorio en el runner para usarlo en los pasos siguientes
+
+#       - name: Set up JDK 17
+#         uses: actions/setup-java@v4  # Configura el entorno de Java
+#         with:
+#           distribution: temurin  # Usa la distribución Temurin de OpenJDK
+#           java-version: '17'  # Especifica la versión de Java a utilizar
+#           cache: maven  # Habilita la caché de dependencias de Maven para acelerar las futuras ejecuciones
+
+#       - name: Run Maven tests
+#         run: mvn -B test  # Ejecuta las pruebas de Maven en modo no interactivo
+
+#       - name: Display Test Reports in Terminal
+#         run: |  # Muestra los reportes de las pruebas en la terminal
+#           echo "=== Test Reports ==="
+#           if [ -d target/surefire-reports ]; then  # Si existen reportes de pruebas en 'target/surefire-reports'
+#             for file in target/surefire-reports/*.txt; do  # Itera sobre cada archivo de reporte de pruebas
+#               echo "------ $file ------"  # Muestra el nombre del archivo de reporte
+#               cat "$file"  # Imprime el contenido del reporte de pruebas
+#             done
+#           else
+#             echo "No se encontraron reportes de pruebas."  # Si no existen reportes, muestra un mensaje

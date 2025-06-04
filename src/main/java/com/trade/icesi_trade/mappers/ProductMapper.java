@@ -19,5 +19,7 @@ public interface ProductMapper {
     @InheritInverseConfiguration
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "seller", ignore = true)  // Ignorar para asignar manualmente
     Product dtoToEntity(ProductDto dto);
+
 }

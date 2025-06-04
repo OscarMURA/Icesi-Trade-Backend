@@ -1,6 +1,7 @@
 package com.trade.icesi_trade.controller.api;
 
 import com.trade.icesi_trade.Service.Interface.ProductService;
+import com.trade.icesi_trade.Service.Interface.UserService;
 import com.trade.icesi_trade.dtos.ProductDto;
 import com.trade.icesi_trade.mappers.ProductMapper;
 import com.trade.icesi_trade.model.Product;
@@ -10,7 +11,15 @@ import io.swagger.v3.oas.annotations.Operation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import com.trade.icesi_trade.model.User;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -26,6 +35,10 @@ public class ProductApiController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private UserService userService;
+
 
     @Autowired
     private ProductMapper productMapper;
@@ -50,9 +63,28 @@ public class ProductApiController {
     @PostMapping
     @Operation(summary = "Create a new product")
     public ResponseEntity<ProductDto> create(@Valid @RequestBody ProductDto dto) {
-        Product created = productService.createProduct(productMapper.dtoToEntity(dto));
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+
+        String userEmail;
+
+        if (principal instanceof UserDetails) {
+            userEmail = ((UserDetails) principal).getUsername();
+        } else {
+            // fallback o error
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        User user = userService.findUserByEmail(userEmail);
+
+        Product product = productMapper.dtoToEntity(dto);
+        product.setSeller(user);
+
+        Product created = productService.createProduct(product);
+
         return new ResponseEntity<>(productMapper.entityToDto(created), HttpStatus.CREATED);
     }
+
 
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing product")
