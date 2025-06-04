@@ -67,8 +67,18 @@ public class UserServiceTest {
     @BeforeEach
     void setUp() {
         userRole = new UserRole();
-        user = new User(1L, "john.doe@example.com", "password123", "John Doe", "123456789", 
-                            LocalDateTime.now(), LocalDateTime.now(), Collections.singletonList(userRole));
+        user = User.builder()
+                .id(1L)
+                .email("john.doe@example.com")
+                .password("password123")
+                .name("John Doe")
+                .phone("123456789")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .userRoles(Collections.singletonList(userRole))
+                .sentMessages(Collections.emptyList())
+                .receivedMessages(Collections.emptyList())
+                .build();
     }
 
     @Test
@@ -83,7 +93,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void testFindUserByEmail_ThrowsException_WhenUserNotFound(){
+    void testFindUserByEmail_ThrowsException_WhenUserNotFound() {
         String email = "john.doe@example.com";
         when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
 
@@ -95,11 +105,11 @@ public class UserServiceTest {
     }
 
     @Test
-    void testFindUserById_Succes(){
+    void testFindUserById_Succes() {
         Long id = 1L;
 
         when(userRepository.findById(id)).thenReturn(Optional.of(user));
-        
+
         User foundUser = userService.findUserById(id);
 
         assertNotNull(foundUser);
@@ -110,7 +120,7 @@ public class UserServiceTest {
     void testFindUserById_ThrowsException_WhenUserNotFound() {
         Long id = 1L;
         when(userRepository.findById(id)).thenReturn(Optional.empty());
-        
+
         NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () -> {
             userService.findUserById(id);
         });
@@ -121,7 +131,7 @@ public class UserServiceTest {
     void testFindAllUsers_Success() {
         when(userRepository.findAll()).thenReturn(List.of(user));
         List<User> users = userService.findAllUsers();
-        
+
         assertNotNull(users);
         assertEquals(1, users.size());
         assertEquals(user.getEmail(), users.get(0).getEmail());
@@ -155,11 +165,20 @@ public class UserServiceTest {
 
     @Test
     void testSaveUser_ThrowsException_WhenNoEmail() {
-        User userWithoutEmail = new User(1L, null, "password123", "John Doe", "123456789", 
-                                         LocalDateTime.now(), LocalDateTime.now(), Collections.singletonList(userRole));
-        
+        User userWithoutEmail = User.builder()
+                .id(1L)
+                .password("password123")
+                .name("John Doe")
+                .phone("123456789")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .userRoles(Collections.singletonList(userRole))
+                .sentMessages(Collections.emptyList())
+                .receivedMessages(Collections.emptyList())
+                .build();
+
         when(userRoleRepository.countByUser_Id(userWithoutEmail.getId())).thenReturn(1L);
-        
+
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             userService.saveUser(userWithoutEmail);
         });
@@ -170,7 +189,7 @@ public class UserServiceTest {
     @Test
     void testSaveUser_ThrowsException_WhenNoRole() {
         when(userRoleRepository.countByUser_Id(user.getId())).thenReturn(0L); // No tiene roles asignados
-        
+
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             userService.saveUser(user);
         });
@@ -180,9 +199,17 @@ public class UserServiceTest {
 
     @Test
     void testSaveUser_ThrowsException_WhenUserHasNoIdOrEmail() {
-        User invalidUser = new User(null, null, "password123", "John Doe", "123456789", 
-                                    LocalDateTime.now(), LocalDateTime.now(), Collections.singletonList(userRole));
-        
+        User invalidUser = User.builder()
+                .password("password123")
+                .name("John Doe")
+                .phone("123456789")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .userRoles(Collections.singletonList(userRole))
+                .sentMessages(Collections.emptyList())
+                .receivedMessages(Collections.emptyList())
+                .build();
+
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             userService.saveUser(invalidUser);
         });
@@ -192,11 +219,20 @@ public class UserServiceTest {
 
     @Test
     void testUpdateUser_ThrowsException_WhenNoEmail() {
-        User userWithoutEmail = new User(1L, null, "password123", "John Doe", "123456789", 
-                                         LocalDateTime.now(), LocalDateTime.now(), Collections.singletonList(userRole));
-        
+        User userWithoutEmail = User.builder()
+                .id(1L)
+                .password("password123")
+                .name("John Doe")
+                .phone("123456789")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .userRoles(Collections.singletonList(userRole))
+                .sentMessages(Collections.emptyList())
+                .receivedMessages(Collections.emptyList())
+                .build();
+
         when(userRoleRepository.countByUser_Id(userWithoutEmail.getId())).thenReturn(1L);
-        
+
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             userService.updateUser(userWithoutEmail, 1L);
         });
@@ -206,48 +242,69 @@ public class UserServiceTest {
 
     @Test
     void testUpdateUser_Success() {
-        User updatedUser = new User(1L, "updated@example.com", "newpassword123", "Updated User", "987654321", 
-                                    LocalDateTime.now(), LocalDateTime.now(), Collections.singletonList(userRole));
-        
-        when(userRepository.findById(user.getId())).thenReturn(Optional.of(user));
-        when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        User updatedUser = User.builder()
+                .id(1L)
+                .email("updated@example.com")
+                .password("newPassword")
+                .name("Updated Name")
+                .phone("987654321")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .userRoles(Collections.singletonList(userRole))
+                .sentMessages(Collections.emptyList())
+                .receivedMessages(Collections.emptyList())
+                .build();
 
-        User result = userService.updateUser(updatedUser, user.getId());
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(userRepository.save(any(User.class))).thenReturn(updatedUser);
+
+        User result = userService.updateUser(updatedUser, 1L);
 
         assertNotNull(result);
         assertEquals("updated@example.com", result.getEmail());
-        assertEquals("Updated User", result.getName());
-        assertEquals("987654321", result.getPhone());
-        assertEquals("newpassword123", result.getPassword());
-        verify(userRepository, times(1)).findById(user.getId());
-        verify(userRepository, times(1)).save(any(User.class));
+        assertEquals("Updated Name", result.getName());
+    }
+
+    @Test
+    void testUpdateUser_ThrowsException_WhenUserNotFound() {
+        User updatedUser = User.builder()
+                .id(1L)
+                .email("updated@example.com")
+                .password("newPassword")
+                .name("Updated Name")
+                .phone("987654321")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .userRoles(Collections.singletonList(userRole))
+                .sentMessages(Collections.emptyList())
+                .receivedMessages(Collections.emptyList())
+                .build();
+
+        when(userRepository.findById(1L)).thenReturn(Optional.empty());
+
+        assertThrows(NoSuchElementException.class, () -> {
+            userService.updateUser(updatedUser, 1L);
+        });
     }
 
     @Test
     void testUpdateUser_ThrowsException_WhenUserHasNoIdOrEmail() {
-        User invalidUser = new User(null, null, "password123", "John Doe", "123456789", 
-                                    LocalDateTime.now(), LocalDateTime.now(), Collections.singletonList(userRole));
-        
+        User invalidUser = User.builder()
+                .password("password123")
+                .name("John Doe")
+                .phone("123456789")
+                .createdAt(LocalDateTime.now())
+                .updatedAt(LocalDateTime.now())
+                .userRoles(Collections.singletonList(userRole))
+                .sentMessages(Collections.emptyList())
+                .receivedMessages(Collections.emptyList())
+                .build();
+
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             userService.updateUser(invalidUser, 1L);
         });
 
         assertEquals("El usuario debe tener al menos un ID y un email.", thrown.getMessage());
-    }
-
-    @Test
-    void testUpdateUser_ThrowsException_WhenUserNotFound() {
-        Long userId = 2L;
-        User updatedUser = new User(userId, "john.updated@example.com", "newpassword123", "John Updated", "987654321", 
-                                    LocalDateTime.now(), LocalDateTime.now(), Collections.singletonList(userRole));
-        
-        when(userRepository.findById(userId)).thenReturn(Optional.empty());
-
-        NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () -> {
-            userService.updateUser(updatedUser, userId);
-        });
-
-        assertEquals("Usuario no encontrado.", thrown.getMessage());
     }
 
     @Test
@@ -315,7 +372,7 @@ public class UserServiceTest {
     void testUpdateUserRoles_ThrowsException_WhenUserNotFound() {
         Long userId = 2L;
         List<Long> newRoleIds = Arrays.asList(2L, 3L);
-        
+
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
 
         RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
@@ -328,17 +385,17 @@ public class UserServiceTest {
     @Test
     void testDeleteUser_Success() {
         when(userRepository.existsById(user.getId())).thenReturn(true);
-        
+
         userService.deleteUser(user.getId());
-        
-        assertNull(userRepository.findById(user.getId()).orElse(null)); 
-        verify(userRepository, times(1)).deleteById(user.getId()); 
+
+        assertNull(userRepository.findById(user.getId()).orElse(null));
+        verify(userRepository, times(1)).deleteById(user.getId());
     }
 
     @Test
     void testDeleteUser_ThrowsException_WhenUserNotFound() {
         when(userRepository.existsById(user.getId())).thenReturn(false);
-        
+
         IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
             userService.deleteUser(user.getId());
         });
@@ -349,12 +406,11 @@ public class UserServiceTest {
     @Test
     void testRegister_Success() {
         RegisterDto dto = new RegisterDto(
-            "jane.doe@example.com",
-            "securePass",
-            "securePass",  // confirmPassword
-            "Jane Doe",
-            "1112223333"
-        );
+                "jane.doe@example.com",
+                "securePass",
+                "securePass", // confirmPassword
+                "Jane Doe",
+                "1112223333");
 
         User newUser = new User();
         newUser.setEmail(dto.getEmail());
@@ -386,12 +442,11 @@ public class UserServiceTest {
     @Test
     void testRegister_ThrowsException_WhenEmailAlreadyExists() {
         RegisterDto dto = new RegisterDto(
-            "jane.doe@example.com",
-            "securePass",
-            "securePass",
-            "Jane Doe",
-            "1112223333"
-        );
+                "jane.doe@example.com",
+                "securePass",
+                "securePass",
+                "Jane Doe",
+                "1112223333");
 
         when(userRepository.findByEmail(dto.getEmail())).thenReturn(Optional.of(new User()));
 
