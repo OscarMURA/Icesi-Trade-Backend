@@ -24,4 +24,6 @@ public interface ProductService {
     Page<Product> getAllProducts(Pageable pageable);
 
     List<Product> getProductsBySellerId(Long idSeller);
+
+    Product markProductAsSold(Long idProduct);
 }

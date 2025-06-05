@@ -93,6 +93,7 @@ public class ProductApiController {
         return new ResponseEntity<>(productMapper.entityToDto(created), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing product")
     public ResponseEntity<ProductDto> update(@PathVariable Long id, @Valid @RequestBody ProductDto dto) {
@@ -100,10 +101,19 @@ public class ProductApiController {
         return ResponseEntity.ok(productMapper.entityToDto(updated));
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete product by ID")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok("Product deleted successfully.");
+    }
+
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @PatchMapping("/{id}/sold")
+    @Operation(summary = "Mark product as sold")
+    public ResponseEntity<ProductDto> markAsSold(@PathVariable Long id) {
+        Product product = productService.markProductAsSold(id);
+        return ResponseEntity.ok(productMapper.entityToDto(product));
     }
 }

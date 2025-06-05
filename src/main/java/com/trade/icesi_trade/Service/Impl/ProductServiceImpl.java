@@ -130,4 +130,17 @@ public class ProductServiceImpl implements ProductService {
         }
         return productRepository.findBySeller_Id(idSeller);
     }
+
+    @Override
+    public Product markProductAsSold(Long idProduct) {
+        if (idProduct == null) {
+            throw new IllegalArgumentException("El ID del producto no puede ser nulo.");
+        }
+        
+        Product product = productRepository.findById(idProduct)
+                .orElseThrow(() -> new NoSuchElementException("Producto no encontrado con el ID: " + idProduct));
+        product.setIsSold(true);
+        product.setUpdatedAt(LocalDateTime.now());
+        return productRepository.save(product);
+    }
 }
