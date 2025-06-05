@@ -85,7 +85,7 @@ public class ProductApiController {
 
         if (status != null && !status.isEmpty()) {
             products = products.stream()
-                    .filter(p -> p.getStatus().equals(status))
+                    .filter(p -> p.getStatus().toLowerCase().equals(status.toLowerCase()))
                     .collect(Collectors.toList());
         }
 
