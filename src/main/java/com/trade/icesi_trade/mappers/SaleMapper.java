@@ -1,7 +1,3 @@
-// This code snippet is defining a Java interface named `SaleMapper` that uses MapStruct for mapping
-// between `Sale` entities and `SaleDto` data transfer objects (DTOs). Here's a breakdown of what each
-// part of the code is doing:
-// SaleMapper.java
 package com.trade.icesi_trade.mappers;
 
 import com.trade.icesi_trade.dtos.SaleDto;

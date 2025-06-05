@@ -1,4 +1,3 @@
-// SaleApiController.java
 package com.trade.icesi_trade.controller.api;
 
 import com.trade.icesi_trade.Service.Interface.SaleService;
@@ -47,6 +46,7 @@ public class SaleApiController {
     @Operation(summary = "Create a new sale")
     @PostMapping
     public ResponseEntity<SaleDto> create(@RequestBody SaleDto dto) {
+        System.out.println("Creating sale with DTO: " + dto.getBuyerId() + ", " + dto.getProductId());
         Sale saved = saleService.save(saleMapper.dtoToEntity(dto));
         return ResponseEntity.status(201).body(saleMapper.entityToDto(saved));
     }
