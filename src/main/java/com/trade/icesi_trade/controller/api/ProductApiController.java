@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.trade.icesi_trade.model.User;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +25,7 @@ import org.springframework.http.HttpStatus;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @RestController
 @RequestMapping("/api/products")
@@ -37,6 +39,8 @@ public class ProductApiController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private com.trade.icesi_trade.Service.aws.S3Service s3Service;
 
     @Autowired
     private ProductMapper productMapper;
@@ -107,6 +111,18 @@ public class ProductApiController {
     public ResponseEntity<String> delete(@PathVariable Long id) {
         productService.deleteProduct(id);
         return ResponseEntity.ok("Product deleted successfully.");
+    }
+
+    @PostMapping("/upload-image")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
+        try {
+            String imageUrl = s3Service.uploadImage(file); // ← método del servicio S3
+            return ResponseEntity.ok(imageUrl);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al subir imagen: " + e.getMessage());
+        }
     }
 
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")

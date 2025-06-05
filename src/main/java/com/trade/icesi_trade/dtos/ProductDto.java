@@ -17,6 +17,7 @@ public class ProductDto {
     private Boolean isSold;
     private Long categoryId;
     private Long sellerId;
+    private String imageUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
