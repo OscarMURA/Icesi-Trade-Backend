@@ -72,19 +72,6 @@ public class UserApiController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/profile")
-    @Operation(summary = "Get logged-in user's profile")
-        public ResponseEntity<UserResponseDto> getProfile(@RequestHeader("Authorization") String authHeader) {
-        String token = authHeader.replace("Bearer ", "");
-        String username = jwtService.extractUsername(token);
-
-        User user = userService.findUserByEmail(username); // usa el método del paso 1.1
-        UserResponseDto userDto = userMapper.entityToDto(user); // Usa MapStruct
-
-        return ResponseEntity.ok(userDto);
-}
-
-
     @Operation(summary = "Get user by ID", description = "Retrieve a user using their unique ID")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "User found"),
