@@ -7,10 +7,10 @@ import com.trade.icesi_trade.model.User;
 import com.trade.icesi_trade.repository.FavoriteProductRepository;
 import com.trade.icesi_trade.repository.ProductRepository;
 import com.trade.icesi_trade.repository.UserRepository;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +34,19 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
 
     @Override
     public FavoriteProduct addFavoriteProduct(FavoriteProduct favoriteProduct) {
+        User user = userRepository.findById(favoriteProduct.getUser().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+
+        Product product = productRepository.findById(favoriteProduct.getProduct().getId())
+                .orElseThrow(() -> new IllegalArgumentException("Producto no encontrado"));
+
+        favoriteProduct.setUser(user);
+        favoriteProduct.setProduct(product);
+
+        if (favoriteProduct.getCreatedAt() == null) {
+            favoriteProduct.setCreatedAt(LocalDateTime.now());
+        }
+
         return favoriteProductRepository.save(favoriteProduct);
     }
 
