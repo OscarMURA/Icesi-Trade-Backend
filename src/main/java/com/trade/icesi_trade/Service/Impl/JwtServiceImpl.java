@@ -1,21 +1,32 @@
 package com.trade.icesi_trade.Service.Impl;
 
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Service;
-
 import java.security.Key;
 import java.util.Date;
 import java.util.function.Function;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import com.trade.icesi_trade.model.User;
+import com.trade.icesi_trade.repository.UserRepository;
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
 
 @Service
 public class JwtServiceImpl {
 
     private static final String SECRET_KEY = "p5rT9$wKm3#sV1q8ZbX4Lk2!uYhEjR6M"; 
     private static final long EXPIRATION_TIME = 1000 * 60 * 60;
+
+    @Autowired
+    private UserRepository userRepository; 
 
     private final UserDetailsService userDetailsService;
 
@@ -28,10 +39,15 @@ public class JwtServiceImpl {
     }
 
     public String generateToken(Authentication authentication) {
-        String username = authentication.getName();
+    String username = authentication.getName();
+
+        User user = userRepository.findByEmail(username)
+            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         return Jwts.builder()
                 .setSubject(username)
+                .claim("id", user.getId())   // Ahora sí tienes el ID
+                .claim("email", user.getEmail())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
