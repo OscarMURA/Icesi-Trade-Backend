@@ -1,4 +1,3 @@
-
 -- USERS
 INSERT INTO USERS (email, password, name, phone, created_at, updated_at) VALUES
 ('juan.perez@example.com', '$2a$10$/1nBoNr/yazRX57ICxeBdeG8sG7Tnd7Y79QrhXPCU5UdwaGKIJAAO', 'Juan Pérez', '3001234567', CURRENT_TIMESTAMP, NULL)
@@ -83,3 +82,9 @@ ON CONFLICT (user_id, role_id) DO NOTHING;
 
 INSERT INTO USER_ROLES (user_id, role_id) VALUES (5, 2)
 ON CONFLICT (user_id, role_id) DO NOTHING;
+
+-- Tipos de notificación
+INSERT INTO type_notification (id, name) VALUES (1, 'MESSAGE') ON CONFLICT (id) DO NOTHING;
+INSERT INTO type_notification (id, name) VALUES (2, 'SYSTEM') ON CONFLICT (id) DO NOTHING;
+INSERT INTO type_notification (id, name) VALUES (3, 'ORDER') ON CONFLICT (id) DO NOTHING;
+INSERT INTO type_notification (id, name) VALUES (4, 'PRODUCT') ON CONFLICT (id) DO NOTHING;

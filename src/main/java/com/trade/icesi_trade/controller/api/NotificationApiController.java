@@ -47,7 +47,7 @@ public class NotificationApiController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @Operation(summary = "Get notifications by user ID")
+    @Operation(summary = "Create new notification")
     @PostMapping
     public ResponseEntity<NotificationDto> create(@RequestBody NotificationDto dto) {
         Notification notification = notificationMapper.dtoToEntity(dto);
@@ -75,5 +75,39 @@ public class NotificationApiController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         notificationService.deleteNotification(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Get notifications by user ID")
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<NotificationDto>> getByUserId(@PathVariable Long userId) {
+        List<NotificationDto> list = notificationService.getNotificationsByUser(userId)
+                .stream()
+                .map(notificationMapper::entityToDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(list);
+    }
+
+    @Operation(summary = "Get pending notifications by user ID")
+    @GetMapping("/user/{userId}/pending")
+    public ResponseEntity<List<NotificationDto>> getPendingByUserId(@PathVariable Long userId) {
+        List<NotificationDto> list = notificationService.getPendingNotificationsByUser(userId)
+                .stream()
+                .map(notificationMapper::entityToDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(list);
+    }
+
+    @Operation(summary = "Mark notification as read")
+    @PutMapping("/{id}/read")
+    public ResponseEntity<NotificationDto> markAsRead(@PathVariable Long id) {
+        Notification notification = notificationService.markAsRead(id);
+        return ResponseEntity.ok(notificationMapper.entityToDto(notification));
+    }
+
+    @Operation(summary = "Mark all notifications as read for a user")
+    @PutMapping("/user/{userId}/read-all")
+    public ResponseEntity<Void> markAllAsRead(@PathVariable Long userId) {
+        notificationService.markAllAsRead(userId);
+        return ResponseEntity.ok().build();
     }
 }

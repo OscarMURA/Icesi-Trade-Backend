@@ -10,6 +10,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 @Service
 public class NotificationServiceImpl implements NotificationService {
@@ -32,10 +34,18 @@ public class NotificationServiceImpl implements NotificationService {
         if (notification == null) {
             throw new IllegalArgumentException("La notificación no puede ser nula.");
         }
+        if (notification.getUser() == null) {
+            throw new IllegalArgumentException("La notificación debe tener un usuario asociado.");
+        }
+        if (notification.getType() == null) {
+            throw new IllegalArgumentException("La notificación debe tener un tipo asociado.");
+        }
+        if (!StringUtils.hasText(notification.getMessage())) {
+            throw new IllegalArgumentException("La notificación debe tener un mensaje.");
+        }
         if (notification.getCreatedAt() == null) {
             notification.setCreatedAt(LocalDateTime.now());
         }
-        // Si no se especifica el estado de lectura, se asume que es no leída (false)
         if (notification.getRead() == null) {
             notification.setRead(false);
         }
@@ -48,15 +58,18 @@ public class NotificationServiceImpl implements NotificationService {
      * @param notificationId the ID of the notification to be marked as read.
      * @return the updated Notification object after being marked as read.
      * @throws IllegalArgumentException if the notificationId is null.
-     * @throws NoSuchElementException if no notification is found with the given ID.
+     * @throws NoSuchElementException   if no notification is found with the given
+     *                                  ID.
      */
     @Override
-    public Notification markNotificationAsRead(Long notificationId) {
+    @Transactional
+    public Notification markAsRead(Long notificationId) {
         if (notificationId == null) {
             throw new IllegalArgumentException("El ID de la notificación no puede ser nulo.");
         }
         Notification notification = notificationRepository.findById(notificationId)
-                .orElseThrow(() -> new NoSuchElementException("Notificación no encontrada con el ID: " + notificationId));
+                .orElseThrow(
+                        () -> new NoSuchElementException("Notificación no encontrada con el ID: " + notificationId));
         notification.setRead(true);
         return notificationRepository.save(notification);
     }
@@ -66,7 +79,8 @@ public class NotificationServiceImpl implements NotificationService {
      *
      * @param userId the ID of the user whose notifications are to be retrieved.
      *               Must not be null.
-     * @return a list of {@link Notification} objects associated with the specified user.
+     * @return a list of {@link Notification} objects associated with the specified
+     *         user.
      * @throws IllegalArgumentException if the provided userId is null.
      */
     @Override
@@ -74,28 +88,24 @@ public class NotificationServiceImpl implements NotificationService {
         if (userId == null) {
             throw new IllegalArgumentException("El ID del usuario no puede ser nulo.");
         }
-
-        return notificationRepository.findAll()
-        .stream()
-        .filter(n -> n != null && n.getUser() != null && n.getUser().getId().equals(userId))
-        .collect(Collectors.toList());
-
+        return notificationRepository.findByUserIdOrderByCreatedAtDesc(userId);
     }
 
     /**
      * Retrieves a list of pending notifications for a specific user.
-     * A notification is considered pending if it has not been read 
+     * A notification is considered pending if it has not been read
      * (i.e., its "read" property is null or false).
      *
-     * @param userId the ID of the user whose pending notifications are to be retrieved
+     * @param userId the ID of the user whose pending notifications are to be
+     *               retrieved
      * @return a list of pending notifications for the specified user
      */
     @Override
     public List<Notification> getPendingNotificationsByUser(Long userId) {
-        List<Notification> allNotifications = getNotificationsByUser(userId);
-        return allNotifications.stream()
-                .filter(n -> n.getRead() == null || !n.getRead())
-                .collect(Collectors.toList());
+        if (userId == null) {
+            throw new IllegalArgumentException("El ID del usuario no puede ser nulo.");
+        }
+        return notificationRepository.findByUserIdAndReadFalse(userId);
     }
 
     @Override
@@ -110,6 +120,25 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public void deleteNotification(Long id) {
+        if (id == null) {
+            throw new IllegalArgumentException("El ID de la notificación no puede ser nulo.");
+        }
+        if (!notificationRepository.existsById(id)) {
+            throw new NoSuchElementException("Notificación no encontrada con el ID: " + id);
+        }
         notificationRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional
+    public void markAllAsRead(Long userId) {
+        if (userId == null) {
+            throw new IllegalArgumentException("El ID del usuario no puede ser nulo.");
+        }
+        List<Notification> notifications = getPendingNotificationsByUser(userId);
+        notifications.forEach(notification -> {
+            notification.setRead(true);
+            notificationRepository.save(notification);
+        });
     }
 }
