@@ -44,9 +44,6 @@ public class UserApiController {
     @Autowired
     private UserMapper userMapper;
 
-    @Autowired
-    private JwtServiceImpl jwtService;
-
     @Operation(summary = "Get all users", description = "Retrieve a list of all registered users. You can optionally filter users by role.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Users retrieved successfully"),

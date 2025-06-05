@@ -122,4 +122,12 @@ public class ProductServiceImpl implements ProductService {
     public Page<Product> getAllProducts(Pageable pageable) {
         return productRepository.findAll(pageable);
     }
+
+    @Override
+    public List<Product> getProductsBySellerId(Long idSeller) {
+        if (idSeller == null) {
+            throw new IllegalArgumentException("El ID del vendedor no puede ser nulo.");
+        }
+        return productRepository.findBySeller_Id(idSeller);
+    }
 }

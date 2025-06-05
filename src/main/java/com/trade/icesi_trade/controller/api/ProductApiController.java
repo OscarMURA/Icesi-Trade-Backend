@@ -16,10 +16,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import com.trade.icesi_trade.model.User;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -45,11 +43,21 @@ public class ProductApiController {
 
     @GetMapping
     @Operation(summary = "Get all products")
-    public ResponseEntity<List<ProductDto>> getAll() {
-        List<ProductDto> products = productService.getAllProducts()
+    public ResponseEntity<List<ProductDto>> getAll(@RequestParam(required = false) Long sellerId) {
+        List<ProductDto> products;
+        
+        if (sellerId != null) {
+            products = productService.getProductsBySellerId(sellerId)
+                    .stream()
+                    .map(productMapper::entityToDto)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(products);
+        } else {
+            products = productService.getAllProducts()
                 .stream()
                 .map(productMapper::entityToDto)
                 .collect(Collectors.toList());
+        }
         return ResponseEntity.ok(products);
     }
 
@@ -60,6 +68,7 @@ public class ProductApiController {
         return ResponseEntity.ok(productMapper.entityToDto(product));
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping
     @Operation(summary = "Create a new product")
     public ResponseEntity<ProductDto> create(@Valid @RequestBody ProductDto dto) {
@@ -71,7 +80,6 @@ public class ProductApiController {
         if (principal instanceof UserDetails) {
             userEmail = ((UserDetails) principal).getUsername();
         } else {
-            // fallback o error
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
@@ -84,7 +92,6 @@ public class ProductApiController {
 
         return new ResponseEntity<>(productMapper.entityToDto(created), HttpStatus.CREATED);
     }
-
 
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing product")
