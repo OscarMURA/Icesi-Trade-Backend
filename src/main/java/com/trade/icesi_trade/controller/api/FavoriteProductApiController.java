@@ -10,7 +10,10 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.RestController;
 
 import com.trade.icesi_trade.Service.Interface.FavoriteProductService;
@@ -20,6 +23,7 @@ import com.trade.icesi_trade.model.FavoriteProduct;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 @RestController
@@ -34,10 +38,42 @@ public class FavoriteProductApiController {
     @Autowired
     private FavoriteProductMapper favoriteProductMapper;
 
-    @Operation(summary = "Add a product to favorites")
-    @PostMapping("/{userId}/{productId}")
-    public ResponseEntity<FavoriteProductDto> addFavorite(@PathVariable Long userId, @PathVariable Long productId) {
-        FavoriteProduct created = favoriteProductService.addFavoriteProduct(userId, productId);
+    @GetMapping
+    @Operation(summary = "Get all products")
+    public ResponseEntity<List<FavoriteProductDto>> getAll(@RequestParam(required = false) Long userId) {
+        List<FavoriteProductDto> products;
+        
+        if (userId != null) {
+            products = favoriteProductService.getFavoriteProductsByUser(userId)
+                    .stream()
+                    .map(favoriteProductMapper::entityToDto)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(products);
+        } else {
+            products = favoriteProductService.get()
+                .stream()
+                .map(favoriteProductMapper::entityToDto)
+                .collect(Collectors.toList());
+        }
+        return ResponseEntity.ok(products);
+    }
+
+    @PostMapping
+    @Operation(summary = "Toggle favorite product")
+    public ResponseEntity<FavoriteProductDto> toggleFavorite(@Valid @RequestBody FavoriteProductDto dto) {
+        System.out.println("🔍 DTO RECIBIDO: userId=" + dto.getUserId() + ", productId=" + dto.getProductId());
+
+        if (dto.getUserId() == null || dto.getProductId() == null) {
+            throw new IllegalArgumentException("MALPARIDA VIDA");
+        }
+        FavoriteProduct existing = favoriteProductService.findByUserIdAndProductId(dto.getUserId(), dto.getProductId());
+
+        if (existing != null) {
+            favoriteProductService.delete(existing.getId());
+            return ResponseEntity.noContent().build();
+        }
+
+        FavoriteProduct created = favoriteProductService.addFavoriteProduct(favoriteProductMapper.dtoToEntity(dto));
         return ResponseEntity.ok(favoriteProductMapper.entityToDto(created));
     }
 

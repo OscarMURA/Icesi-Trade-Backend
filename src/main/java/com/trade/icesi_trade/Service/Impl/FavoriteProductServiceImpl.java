@@ -28,27 +28,13 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
     private ProductRepository productRepository;
 
     @Override
-    public FavoriteProduct addFavoriteProduct(Long userId, Long productId) {
-        if(userId == null || productId == null) {
-            throw new IllegalArgumentException("El ID del usuario y del producto no pueden ser nulos.");
-        }
-        FavoriteProduct existingFavorite = favoriteProductRepository.findByProduct_IdAndUser_Id(productId, userId);
-        if(existingFavorite != null) {
-            throw new IllegalArgumentException("El producto ya está marcado como favorito para este usuario.");
-        }
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NoSuchElementException("Usuario no encontrado con ID: " + userId));
-        Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new NoSuchElementException("Producto no encontrado con ID: " + productId));
+    public List<FavoriteProduct> get() {
+        return favoriteProductRepository.findAll();
+    }
 
-        FavoriteProduct favorite = FavoriteProduct.builder()
-                .id(UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE)
-                .user(user)
-                .product(product)
-                .createdAt(LocalDateTime.now())
-                .build();
-
-        return favoriteProductRepository.save(favorite);
+    @Override
+    public FavoriteProduct addFavoriteProduct(FavoriteProduct favoriteProduct) {
+        return favoriteProductRepository.save(favoriteProduct);
     }
 
     @Override
@@ -86,5 +72,18 @@ public class FavoriteProductServiceImpl implements FavoriteProductService {
                 .stream()
                 .filter(fp -> fp.getUser() != null && fp.getUser().getId().equals(userId))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void delete(Long id) {
+        favoriteProductRepository.deleteById(id);
+    }
+
+    @Override
+    public FavoriteProduct findByUserIdAndProductId(Long userId, Long productId) {
+        if(userId == null || productId == null) {
+            throw new IllegalArgumentException("El ID del usuario y del producto no pueden ser nulos.");
+        }
+        return favoriteProductRepository.findByUser_IdAndProduct_Id(userId, productId);
     }
 }
