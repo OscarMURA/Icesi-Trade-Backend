@@ -10,6 +10,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,6 +33,7 @@ public class ChatMessageController {
     private ChatMessageMapper messageMapper;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<List<ChatMessageDto>> getMessages(@RequestParam("userId") Long userId) {
         List<ChatMessage> messages = chatMessageService.getMessagesByUser(userId);
         List<ChatMessageDto> messageDtos = messages.stream()
@@ -41,6 +43,7 @@ public class ChatMessageController {
     }
 
     @MessageMapping("/chat.private")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public void handlePrivateMessage(ChatMessageDto messageDto) {
         ChatMessage message = messageMapper.dtoToEntity(messageDto);
         message.setSender(userService.findUserById(messageDto.getSenderId()));
@@ -64,6 +67,7 @@ public class ChatMessageController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<ChatMessageDto> createMessage(@RequestBody ChatMessageDto messageDto) {
         ChatMessage message = messageMapper.dtoToEntity(messageDto);
         message.setSender(userService.findUserById(messageDto.getSenderId()));
@@ -75,6 +79,7 @@ public class ChatMessageController {
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<Void> deleteMessage(@PathVariable Long id) {
         boolean deleted = chatMessageService.deleteMessage(id);
         if (deleted) {

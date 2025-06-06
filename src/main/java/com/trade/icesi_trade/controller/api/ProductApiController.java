@@ -47,6 +47,7 @@ public class ProductApiController {
 
     @GetMapping
     @Operation(summary = "Get all products")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<List<ProductDto>> getAll(
             @RequestParam(required = false) Long sellerId,
             @RequestParam(required = false) Long categoryId,
@@ -113,6 +114,7 @@ public class ProductApiController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get product by ID")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<ProductDto> getById(@PathVariable Long id) {
         Product product = productService.getProductById(id);
         return ResponseEntity.ok(productMapper.entityToDto(product));
