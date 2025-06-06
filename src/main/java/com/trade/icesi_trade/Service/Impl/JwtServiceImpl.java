@@ -2,6 +2,7 @@ package com.trade.icesi_trade.Service.Impl;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,19 +40,26 @@ public class JwtServiceImpl {
     }
 
     public String generateToken(Authentication authentication) {
-    String username = authentication.getName();
+        String username = authentication.getName();
 
         User user = userRepository.findByEmail(username)
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
+        // 👇 Extrae los roles del userRoles
+        List<String> roleNames = user.getUserRoles()
+            .stream()
+            .map(ur -> ur.getRole().getName()) // "ADMIN", "USER", etc.
+            .toList();
+
         return Jwts.builder()
-                .setSubject(username)
-                .claim("id", user.getId())   // Ahora sí tienes el ID
-                .claim("email", user.getEmail())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-                .compact();
+            .setSubject(username)
+            .claim("id", user.getId())
+            .claim("email", user.getEmail())
+            .claim("roles", roleNames) // ✅ agrega roles al token
+            .setIssuedAt(new Date())
+            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+            .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+            .compact();
     }
 
     public String extractUsername(String token) {

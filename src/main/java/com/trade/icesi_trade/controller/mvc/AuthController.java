@@ -72,6 +72,6 @@ public class AuthController {
                 return "redirect:/users"; // Panel de admins
             }
         }
-        return "redirect:/home"; // Panel para usuarios normales
+        return "redirect:/home"; 
     }
 }

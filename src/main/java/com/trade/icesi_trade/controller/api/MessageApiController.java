@@ -19,6 +19,8 @@ import java.util.stream.Collectors;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+
 @RestController
 @RequestMapping("/api/messages")
 @RequiredArgsConstructor
@@ -36,6 +38,7 @@ public class MessageApiController {
 
     @Operation(summary = "Get all messages")
     @GetMapping
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<List<MessageDto>> getAllMessages() {
         List<MessageDto> messages = messageService.getAllMessages().stream()
                 .map(messageMapper::entityToDto)
@@ -45,6 +48,7 @@ public class MessageApiController {
 
     @Operation(summary = "Get message by ID")
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<MessageDto> getMessageById(@PathVariable Long id) {
         return messageService.getMessageById(id).stream()
                 .findFirst()
@@ -55,6 +59,7 @@ public class MessageApiController {
 
     @Operation(summary = "Create new message")
     @PostMapping
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<MessageDto> createMessage(@RequestBody MessageDto dto) {
         Message message = messageMapper.dtoToEntity(dto);
         message.setSender(userService.findUserById(dto.getSenderId()));
@@ -67,6 +72,7 @@ public class MessageApiController {
 
     @Operation(summary = "Update message by ID")
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<MessageDto> updateMessage(@PathVariable Long id, @RequestBody MessageDto dto) {
         Message message = messageMapper.dtoToEntity(dto);
         message.setId(id);
@@ -80,6 +86,7 @@ public class MessageApiController {
 
     @Operation(summary = "Delete message by ID")
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<Void> deleteMessage(@PathVariable Long id) {
         messageService.deleteMessage(id);
         return ResponseEntity.noContent().build();
