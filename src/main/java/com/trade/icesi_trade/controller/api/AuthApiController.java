@@ -5,6 +5,7 @@ import com.trade.icesi_trade.dtos.LogInDto;
 import com.trade.icesi_trade.dtos.TokenDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,7 +21,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = { "http://localhost:5173", "http://localhost:3000" })
+@CrossOrigin(origins = { "${app.frontend.url}", "${app.frontend.alternative-url}" })
 @Tag(name = "Authentication", description = "Authentication operations")
 public class AuthApiController {
 
