@@ -9,6 +9,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ImageProductRepository extends JpaRepository<ImageProduct, Long> {
-            ImageProduct findByProduct_Id(Long product_id);
-            Optional<ImageProduct> findById(Long imageId);
+    ImageProduct findByProduct_Id(Long product_id);
+
+    Optional<ImageProduct> findById(Long imageId);
+
+    void deleteByProduct_Id(Long productId);
 }
