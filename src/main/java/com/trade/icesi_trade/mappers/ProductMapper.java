@@ -12,14 +12,14 @@ public interface ProductMapper {
 
     @Mappings({
         @Mapping(source = "category.id", target = "categoryId"),
-        @Mapping(source = "seller.id", target = "sellerId")
+        @Mapping(source = "seller.id", target = "sellerId"),
+        @Mapping(source = "imageUrl", target = "imageUrl") // ✅ incluir el campo
     })
     ProductDto entityToDto(Product product);
 
     @InheritInverseConfiguration
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "seller", ignore = true)  // Ignorar para asignar manualmente
+    @Mapping(target = "seller", ignore = true)  // ✅ Se asigna manualmente en el controller
     Product dtoToEntity(ProductDto dto);
-
 }
