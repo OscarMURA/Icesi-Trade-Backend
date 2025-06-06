@@ -31,7 +31,6 @@ public class CategoryApiController {
 
     @GetMapping
     @Operation(summary = "Get all categories")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<List<CategoryDto>> getAll() {
         List<CategoryDto> categories = categoryService.getAllCategories().stream()
                 .map(categoryMapper::entityToDto)
@@ -41,7 +40,6 @@ public class CategoryApiController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get category by ID")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<CategoryDto> getById(@PathVariable Long id) {
         Category category = categoryService.getCategoryById(id);
         return ResponseEntity.ok(categoryMapper.entityToDto(category));
@@ -49,7 +47,6 @@ public class CategoryApiController {
 
     @PostMapping
     @Operation(summary = "Create new category")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<CategoryDto> create(@Valid @RequestBody CategoryDto dto) {
         Category created = categoryService.createCategory(categoryMapper.dtoToEntity(dto));
         return new ResponseEntity<>(categoryMapper.entityToDto(created), HttpStatus.CREATED);
@@ -57,7 +54,6 @@ public class CategoryApiController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update existing category")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<CategoryDto> update(@PathVariable Long id, @Valid @RequestBody CategoryDto dto) {
         Category updated = categoryService.updateCategory(id, categoryMapper.dtoToEntity(dto));
         return ResponseEntity.ok(categoryMapper.entityToDto(updated));
@@ -65,7 +61,6 @@ public class CategoryApiController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete category by ID")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<String> delete(@PathVariable Long id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.ok("Category deleted successfully.");

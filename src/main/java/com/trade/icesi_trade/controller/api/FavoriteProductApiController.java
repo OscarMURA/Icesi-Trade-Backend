@@ -42,7 +42,6 @@ public class FavoriteProductApiController {
 
     @GetMapping
     @Operation(summary = "Get all products")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<List<FavoriteProductDto>> getAll(@RequestParam(required = false) Long userId) {
         List<FavoriteProductDto> products;
         
@@ -63,7 +62,6 @@ public class FavoriteProductApiController {
 
     @PostMapping
     @Operation(summary = "Toggle favorite product")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<FavoriteProductDto> toggleFavorite(@Valid @RequestBody FavoriteProductDto dto) {
         System.out.println("🔍 DTO RECIBIDO: userId=" + dto.getUserId() + ", productId=" + dto.getProductId());
 
@@ -83,7 +81,6 @@ public class FavoriteProductApiController {
 
     @Operation(summary = "Remove a product from favorites")
     @DeleteMapping("/{userId}/{productId}")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<String> removeFavorite(@PathVariable Long userId, @PathVariable Long productId) {
         boolean deleted = favoriteProductService.removeFavoriteProduct(userId, productId);
         return deleted ?
@@ -93,7 +90,6 @@ public class FavoriteProductApiController {
 
     @Operation(summary = "Get a specific favorite product")
     @GetMapping("/{userId}/{productId}")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<FavoriteProductDto> getFavorite(@PathVariable @NotNull Long userId,
                                                           @PathVariable @NotNull Long productId) {
         FavoriteProduct favorite = favoriteProductService.getFavoriteProduct(userId, productId);
@@ -103,7 +99,6 @@ public class FavoriteProductApiController {
 
     @Operation(summary = "Get all favorite products for a user")
     @GetMapping("/user/{userId}")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<List<FavoriteProductDto>> getFavoritesByUser(@PathVariable Long userId) {
         List<FavoriteProductDto> favorites = favoriteProductService.getFavoriteProductsByUser(userId)
                 .stream()

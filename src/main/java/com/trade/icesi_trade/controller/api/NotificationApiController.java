@@ -32,7 +32,6 @@ public class NotificationApiController {
 
     @Operation(summary = "Get all notifications")
     @GetMapping
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<List<NotificationDto>> getAll(@RequestParam(required = false) String userId) {
         if (userId != null) {
             List<NotificationDto> userNotifications = notificationService.getNotificationsByUser(Long.parseLong(userId))
@@ -50,7 +49,6 @@ public class NotificationApiController {
 
     @Operation(summary = "Get notification by ID")
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<NotificationDto> getById(@PathVariable Long id) {
         return notificationService.getNotificationById(id)
                 .map(notificationMapper::entityToDto)
@@ -60,7 +58,6 @@ public class NotificationApiController {
 
     @Operation(summary = "Create new notification")
     @PostMapping
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<NotificationDto> create(@RequestBody NotificationDto dto) {
         Notification notification = notificationMapper.dtoToEntity(dto);
         notification.setUser(userService.findUserById(dto.getUserId()));
@@ -72,7 +69,6 @@ public class NotificationApiController {
 
     @Operation(summary = "Update notification by ID")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<NotificationDto> update(@PathVariable Long id, @RequestBody NotificationDto dto) {
         Notification notification = notificationMapper.dtoToEntity(dto);
         notification.setId(id);
@@ -85,7 +81,6 @@ public class NotificationApiController {
 
     @Operation(summary = "Delete notification by ID")
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         notificationService.deleteNotification(id);
         return ResponseEntity.noContent().build();
@@ -93,7 +88,6 @@ public class NotificationApiController {
 
     @Operation(summary = "Get notifications by user ID")
     @GetMapping("/user/{userId}")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<List<NotificationDto>> getByUserId(@PathVariable Long userId) {
         List<NotificationDto> list = notificationService.getNotificationsByUser(userId)
                 .stream()
@@ -104,7 +98,6 @@ public class NotificationApiController {
 
     @Operation(summary = "Get pending notifications by user ID")
     @GetMapping("/user/{userId}/pending")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<List<NotificationDto>> getPendingByUserId(@PathVariable Long userId) {
         List<NotificationDto> list = notificationService.getPendingNotificationsByUser(userId)
                 .stream()
@@ -115,7 +108,6 @@ public class NotificationApiController {
 
     @Operation(summary = "Mark notification as read")
     @PutMapping("/{id}/read")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<NotificationDto> markAsRead(@PathVariable Long id) {
         Notification notification = notificationService.markAsRead(id);
         return ResponseEntity.ok(notificationMapper.entityToDto(notification));
@@ -123,7 +115,6 @@ public class NotificationApiController {
 
     @Operation(summary = "Mark all notifications as read for a user")
     @PutMapping("/user/{userId}/read-all")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<Void> markAllAsRead(@PathVariable Long userId) {
         notificationService.markAllAsRead(userId);
         return ResponseEntity.ok().build();

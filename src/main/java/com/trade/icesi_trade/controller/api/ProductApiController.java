@@ -47,7 +47,6 @@ public class ProductApiController {
 
     @GetMapping
     @Operation(summary = "Get all products")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<List<ProductDto>> getAll(
             @RequestParam(required = false) Long sellerId,
             @RequestParam(required = false) Long categoryId,
@@ -114,13 +113,11 @@ public class ProductApiController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get product by ID")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<ProductDto> getById(@PathVariable Long id) {
         Product product = productService.getProductById(id);
         return ResponseEntity.ok(productMapper.entityToDto(product));
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PostMapping
     @Operation(summary = "Create a new product")
     public ResponseEntity<ProductDto> create(@Valid @RequestBody ProductDto dto) {
@@ -145,7 +142,6 @@ public class ProductApiController {
         return new ResponseEntity<>(productMapper.entityToDto(created), HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PutMapping("/{id}")
     @Operation(summary = "Update an existing product")
     public ResponseEntity<ProductDto> update(@PathVariable Long id, @Valid @RequestBody ProductDto dto) {
@@ -153,7 +149,6 @@ public class ProductApiController {
         return ResponseEntity.ok(productMapper.entityToDto(updated));
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete product by ID")
     public ResponseEntity<String> delete(@PathVariable Long id) {
@@ -162,7 +157,6 @@ public class ProductApiController {
     }
 
     @PostMapping("/upload-image")
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
         try {
             String imageUrl = s3Service.uploadImage(file); // ← método del servicio S3
@@ -173,7 +167,6 @@ public class ProductApiController {
         }
     }
 
-    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @PatchMapping("/{id}/sold")
     @Operation(summary = "Mark product as sold")
     public ResponseEntity<ProductDto> markAsSold(@PathVariable Long id) {
