@@ -33,5 +33,9 @@ public class Sale {
     @JoinColumn(name = "product")
     private Product product;
 
+    private Double price;
+
+    private String status;
+
     private LocalDateTime createdAt;
 }
