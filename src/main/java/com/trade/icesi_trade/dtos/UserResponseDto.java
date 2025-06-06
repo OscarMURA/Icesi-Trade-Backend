@@ -4,6 +4,8 @@
  */
 package com.trade.icesi_trade.dtos;
 
+import java.util.List;
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
@@ -28,4 +30,7 @@ public class UserResponseDto {
 
     @Schema(description = "User phone number", example = "3123456789")
     private String phone;
+
+    private List<String> roles;
+
 }

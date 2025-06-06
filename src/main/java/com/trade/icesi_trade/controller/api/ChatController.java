@@ -31,7 +31,6 @@ public class ChatController {
     private ChatMessageService chatMessageService;
 
     @GetMapping("/users")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<List<UserResponseDto>> getAllUsers() {
         try {
             List<UserResponseDto> users = userService.findAllUsers().stream()
@@ -44,7 +43,6 @@ public class ChatController {
     }
 
     @GetMapping("/contacts")
-    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<List<UserResponseDto>> getChatContacts(@RequestParam Long userId) {
         List<User> contacts = chatMessageService.getChatContacts(userId);
         List<UserResponseDto> result = contacts.stream()
