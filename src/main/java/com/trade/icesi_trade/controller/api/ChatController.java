@@ -11,7 +11,9 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.trade.icesi_trade.Service.Interface.ChatMessageService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +28,9 @@ public class ChatController {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private ChatMessageService chatMessageService;
+
     @GetMapping("/users")
     @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
     public ResponseEntity<List<UserResponseDto>> getAllUsers() {
@@ -37,5 +42,15 @@ public class ChatController {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    @GetMapping("/contacts")
+    @PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+    public ResponseEntity<List<UserResponseDto>> getChatContacts(@RequestParam Long userId) {
+        List<User> contacts = chatMessageService.getChatContacts(userId);
+        List<UserResponseDto> result = contacts.stream()
+                .map(userMapper::entityToDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(result);
     }
 }

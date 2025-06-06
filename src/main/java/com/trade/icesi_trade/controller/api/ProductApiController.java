@@ -47,21 +47,67 @@ public class ProductApiController {
 
     @GetMapping
     @Operation(summary = "Get all products")
-    public ResponseEntity<List<ProductDto>> getAll(@RequestParam(required = false) Long sellerId) {
+    public ResponseEntity<List<ProductDto>> getAll(
+            @RequestParam(required = false) Long sellerId,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String location,
+            @RequestParam(required = false) String search) {
+
         List<ProductDto> products;
-        
+
         if (sellerId != null) {
             products = productService.getProductsBySellerId(sellerId)
                     .stream()
                     .map(productMapper::entityToDto)
                     .collect(Collectors.toList());
-            return ResponseEntity.ok(products);
         } else {
             products = productService.getAllProducts()
-                .stream()
-                .map(productMapper::entityToDto)
-                .collect(Collectors.toList());
+                    .stream()
+                    .map(productMapper::entityToDto)
+                    .collect(Collectors.toList());
         }
+
+        if (categoryId != null) {
+            products = products.stream()
+                    .filter(p -> p.getCategoryId().equals(categoryId))
+                    .collect(Collectors.toList());
+        }
+
+        if (minPrice != null) {
+            products = products.stream()
+                    .filter(p -> p.getPrice() >= minPrice)
+                    .collect(Collectors.toList());
+        }
+
+        if (maxPrice != null) {
+            products = products.stream()
+                    .filter(p -> p.getPrice() <= maxPrice)
+                    .collect(Collectors.toList());
+        }
+
+        if (status != null && !status.isEmpty()) {
+            products = products.stream()
+                    .filter(p -> p.getStatus().toLowerCase().equals(status.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        if (location != null && !location.isEmpty()) {
+            products = products.stream()
+                    .filter(p -> p.getLocation().toLowerCase().contains(location.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        if (search != null && !search.isEmpty()) {
+            String searchLower = search.toLowerCase();
+            products = products.stream()
+                    .filter(p -> p.getTitle().toLowerCase().contains(searchLower) ||
+                            p.getDescription().toLowerCase().contains(searchLower))
+                    .collect(Collectors.toList());
+        }
+
         return ResponseEntity.ok(products);
     }
 
