@@ -1,3 +1,4 @@
+// SaleDto.java
 package com.trade.icesi_trade.dtos;
 
 import lombok.Data;

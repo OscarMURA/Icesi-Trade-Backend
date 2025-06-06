@@ -1,3 +1,4 @@
+// SaleApiController.java
 package com.trade.icesi_trade.controller.api;
 
 import com.trade.icesi_trade.Service.Interface.SaleService;
@@ -46,7 +47,6 @@ public class SaleApiController {
     @Operation(summary = "Create a new sale")
     @PostMapping
     public ResponseEntity<SaleDto> create(@RequestBody SaleDto dto) {
-        System.out.println("Creating sale with DTO: " + dto.getBuyerId() + ", " + dto.getProductId());
         Sale saved = saleService.save(saleMapper.dtoToEntity(dto));
         return ResponseEntity.status(201).body(saleMapper.entityToDto(saved));
     }
@@ -73,5 +73,29 @@ public class SaleApiController {
                 .toList();
         List<SaleDto> saleDtos = sales.stream().map(saleMapper::entityToDto).toList();
         return ResponseEntity.ok(saleDtos);
+    }
+
+    @Operation(summary = "Get pending offers by product ID")
+    @GetMapping("/product/{productId}/offers")
+    public ResponseEntity<List<SaleDto>> getPendingOffersByProduct(@PathVariable Long productId) {
+        List<Sale> sales = saleService.findPendingOffersByProduct(productId);
+        List<SaleDto> saleDtos = sales.stream()
+                .map(saleMapper::entityToDto)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(saleDtos);
+    }
+
+    @Operation(summary = "Accept an offer")
+    @PutMapping("/{id}/accept")
+    public ResponseEntity<SaleDto> acceptOffer(@PathVariable Long id) {
+        Sale updated = saleService.acceptOffer(id);
+        return ResponseEntity.ok(saleMapper.entityToDto(updated));
+    }
+
+    @Operation(summary = "Reject an offer")
+    @PutMapping("/{id}/reject")
+    public ResponseEntity<SaleDto> rejectOffer(@PathVariable Long id) {
+        Sale updated = saleService.rejectOffer(id);
+        return ResponseEntity.ok(saleMapper.entityToDto(updated));
     }
 }
