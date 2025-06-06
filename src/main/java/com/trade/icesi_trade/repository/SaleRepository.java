@@ -15,6 +15,7 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 
     long countByBuyer_Id(Long sellerId);
 
-
     List<Sale> findByProduct_IdAndBuyer_Id(Long productId, Long buyerId);
+
+    void deleteByProduct_Id(Long productId);
 }

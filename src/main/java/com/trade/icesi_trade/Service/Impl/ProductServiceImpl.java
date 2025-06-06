@@ -7,9 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.trade.icesi_trade.Service.Interface.ProductService;
 import com.trade.icesi_trade.model.Product;
 import com.trade.icesi_trade.repository.ProductRepository;
+import com.trade.icesi_trade.repository.SaleRepository;
+import com.trade.icesi_trade.repository.FavoriteProductRepository;
+import com.trade.icesi_trade.repository.ReviewRepository;
+import com.trade.icesi_trade.repository.ImageProductRepository;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -17,12 +22,26 @@ public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private SaleRepository saleRepository;
+
+    @Autowired
+    private FavoriteProductRepository favoriteProductRepository;
+
+    @Autowired
+    private ReviewRepository reviewRepository;
+
+    @Autowired
+    private ImageProductRepository imageProductRepository;
+
     /**
      * Creates a new product and saves it to the repository.
      *
-     * @param product The product to be created. Must not be null and must have a non-empty title.
+     * @param product The product to be created. Must not be null and must have a
+     *                non-empty title.
      * @return The saved product instance.
-     * @throws IllegalArgumentException If the product is null or if the product's title is null or empty.
+     * @throws IllegalArgumentException If the product is null or if the product's
+     *                                  title is null or empty.
      */
     @Override
     public Product createProduct(Product product) {
@@ -32,7 +51,7 @@ public class ProductServiceImpl implements ProductService {
         if (product.getTitle() == null || product.getTitle().isEmpty()) {
             throw new IllegalArgumentException("El producto debe tener un título.");
         }
-        
+
         product.setCreatedAt(LocalDateTime.now());
         return productRepository.save(product);
     }
@@ -40,11 +59,12 @@ public class ProductServiceImpl implements ProductService {
     /**
      * Updates an existing product with the provided details.
      *
-     * @param id The ID of the product to be updated. Must not be null.
-     * @param product The product object containing the updated details. Must not be null.
+     * @param id      The ID of the product to be updated. Must not be null.
+     * @param product The product object containing the updated details. Must not be
+     *                null.
      * @return The updated product after saving it to the repository.
      * @throws IllegalArgumentException If the provided ID or product is null.
-     * @throws NoSuchElementException If no product is found with the given ID.
+     * @throws NoSuchElementException   If no product is found with the given ID.
      */
     @Override
     public Product updateProduct(Long id, Product product) {
@@ -54,7 +74,7 @@ public class ProductServiceImpl implements ProductService {
 
         Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Producto no encontrado con el ID: " + id));
-        
+
         existingProduct.setTitle(product.getTitle());
         existingProduct.setDescription(product.getDescription());
         existingProduct.setPrice(product.getPrice());
@@ -71,10 +91,12 @@ public class ProductServiceImpl implements ProductService {
      * Deletes a product by its ID.
      *
      * @param id the ID of the product to be deleted; must not be null.
-     * @return {@code true} if the product was successfully deleted, {@code false} if the product does not exist.
+     * @return {@code true} if the product was successfully deleted, {@code false}
+     *         if the product does not exist.
      * @throws IllegalArgumentException if the provided ID is null.
      */
     @Override
+    @Transactional
     public boolean deleteProduct(Long id) {
         if (id == null) {
             throw new IllegalArgumentException("El ID del producto no puede ser nulo.");
@@ -82,6 +104,14 @@ public class ProductServiceImpl implements ProductService {
         if (!productRepository.existsById(id)) {
             return false;
         }
+
+        // Eliminar registros relacionados
+        saleRepository.deleteByProduct_Id(id);
+        favoriteProductRepository.deleteByProduct_Id(id);
+        reviewRepository.deleteByProduct_Id(id);
+        imageProductRepository.deleteByProduct_Id(id);
+
+        // Finalmente eliminar el producto
         productRepository.deleteById(id);
         return true;
     }
@@ -92,7 +122,7 @@ public class ProductServiceImpl implements ProductService {
      * @param id the unique identifier of the product to retrieve; must not be null.
      * @return the product associated with the given ID.
      * @throws IllegalArgumentException if the provided ID is null.
-     * @throws NoSuchElementException if no product is found with the given ID.
+     * @throws NoSuchElementException   if no product is found with the given ID.
      */
     @Override
     public Product getProductById(Long id) {
@@ -137,7 +167,7 @@ public class ProductServiceImpl implements ProductService {
         if (idProduct == null) {
             throw new IllegalArgumentException("El ID del producto no puede ser nulo.");
         }
-        
+
         Product product = productRepository.findById(idProduct)
                 .orElseThrow(() -> new NoSuchElementException("Producto no encontrado con el ID: " + idProduct));
         product.setIsSold(true);

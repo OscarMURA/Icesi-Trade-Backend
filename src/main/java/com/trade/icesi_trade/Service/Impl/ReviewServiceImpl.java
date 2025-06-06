@@ -90,4 +90,18 @@ public class ReviewServiceImpl implements ReviewService {
     public List<Review> getAllReviews() {
         return reviewRepository.findAll();
     }
+
+    @Override
+    public List<Review> getFilteredReviews(Long reviewerId, Long productId) {
+        if (reviewerId == null && productId == null) {
+            return getAllReviews();
+        }
+        if (reviewerId != null && productId != null) {
+            return reviewRepository.findByReviewer_IdAndProduct_Id(reviewerId, productId);
+        }
+        if (reviewerId != null) {
+            return getReviewsByReviewer(reviewerId);
+        }
+        return getReviewsByProduct(productId);
+    }
 }
