@@ -62,6 +62,7 @@ public class ProductServiceImpl implements ProductService {
         existingProduct.setStatus(product.getStatus());
         existingProduct.setUpdatedAt(LocalDateTime.now());
         existingProduct.setCategory(product.getCategory());
+        existingProduct.setImageUrl(product.getImageUrl());
 
         return productRepository.save(existingProduct);
     }
