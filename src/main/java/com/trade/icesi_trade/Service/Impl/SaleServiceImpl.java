@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @Service
 public class SaleServiceImpl implements SaleService {
@@ -41,6 +42,7 @@ public class SaleServiceImpl implements SaleService {
         sale.setBuyer(buyer);
         sale.setProduct(product);
         sale.setCreatedAt(LocalDateTime.now());
+        sale.setStatus("pending");
 
         return saleRepository.save(sale);
     }
@@ -81,5 +83,52 @@ public class SaleServiceImpl implements SaleService {
     @Override
     public List<Sale> findAll() {
         return saleRepository.findAll();
+    }
+
+    @Override
+    public List<Sale> findPendingOffersByProduct(Long productId) {
+        return saleRepository.findAll().stream()
+                .filter(sale -> sale.getProduct() != null &&
+                        sale.getProduct().getId().equals(productId) &&
+                        "pending".equals(sale.getStatus()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Sale acceptOffer(Long id) {
+        Sale sale = findById(id);
+        if (!"pending".equals(sale.getStatus())) {
+            throw new IllegalStateException("Solo se pueden aceptar ofertas pendientes");
+        }
+        sale.setStatus("accepted");
+        saleRepository.save(sale);
+
+        Product producto = sale.getProduct();
+        producto.setPrice(sale.getPrice());
+        producto.setIsSold(true);
+        productRepository.save(producto);
+
+        List<Sale> otrasOfertas = saleRepository.findAll().stream()
+                .filter(s -> s.getProduct() != null &&
+                        s.getProduct().getId().equals(sale.getProduct().getId()) &&
+                        !s.getId().equals(sale.getId()) &&
+                        "pending".equals(s.getStatus()))
+                .toList();
+        for (Sale otra : otrasOfertas) {
+            otra.setStatus("rejected");
+            saleRepository.save(otra);
+        }
+
+        return sale;
+    }
+
+    @Override
+    public Sale rejectOffer(Long id) {
+        Sale sale = findById(id);
+        if (!"pending".equals(sale.getStatus())) {
+            throw new IllegalStateException("Solo se pueden rechazar ofertas pendientes");
+        }
+        sale.setStatus("rejected");
+        return saleRepository.save(sale);
     }
 }
