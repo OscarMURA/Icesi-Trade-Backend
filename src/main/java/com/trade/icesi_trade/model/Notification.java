@@ -35,7 +35,6 @@ public class Notification {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Lob
     private String message;
 
     private LocalDateTime createdAt;

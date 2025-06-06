@@ -30,7 +30,14 @@ public class NotificationApiController {
 
     @Operation(summary = "Get all notifications")
     @GetMapping
-    public ResponseEntity<List<NotificationDto>> getAll() {
+    public ResponseEntity<List<NotificationDto>> getAll(@RequestParam(required = false) String userId) {
+        if (userId != null) {
+            List<NotificationDto> userNotifications = notificationService.getNotificationsByUser(Long.parseLong(userId))
+                    .stream()
+                    .map(notificationMapper::entityToDto)
+                    .collect(Collectors.toList());
+            return ResponseEntity.ok(userNotifications);
+        }
         List<NotificationDto> list = notificationService.getAllNotifications()
                 .stream()
                 .map(notificationMapper::entityToDto)
