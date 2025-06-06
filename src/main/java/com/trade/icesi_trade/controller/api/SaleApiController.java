@@ -30,7 +30,24 @@ public class SaleApiController {
 
     @Operation(summary = "Get all sales")
     @GetMapping
-    public ResponseEntity<List<SaleDto>> getAll() {
+    public ResponseEntity<List<SaleDto>> getAll(@RequestParam(required = false) Long productId,
+                                                @RequestParam(required = false) Long buyerId) {
+        System.out.println("Fetching all sales with filters: productId=" + productId + ", buyerId=" + buyerId);
+        if (productId != null) {
+            List<Sale> sales = saleService.findAll().stream()
+                    .filter(sale -> sale.getProduct() != null && sale.getProduct().getId().equals(productId))
+                    .collect(Collectors.toList());
+            List<SaleDto> saleDtos = sales.stream().map(saleMapper::entityToDto).collect(Collectors.toList());
+            System.out.println(saleDtos.toString());
+            return ResponseEntity.ok(saleDtos);
+        }
+        if (buyerId != null) {
+            List<Sale> sales = saleService.findAll().stream()
+                    .filter(sale -> sale.getBuyer() != null && sale.getBuyer().getId().equals(buyerId))
+                    .collect(Collectors.toList());
+            List<SaleDto> saleDtos = sales.stream().map(saleMapper::entityToDto).collect(Collectors.toList());
+            return ResponseEntity.ok(saleDtos);
+        }
         List<SaleDto> sales = saleService.findAll().stream()
                 .map(saleMapper::entityToDto)
                 .collect(Collectors.toList());
@@ -65,7 +82,7 @@ public class SaleApiController {
         return ResponseEntity.ok("Venta eliminada.");
     }
 
-    @Operation(summary = "Get sales by seller ID")
+    @Operation(summary = "Get sales by buyer ID")
     @GetMapping("/buyer/{buyerId}")
     public ResponseEntity<List<SaleDto>> getSalesByBuyer(@PathVariable Long buyerId) {
         List<Sale> sales = saleService.findAll().stream()

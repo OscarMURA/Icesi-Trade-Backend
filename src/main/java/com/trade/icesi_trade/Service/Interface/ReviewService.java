@@ -20,4 +20,6 @@ public interface ReviewService {
     List<Review> getReviewsByReviewee(Long revieweeId);
 
     Double calculateAverageRatingByProduct(Long productId);
+
+    List<Review> getFilteredReviews(Long reviewerId, Long productId);
 }
