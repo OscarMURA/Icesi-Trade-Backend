@@ -26,7 +26,6 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
 @RestController
 @RequestMapping("/api/products")
 @CrossOrigin
@@ -56,6 +55,18 @@ public class ProductApiController {
             @RequestParam(required = false) String location,
             @RequestParam(required = false) String search) {
 
+        // Obtener el usuario autenticado para excluir sus productos
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long currentUserId = null;
+
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            String userEmail = ((UserDetails) authentication.getPrincipal()).getUsername();
+            User user = userService.findUserByEmail(userEmail);
+            if (user != null) {
+                currentUserId = user.getId();
+            }
+        }
+
         List<ProductDto> products;
 
         if (sellerId != null) {
@@ -64,10 +75,21 @@ public class ProductApiController {
                     .map(productMapper::entityToDto)
                     .collect(Collectors.toList());
         } else {
-            products = productService.getAllProducts()
-                    .stream()
-                    .map(productMapper::entityToDto)
-                    .collect(Collectors.toList());
+            // Si no se especifica sellerId, obtener productos disponibles excluyendo los
+            // del usuario actual
+            if (currentUserId != null) {
+                products = productService.getAvailableProductsExcludingSeller(currentUserId)
+                        .stream()
+                        .map(productMapper::entityToDto)
+                        .collect(Collectors.toList());
+            } else {
+                // Si no hay usuario autenticado, obtener todos los productos disponibles
+                products = productService.getAllProducts()
+                        .stream()
+                        .filter(p -> p.getIsSold() == null || !p.getIsSold())
+                        .map(productMapper::entityToDto)
+                        .collect(Collectors.toList());
+            }
         }
 
         if (categoryId != null) {
@@ -118,12 +140,16 @@ public class ProductApiController {
         return ResponseEntity.ok(productMapper.entityToDto(product));
     }
 
-    @PostMapping
-    @Operation(summary = "Create a new product")
-    public ResponseEntity<ProductDto> create(@Valid @RequestBody ProductDto dto) {
+    @GetMapping("/available")
+    @Operation(summary = "Get available products excluding current seller")
+    public ResponseEntity<List<ProductDto>> getAvailableProducts() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = authentication.getPrincipal();
 
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        Object principal = authentication.getPrincipal();
         String userEmail;
 
         if (principal instanceof UserDetails) {
@@ -133,6 +159,48 @@ public class ProductApiController {
         }
 
         User user = userService.findUserByEmail(userEmail);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        List<Product> products = productService.getAvailableProductsExcludingSeller(user.getId());
+
+        List<ProductDto> productDtos = products.stream()
+                .map(productMapper::entityToDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(productDtos);
+    }
+
+    @PostMapping
+    @Operation(summary = "Create a new product")
+    public ResponseEntity<ProductDto> create(@Valid @RequestBody ProductDto dto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        // Verificar si la autenticación es null
+        if (authentication == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+
+        Object principal = authentication.getPrincipal();
+
+        String userEmail;
+
+        if (principal instanceof UserDetails) {
+            userEmail = ((UserDetails) principal).getUsername();
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(null);
+        }
+
+        User user = userService.findUserByEmail(userEmail);
+
+        // Verificar si el usuario existe
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(null);
+        }
 
         Product product = productMapper.dtoToEntity(dto);
         product.setSeller(user);

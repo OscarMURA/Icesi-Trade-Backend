@@ -174,4 +174,12 @@ public class ProductServiceImpl implements ProductService {
         product.setUpdatedAt(LocalDateTime.now());
         return productRepository.save(product);
     }
+
+    @Override
+    public List<Product> getAvailableProductsExcludingSeller(Long sellerId) {
+        if (sellerId == null) {
+            throw new IllegalArgumentException("El ID del vendedor no puede ser nulo.");
+        }
+        return productRepository.findAvailableProductsExcludingSeller(sellerId);
+    }
 }

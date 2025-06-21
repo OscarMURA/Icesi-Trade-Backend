@@ -26,4 +26,6 @@ public interface ProductService {
     List<Product> getProductsBySellerId(Long idSeller);
 
     Product markProductAsSold(Long idProduct);
+
+    List<Product> getAvailableProductsExcludingSeller(Long sellerId);
 }

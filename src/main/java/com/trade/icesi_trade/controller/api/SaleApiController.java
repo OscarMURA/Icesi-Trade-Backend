@@ -31,7 +31,7 @@ public class SaleApiController {
     @Operation(summary = "Get all sales")
     @GetMapping
     public ResponseEntity<List<SaleDto>> getAll(@RequestParam(required = false) Long productId,
-                                                @RequestParam(required = false) Long buyerId) {
+            @RequestParam(required = false) Long buyerId) {
         System.out.println("Fetching all sales with filters: productId=" + productId + ", buyerId=" + buyerId);
         if (productId != null) {
             List<Sale> sales = saleService.findAll().stream()
