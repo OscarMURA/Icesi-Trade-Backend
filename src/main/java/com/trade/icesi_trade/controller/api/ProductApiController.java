@@ -26,6 +26,11 @@ import org.springframework.http.HttpStatus;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.trade.icesi_trade.Service.blob.AzureBlobService;
+
+import java.util.ArrayList;
+import java.util.Collections;
+
 @RestController
 @RequestMapping("/api/products")
 @CrossOrigin
@@ -39,7 +44,7 @@ public class ProductApiController {
     private UserService userService;
 
     @Autowired
-    private com.trade.icesi_trade.Service.aws.S3Service s3Service;
+    private AzureBlobService blobService;
 
     @Autowired
     private ProductMapper productMapper;
@@ -227,11 +232,32 @@ public class ProductApiController {
     @PostMapping("/upload-image")
     public ResponseEntity<String> uploadImage(@RequestParam("file") MultipartFile file) {
         try {
-            String imageUrl = s3Service.uploadImage(file); // ← método del servicio S3
+            String imageUrl = blobService.uploadImage(file);
             return ResponseEntity.ok(imageUrl);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error al subir imagen: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/upload-images")
+    public ResponseEntity<List<String>> uploadMultipleImages(@RequestParam("files") MultipartFile[] files) {
+        try {
+            // Validar límite de 3 imágenes
+            if (files.length > 3) {
+                return ResponseEntity.badRequest()
+                        .body(Collections.emptyList());
+            }
+
+            List<String> imageUrls = new ArrayList<>();
+            for (MultipartFile file : files) {
+                String imageUrl = blobService.uploadImage(file);
+                imageUrls.add(imageUrl);
+            }
+            return ResponseEntity.ok(imageUrls);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Collections.emptyList());
         }
     }
 

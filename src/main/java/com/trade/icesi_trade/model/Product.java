@@ -47,7 +47,7 @@ public class Product {
     @JoinColumn(name = "seller")
     private User seller;
 
-    @Column(name = "image_url")
+    @Column(name = "image_url", columnDefinition = "TEXT")
     private String imageUrl;
 
     private LocalDateTime createdAt;

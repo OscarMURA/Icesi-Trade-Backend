@@ -40,7 +40,8 @@ public class ImageProductServiceTest {
     @InjectMocks
     private ImageProductServiceImpl imageProductService;
 
-    // Antes de cada test, se inyecta la URL base de imágenes (para simular un entorno desplegado)
+    // Antes de cada test, se inyecta la URL base de imágenes (para simular un
+    // entorno desplegado)
     @BeforeEach
     public void setUp() {
         ReflectionTestUtils.setField(imageProductService, "imageBaseUrl", "http://testserver.com/images/");
@@ -67,24 +68,23 @@ public class ImageProductServiceTest {
 
     /**
      * Tests the uploadImage method to ensure it throws an IllegalArgumentException
-     * when attempting to upload a file that exceeds the size limit of 5 MB.
+     * when attempting to upload a file that exceeds the size limit of 1 MB.
      * 
      * Scenario:
-     * - A file larger than 5 MB is created and passed to the uploadImage method.
+     * - A file larger than 1 MB is created and passed to the uploadImage method.
      * - The method is expected to throw an exception with a specific error message.
      */
     @Test
     public void testUploadImage_FileTooLarge() {
         // Arrange
-        byte[] bigData = new byte[(int) (5 * 1024 * 1024 + 1)];
+        byte[] bigData = new byte[(int) (1 * 1024 * 1024 + 1)]; // 1MB + 1 byte
         MultipartFile file = new MockMultipartFile("file", "bigImage.jpg", "image/jpeg", bigData);
         Long productId = 1L;
-        
+
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-            imageProductService.uploadImage(file, productId)
-        );
-        assertEquals("El tamaño del archivo excede el límite permitido de 5MB", exception.getMessage());
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> imageProductService.uploadImage(file, productId));
+        assertEquals("El tamaño del archivo excede el límite permitido de 1MB", exception.getMessage());
     }
 
     /**
@@ -95,30 +95,31 @@ public class ImageProductServiceTest {
      * The test verifies:
      * - That the exception is thrown.
      * - That the exception message contains the expected error message indicating
-     *   the unsupported image format.
+     * the unsupported image format.
      */
     @Test
     public void testUploadImage_InvalidExtension() {
         // Arrange
         MultipartFile file = new MockMultipartFile("file", "testImage.gif", "image/gif", "dummy content".getBytes());
         Long productId = 1L;
-        
+
         // Act & Assert
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-            imageProductService.uploadImage(file, productId)
-        );
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> imageProductService.uploadImage(file, productId));
         assertTrue(exception.getMessage().contains("Formato de imagen no permitido"));
     }
 
     /**
-     * Tests the uploadImage method of the ImageProductService when the product is not found.
+     * Tests the uploadImage method of the ImageProductService when the product is
+     * not found.
      * 
      * Scenario:
      * - A valid image file is provided.
      * - The product ID does not exist in the repository.
      * 
      * Expected Outcome:
-     * - A NoSuchElementException is thrown with a message indicating the product was not found.
+     * - A NoSuchElementException is thrown with a message indicating the product
+     * was not found.
      */
     @Test
     public void testUploadImage_ProductNotFound() {
@@ -128,9 +129,8 @@ public class ImageProductServiceTest {
         when(productRepository.findById(productId)).thenReturn(Optional.empty());
 
         // Act & Assert
-        Exception exception = assertThrows(NoSuchElementException.class, () ->
-            imageProductService.uploadImage(file, productId)
-        );
+        Exception exception = assertThrows(NoSuchElementException.class,
+                () -> imageProductService.uploadImage(file, productId));
         assertTrue(exception.getMessage().contains("Producto no encontrado con ID: " + productId));
     }
 
@@ -139,7 +139,8 @@ public class ImageProductServiceTest {
      * successfully retrieves an image associated with a given product ID.
      * 
      * Scenario:
-     * - A product ID is provided, and an image exists for that product in the repository.
+     * - A product ID is provided, and an image exists for that product in the
+     * repository.
      * 
      * Expected Outcome:
      * - The method returns the correct ImageProduct object with the expected URL.
@@ -163,9 +164,11 @@ public class ImageProductServiceTest {
     }
 
     /**
-     * Test case for the method getImageByProductId when no image is found for the given product ID.
+     * Test case for the method getImageByProductId when no image is found for the
+     * given product ID.
      * 
-     * This test verifies that the service throws a NoSuchElementException with the appropriate
+     * This test verifies that the service throws a NoSuchElementException with the
+     * appropriate
      * error message when the repository returns null for the specified product ID.
      */
     @Test
@@ -175,9 +178,8 @@ public class ImageProductServiceTest {
         when(imageProductRepository.findByProduct_Id(productId)).thenReturn(null);
 
         // Act & Assert
-        Exception exception = assertThrows(NoSuchElementException.class, () ->
-            imageProductService.getImageByProductId(productId)
-        );
+        Exception exception = assertThrows(NoSuchElementException.class,
+                () -> imageProductService.getImageByProductId(productId));
         assertTrue(exception.getMessage().contains("No se encontró imagen para el producto con ID: " + productId));
     }
 
@@ -207,7 +209,8 @@ public class ImageProductServiceTest {
 
     /**
      * Test case for the deleteImage method in the ImageProductService class.
-     * Verifies that the method returns false when attempting to delete a non-existent image.
+     * Verifies that the method returns false when attempting to delete a
+     * non-existent image.
      * 
      * Steps:
      * 1. Simulates the absence of an image with a given ID.
@@ -236,9 +239,8 @@ public class ImageProductServiceTest {
     public void testUploadImage_NullFile() {
         Long productId = 1L;
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-            imageProductService.uploadImage(null, productId)
-        );
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> imageProductService.uploadImage(null, productId));
         assertEquals("El archivo no puede ser nulo o estar vacío", exception.getMessage());
     }
 
@@ -250,9 +252,8 @@ public class ImageProductServiceTest {
         MultipartFile file = new MockMultipartFile("file", "", "image/jpeg", new byte[0]);
         Long productId = 1L;
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-            imageProductService.uploadImage(file, productId)
-        );
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> imageProductService.uploadImage(file, productId));
         assertEquals("El archivo no puede ser nulo o estar vacío", exception.getMessage());
     }
 
@@ -264,9 +265,8 @@ public class ImageProductServiceTest {
         MultipartFile file = new MockMultipartFile("file", "imagen", "image/jpeg", "content".getBytes());
         Long productId = 1L;
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-            imageProductService.uploadImage(file, productId)
-        );
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> imageProductService.uploadImage(file, productId));
         assertEquals("El archivo debe tener una extensión válida", exception.getMessage());
     }
 
@@ -277,9 +277,8 @@ public class ImageProductServiceTest {
     public void testUploadImage_NullProductId() {
         MultipartFile file = new MockMultipartFile("file", "image.jpg", "image/jpeg", "data".getBytes());
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-            imageProductService.uploadImage(file, null)
-        );
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> imageProductService.uploadImage(file, null));
         assertEquals("El ID del producto no puede ser nulo", exception.getMessage());
     }
 
@@ -288,9 +287,8 @@ public class ImageProductServiceTest {
      */
     @Test
     public void testGetImageByProductId_Null() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-            imageProductService.getImageByProductId(null)
-        );
+        Exception exception = assertThrows(IllegalArgumentException.class,
+                () -> imageProductService.getImageByProductId(null));
         assertEquals("El ID del producto no puede ser nulo", exception.getMessage());
     }
 
@@ -299,9 +297,7 @@ public class ImageProductServiceTest {
      */
     @Test
     public void testDeleteImage_NullId() {
-        Exception exception = assertThrows(IllegalArgumentException.class, () ->
-            imageProductService.deleteImage(null)
-        );
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> imageProductService.deleteImage(null));
         assertEquals("El ID de la imagen no puede ser nulo", exception.getMessage());
     }
 }
