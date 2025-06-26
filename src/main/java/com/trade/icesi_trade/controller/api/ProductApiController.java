@@ -267,4 +267,16 @@ public class ProductApiController {
         Product product = productService.markProductAsSold(id);
         return ResponseEntity.ok(productMapper.entityToDto(product));
     }
+
+    @PostMapping("/test-delete-image")
+    @Operation(summary = "Test endpoint to delete a specific image from Azure")
+    public ResponseEntity<String> testDeleteImage(@RequestParam String imageUrl) {
+        try {
+            boolean result = blobService.deleteImageByUrl(imageUrl);
+            return ResponseEntity.ok("Resultado de eliminación: " + result + " para URL: " + imageUrl);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al eliminar imagen: " + e.getMessage());
+        }
+    }
 }

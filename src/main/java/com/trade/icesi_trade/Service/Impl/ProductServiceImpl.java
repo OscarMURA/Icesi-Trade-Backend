@@ -15,6 +15,7 @@ import com.trade.icesi_trade.repository.SaleRepository;
 import com.trade.icesi_trade.repository.FavoriteProductRepository;
 import com.trade.icesi_trade.repository.ReviewRepository;
 import com.trade.icesi_trade.repository.ImageProductRepository;
+import com.trade.icesi_trade.Service.blob.AzureBlobService;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -33,6 +34,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ImageProductRepository imageProductRepository;
+
+    @Autowired
+    private AzureBlobService azureBlobService;
 
     /**
      * Creates a new product and saves it to the repository.
@@ -58,6 +62,8 @@ public class ProductServiceImpl implements ProductService {
 
     /**
      * Updates an existing product with the provided details.
+     * If the image URL has changed, this method will delete the old images from
+     * Azure Blob Storage.
      *
      * @param id      The ID of the product to be updated. Must not be null.
      * @param product The product object containing the updated details. Must not be
@@ -67,6 +73,7 @@ public class ProductServiceImpl implements ProductService {
      * @throws NoSuchElementException   If no product is found with the given ID.
      */
     @Override
+    @Transactional
     public Product updateProduct(Long id, Product product) {
         if (id == null || product == null) {
             throw new IllegalArgumentException("El ID del producto y los datos a actualizar no pueden ser nulos.");
@@ -74,6 +81,16 @@ public class ProductServiceImpl implements ProductService {
 
         Product existingProduct = productRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Producto no encontrado con el ID: " + id));
+
+        // Verificar si las imágenes han cambiado
+        String oldImageUrl = existingProduct.getImageUrl();
+        String newImageUrl = product.getImageUrl();
+
+        // Solo eliminar de Azure las imágenes que fueron removidas
+        List<String> removedImages = getRemovedImageUrls(oldImageUrl, newImageUrl);
+        for (String url : removedImages) {
+            azureBlobService.deleteImageByUrl(url);
+        }
 
         existingProduct.setTitle(product.getTitle());
         existingProduct.setDescription(product.getDescription());
@@ -88,7 +105,24 @@ public class ProductServiceImpl implements ProductService {
     }
 
     /**
+     * Obtiene la lista de URLs de imágenes que estaban en oldImageUrl pero no en
+     * newImageUrl.
+     */
+    private List<String> getRemovedImageUrls(String oldImageUrl, String newImageUrl) {
+        List<String> oldList = oldImageUrl == null || oldImageUrl.isBlank() ? List.of()
+                : List.of(oldImageUrl.split(","));
+        List<String> newList = newImageUrl == null || newImageUrl.isBlank() ? List.of()
+                : List.of(newImageUrl.split(","));
+        return oldList.stream()
+                .map(String::trim)
+                .filter(url -> !url.isEmpty() && !newList.contains(url.trim()))
+                .toList();
+    }
+
+    /**
      * Deletes a product by its ID.
+     * This method also deletes associated images from Azure Blob Storage
+     * and removes all related records (sales, favorites, reviews, images).
      *
      * @param id the ID of the product to be deleted; must not be null.
      * @return {@code true} if the product was successfully deleted, {@code false}
@@ -101,9 +135,14 @@ public class ProductServiceImpl implements ProductService {
         if (id == null) {
             throw new IllegalArgumentException("El ID del producto no puede ser nulo.");
         }
-        if (!productRepository.existsById(id)) {
+
+        Product product = productRepository.findById(id).orElse(null);
+        if (product == null) {
             return false;
         }
+
+        // Eliminar imágenes de Azure Blob Storage
+        deleteProductImagesFromAzure(product);
 
         // Eliminar registros relacionados
         saleRepository.deleteByProduct_Id(id);
@@ -114,6 +153,36 @@ public class ProductServiceImpl implements ProductService {
         // Finalmente eliminar el producto
         productRepository.deleteById(id);
         return true;
+    }
+
+    /**
+     * Deletes all images associated with a product from Azure Blob Storage.
+     * This method handles both single images and multiple images separated by
+     * commas.
+     *
+     * @param product the product whose images should be deleted
+     */
+    private void deleteProductImagesFromAzure(Product product) {
+        if (product.getImageUrl() == null || product.getImageUrl().isEmpty()) {
+            return;
+        }
+
+        try {
+            // Dividir las URLs si hay múltiples imágenes (separadas por comas)
+            String[] imageUrls = product.getImageUrl().split(",");
+
+            for (String imageUrl : imageUrls) {
+                String trimmedUrl = imageUrl.trim();
+                if (!trimmedUrl.isEmpty()) {
+                    azureBlobService.deleteImageByUrl(trimmedUrl);
+                }
+            }
+        } catch (Exception e) {
+            // Log the error but don't fail the deletion process
+            // The product deletion should continue even if image deletion fails
+            System.err
+                    .println("Error deleting images from Azure for product " + product.getId() + ": " + e.getMessage());
+        }
     }
 
     /**
