@@ -42,13 +42,13 @@ public class AppConfig {
     @Order(1)
     public SecurityFilterChain apiFilterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/g1/losbandalos/api/**")
+                .securityMatcher("/Icesi-Trade/api/")
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configure(http))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/g1/losbandalos/api/auth/**").permitAll()
-                        .requestMatchers("/g1/losbandalos/ws/**").permitAll() // Permite acceso al WebSocket
+                        .requestMatchers("/Icesi-Trade/api/auth/").permitAll()
+                        .requestMatchers("/Icesi-Trade/ws/").permitAll() // Permite acceso al WebSocket
                         .anyRequest().authenticated())
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 
@@ -59,26 +59,26 @@ public class AppConfig {
     @Order(2)
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .securityMatcher("/g1/losbandalos/public/**", "/g1/losbandalos/css/**", "/g1/losbandalos/js/**")
+                .securityMatcher("/Icesi-Trade/public/", "/Icesi-Trade/css/", "/Icesi-Trade/js/")
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configure(http))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/g1/losbandalos/public/login",
-                                "/g1/losbandalos/public/register",
-                                "/g1/losbandalos/css/**",
-                                "/g1/losbandalos/js/**",
-                                "/g1/losbandalos/swagger-ui/**",
-                                "/g1/losbandalos/v3/api-docs/**",
-                                "/g1/losbandalos/swagger-ui.html")
+                                "/Icesi-Trade/public/login",
+                                "/Icesi-Trade/public/register",
+                                "/Icesi-Trade/css/",
+                                "/Icesi-Trade/js/",
+                                "/Icesi-Trade/swagger-ui/",
+                                "/Icesi-Trade/v3/api-docs/",
+                                "/Icesi-Trade/swagger-ui.html")
                         .permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form
-                        .loginPage("/g1/losbandalos/public/login")
-                        .defaultSuccessUrl("/g1/losbandalos/public/default", true)
+                        .loginPage("/Icesi-Trade/public/login")
+                        .defaultSuccessUrl("/Icesi-Trade/public/default", true)
                         .permitAll())
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/g1/losbandalos/public/login?logout")
+                        .logoutSuccessUrl("/Icesi-Trade/public/login?logout")
                         .permitAll())
                 .sessionManagement(sess -> sess
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED));
