@@ -149,26 +149,29 @@ public class ProductApiController {
     @Operation(summary = "Get available products excluding current seller")
     public ResponseEntity<List<ProductDto>> getAvailableProducts() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long currentUserId = null;
 
-        if (authentication == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        // Si hay un usuario autenticado, obtener sus productos para excluirlos
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            String userEmail = ((UserDetails) authentication.getPrincipal()).getUsername();
+            User user = userService.findUserByEmail(userEmail);
+            if (user != null) {
+                currentUserId = user.getId();
+            }
         }
 
-        Object principal = authentication.getPrincipal();
-        String userEmail;
+        List<Product> products;
 
-        if (principal instanceof UserDetails) {
-            userEmail = ((UserDetails) principal).getUsername();
+        if (currentUserId != null) {
+            // Si hay usuario autenticado, excluir sus productos
+            products = productService.getAvailableProductsExcludingSeller(currentUserId);
         } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            // Si no hay usuario autenticado, obtener todos los productos disponibles
+            products = productService.getAllProducts()
+                    .stream()
+                    .filter(p -> p.getIsSold() == null || !p.getIsSold())
+                    .collect(Collectors.toList());
         }
-
-        User user = userService.findUserByEmail(userEmail);
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        List<Product> products = productService.getAvailableProductsExcludingSeller(user.getId());
 
         List<ProductDto> productDtos = products.stream()
                 .map(productMapper::entityToDto)
