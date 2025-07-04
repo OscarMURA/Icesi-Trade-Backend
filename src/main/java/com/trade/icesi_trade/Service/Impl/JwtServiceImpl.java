@@ -1,6 +1,7 @@
 package com.trade.icesi_trade.Service.Impl;
 
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
@@ -23,15 +24,15 @@ import io.jsonwebtoken.security.Keys;
 @Service
 public class JwtServiceImpl {
 
-    private static final String SECRET_KEY = "p5rT9$wKm3#sV1q8ZbX4Lk2!uYhEjR6M"; 
+    private static final String SECRET_KEY = "p5rT9$wKm3#sV1q8ZbX4Lk2!uYhEjR6M";
     private static final long EXPIRATION_TIME = 1000 * 60 * 60;
 
     @Autowired
-    private UserRepository userRepository; 
+    private UserRepository userRepository;
 
     private final UserDetailsService userDetailsService;
 
-    public JwtServiceImpl (UserDetailsService userDetailsService) {
+    public JwtServiceImpl(UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
@@ -43,23 +44,23 @@ public class JwtServiceImpl {
         String username = authentication.getName();
 
         User user = userRepository.findByEmail(username)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         // 👇 Extrae los roles del userRoles
-        List<String> roleNames = user.getUserRoles()
-            .stream()
-            .map(ur -> ur.getRole().getName()) // "ADMIN", "USER", etc.
-            .toList();
+        List<String> roleNames = user.getUserRoles() != null ? user.getUserRoles()
+                .stream()
+                .map(ur -> ur.getRole().getName()) // "ADMIN", "USER", etc.
+                .toList() : new ArrayList<>();
 
         return Jwts.builder()
-            .setSubject(username)
-            .claim("id", user.getId())
-            .claim("email", user.getEmail())
-            .claim("roles", roleNames) // ✅ agrega roles al token
-            .setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-            .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-            .compact();
+                .setSubject(username)
+                .claim("id", user.getId())
+                .claim("email", user.getEmail())
+                .claim("roles", roleNames) // ✅ agrega roles al token
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .compact();
     }
 
     public String extractUsername(String token) {
@@ -81,13 +82,13 @@ public class JwtServiceImpl {
     }
 
     public boolean isTokenValid(String token) {
-        return ( !isTokenExpired(token));
+        return (!isTokenExpired(token));
     }
 
     private boolean isTokenExpired(String token) {
         Date expiration = extractClaim(token, Claims::getExpiration);
         return expiration.before(new Date());
-    }    
+    }
 
     public long getTokenCreationTime(String token) {
         return extractClaim(token, Claims::getIssuedAt).getTime();

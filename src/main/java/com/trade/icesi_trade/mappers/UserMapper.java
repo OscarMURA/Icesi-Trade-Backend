@@ -16,7 +16,7 @@ public interface UserMapper {
         @Mapping(target = "phone", source = "phone"),
         @Mapping(target = "password", source = "password")
     })
-    @Mapping(target = "roles", expression = "java(user.getUserRoles().stream().map(ur -> ur.getRole().getName()).toList())")
+    @Mapping(target = "roles", expression = "java(user.getUserRoles() != null ? user.getUserRoles().stream().map(ur -> ur.getRole().getName()).toList() : new java.util.ArrayList<>())")
     UserResponseDto entityToDto(User user);
 
     @InheritInverseConfiguration
