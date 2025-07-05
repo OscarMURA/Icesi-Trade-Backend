@@ -42,25 +42,41 @@ public class ChatMessageController {
 
     @MessageMapping("/chat.private")
     public void handlePrivateMessage(ChatMessageDto messageDto) {
-        ChatMessage message = messageMapper.dtoToEntity(messageDto);
-        message.setSender(userService.findUserById(messageDto.getSenderId()));
-        message.setReceiver(userService.findUserById(messageDto.getReceiverId()));
-        message.setCreatedAt(LocalDateTime.now());
+        try {
+            System.out.println("Recibido mensaje: " + messageDto.getContent() + " de " + messageDto.getSenderId()
+                    + " a " + messageDto.getReceiverId());
 
-        ChatMessage savedMessage = chatMessageService.saveMessage(message);
-        ChatMessageDto savedMessageDto = messageMapper.entityToDto(savedMessage);
+            // Crear mensaje con datos mínimos para envío rápido
+            ChatMessage message = messageMapper.dtoToEntity(messageDto);
+            message.setSender(userService.findUserById(messageDto.getSenderId()));
+            message.setReceiver(userService.findUserById(messageDto.getReceiverId()));
+            message.setCreatedAt(LocalDateTime.now());
 
-        // Enviar mensaje al destinatario
-        messagingTemplate.convertAndSendToUser(
-                message.getReceiver().getName(),
-                "/queue/messages",
-                savedMessageDto);
+            // Enviar mensaje inmediatamente al destinatario (antes de guardar en BD)
+            ChatMessageDto immediateMessageDto = messageMapper.entityToDto(message);
+            immediateMessageDto.setId(null); // Indicar que es un mensaje temporal
 
-        // Enviar mensaje al remitente (para confirmación)
-        messagingTemplate.convertAndSendToUser(
-                message.getSender().getName(),
-                "/queue/messages",
-                savedMessageDto);
+            messagingTemplate.convertAndSendToUser(
+                    message.getReceiver().getName(),
+                    "/queue/messages",
+                    immediateMessageDto);
+
+            // Guardar en BD de forma asíncrona
+            ChatMessage savedMessage = chatMessageService.saveMessage(message);
+            ChatMessageDto savedMessageDto = messageMapper.entityToDto(savedMessage);
+
+            // Enviar confirmación con ID real al remitente
+            messagingTemplate.convertAndSendToUser(
+                    message.getSender().getName(),
+                    "/queue/messages",
+                    savedMessageDto);
+
+            System.out.println("Mensaje procesado y enviado exitosamente");
+
+        } catch (Exception e) {
+            System.err.println("Error procesando mensaje: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @PostMapping

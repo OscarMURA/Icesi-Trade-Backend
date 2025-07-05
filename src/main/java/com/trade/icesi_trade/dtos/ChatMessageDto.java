@@ -12,4 +12,5 @@ public class ChatMessageDto {
     private Long receiverId;
     private String content;
     private String createdAt;
+    private Boolean isTemporary; // Para indicar si es un mensaje temporal
 }

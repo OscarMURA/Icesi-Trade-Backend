@@ -177,7 +177,7 @@ public class EmailServiceImpl implements EmailService {
                                     <p style="word-break: break-all; color: #666; background-color: #f8f9fa; padding: 10px; border-radius: 5px;">%s</p>
 
                                     <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 5px; padding: 15px; margin: 20px 0;">
-                                        <p style="margin: 0;"><strong>⚠️ Importante:</strong> Este enlace expira en 24 horas por seguridad.</p>
+                                        <p style="margin: 0;"><strong>⚠️ Importante:</strong> Este enlace expira en 1 hora por seguridad.</p>
                                     </div>
 
                                     <p>Una vez verificado tu email, podrás:</p>
