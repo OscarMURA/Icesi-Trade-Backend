@@ -2,11 +2,15 @@ package com.trade.icesi_trade.controller.api;
 
 import com.trade.icesi_trade.Service.Impl.JwtServiceImpl;
 import com.trade.icesi_trade.Service.Interface.UserService;
+import com.trade.icesi_trade.Service.Interface.EmailService;
 import com.trade.icesi_trade.dtos.LogInDto;
 import com.trade.icesi_trade.dtos.RegisterDto;
 import com.trade.icesi_trade.dtos.TokenDto;
 import com.trade.icesi_trade.mappers.UserMapper;
 import com.trade.icesi_trade.model.User;
+import com.trade.icesi_trade.model.EmailVerification;
+import com.trade.icesi_trade.repository.EmailVerificationRepository;
+import com.trade.icesi_trade.repository.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,6 +22,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -45,6 +50,15 @@ public class AuthApiController {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private EmailVerificationRepository emailVerificationRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Operation(summary = "User login")
     @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -122,6 +136,139 @@ public class AuthApiController {
             return ResponseEntity.internalServerError()
                     .contentType(MediaType.APPLICATION_JSON)
                     .body("{\"error\": \"Error al obtener información del rol: " + e.getMessage() + "\"}");
+        }
+    }
+
+    @Operation(summary = "Verify email with token")
+    @PostMapping(value = "/verify-email", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> verifyEmail(@RequestParam String token) {
+        try {
+            System.out.println("Verificando token: " + token);
+
+            // Buscar la verificación por token
+            var verificationOpt = emailVerificationRepository.findByToken(token);
+
+            if (verificationOpt.isEmpty()) {
+                System.out.println("Token no encontrado: " + token);
+                return ResponseEntity.badRequest()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body("{\"error\": \"Token inválido\"}");
+            }
+
+            EmailVerification verification = verificationOpt.get();
+            System.out.println("Token encontrado para email: " + verification.getEmail());
+            System.out.println("Estado del token - Usado: " + verification.isUsed() + ", Expira: "
+                    + verification.getExpiresAt());
+
+            // Verificar que no haya sido usado y no haya expirado
+            if (verification.isUsed()) {
+                System.out.println("Token ya utilizado: " + token);
+                return ResponseEntity.badRequest()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body("{\"error\": \"Este enlace de verificación ya ha sido utilizado. Tu cuenta ya está verificada y puedes iniciar sesión.\"}");
+            }
+
+            if (verification.getExpiresAt().isBefore(java.time.LocalDateTime.now())) {
+                System.out.println("Token expirado: " + token);
+                return ResponseEntity.badRequest()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body("{\"error\": \"Token ha expirado\"}");
+            }
+
+            // Habilitar el usuario
+            User user = userRepository.findByEmail(verification.getEmail())
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+            System.out.println("👤 Usuario encontrado: " + user.getEmail() + " (Habilitado: " + user.isEnabled() + ")");
+
+            // Si el usuario ya está habilitado, solo marcar el token como usado
+            if (user.isEnabled()) {
+                System.out.println("Usuario ya está habilitado, solo marcando token como usado");
+                verification.setUsed(true);
+                emailVerificationRepository.save(verification);
+                System.out.println("Token marcado como usado: " + token);
+
+                return ResponseEntity.ok(Map.of(
+                        "message", "Tu cuenta ya está verificada y puedes iniciar sesión",
+                        "verified", true,
+                        "userEmail", user.getEmail()));
+            }
+
+            user.setEnabled(true);
+            userRepository.save(user);
+            System.out.println("Usuario habilitado: " + user.getEmail());
+
+            // Marcar token como usado
+            verification.setUsed(true);
+            emailVerificationRepository.save(verification);
+            System.out.println("Token marcado como usado: " + token);
+
+            // Enviar email de bienvenida
+            try {
+                emailService.sendWelcomeEmail(user.getEmail(), user.getName());
+                System.out.println("Email de bienvenida enviado a: " + user.getEmail());
+            } catch (Exception e) {
+                // No fallar si el email de bienvenida falla
+                System.err.println("Error enviando email de bienvenida: " + e.getMessage());
+            }
+
+            System.out.println("🎉 Verificación completada exitosamente para: " + user.getEmail());
+            return ResponseEntity.ok(Map.of(
+                    "message", "Email verificado exitosamente",
+                    "verified", true,
+                    "userEmail", user.getEmail()));
+
+        } catch (Exception e) {
+            System.err.println("Error en verificación: " + e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.internalServerError()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body("{\"error\": \"Error verificando email: " + e.getMessage() + "\"}");
+        }
+    }
+
+    @Operation(summary = "Resend verification email")
+    @PostMapping(value = "/resend-verification", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    public ResponseEntity<?> resendVerification(@RequestParam String email) {
+        try {
+            User user = userRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+            if (user.isEnabled()) {
+                return ResponseEntity.badRequest()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body("{\"error\": \"El email ya está verificado\"}");
+            }
+
+            // Eliminar verificaciones anteriores para este email
+            emailVerificationRepository.deleteByEmailAndType(email,
+                    EmailVerification.VerificationType.EMAIL_VERIFICATION);
+
+            // Generar nuevo token
+            String newToken = java.util.UUID.randomUUID().toString().replace("-", "");
+
+            EmailVerification verification = EmailVerification.builder()
+                    .token(newToken)
+                    .email(email)
+                    .expiresAt(java.time.LocalDateTime.now().plusHours(24))
+                    .type(EmailVerification.VerificationType.EMAIL_VERIFICATION)
+                    .used(false)
+                    .build();
+
+            emailVerificationRepository.save(verification);
+
+            // Enviar nuevo email de verificación
+            emailService.sendVerificationEmail(email, newToken, user.getName());
+
+            return ResponseEntity.ok(Map.of(
+                    "message", "Email de verificación reenviado exitosamente",
+                    "email", email));
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body("{\"error\": \"Error reenviando verificación: " + e.getMessage() + "\"}");
         }
     }
 }
