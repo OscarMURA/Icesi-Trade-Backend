@@ -74,7 +74,10 @@ public class AuthApiController {
                     .map(a -> a.getAuthority())
                     .toList();
 
-            String username = authentication.getName();
+            // Obtener el usuario completo desde la base de datos para obtener el nombre
+            // real
+            User user = userService.findUserByEmail(loginDto.getEmail());
+            String username = user.getName(); // Usar el nombre real del usuario
             long creationTime = jwtService.getTokenCreationTime(token);
             long expirationTime = jwtService.getTokenExpirationTime(token);
 

@@ -2,6 +2,7 @@ package com.trade.icesi_trade.controller.api;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -58,7 +59,7 @@ public class UserApiController {
 
                 if (roleName != null && !roleName.isBlank()) {
                         users = users.stream()
-                                        .filter(user -> user.getUserRoles().stream()
+                                        .filter(user -> user.getUserRoles() != null && user.getUserRoles().stream()
                                                         .anyMatch(ur -> ur.getRole().getName()
                                                                         .equalsIgnoreCase(roleName)))
                                         .toList();
@@ -133,9 +134,9 @@ public class UserApiController {
         @GetMapping("/{id}/roles")
         public ResponseEntity<List<RoleDto>> getUserRoles(@PathVariable Long id) {
                 User user = userService.findUserById(id);
-                List<RoleDto> roles = user.getUserRoles().stream()
+                List<RoleDto> roles = user.getUserRoles() != null ? user.getUserRoles().stream()
                                 .map(ur -> roleMapper.entityToDto(ur.getRole()))
-                                .collect(Collectors.toList());
+                                .collect(Collectors.toList()) : new ArrayList<>();
                 return ResponseEntity.ok(roles);
         }
 

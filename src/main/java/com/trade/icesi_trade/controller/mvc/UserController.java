@@ -1,6 +1,7 @@
 package com.trade.icesi_trade.controller.mvc;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +28,7 @@ import com.trade.icesi_trade.Service.Interface.RoleService;
 public class UserController {
 
     @Autowired
-    private  UserService userService;
+    private UserService userService;
 
     @Autowired
     private RoleService roleService;
@@ -35,22 +36,21 @@ public class UserController {
     @Autowired
     private UserRoleRepository userRoleRepository;
 
- 
     @GetMapping
     public String listUsers(Model model) {
         model.addAttribute("users", userService.findAllUsers());
-        return "users/list";  
+        return "users/list";
     }
-    
+
     @GetMapping("/{email}")
-    public ResponseEntity<User> getUserByEmail( String email) {
-        User user =  userService.findUserByEmail(email);
+    public ResponseEntity<User> getUserByEmail(String email) {
+        User user = userService.findUserByEmail(email);
         return ResponseEntity.ok(user);
     }
 
     @PostMapping
     public ResponseEntity<User> createUser(@RequestBody User user) {
-        User savedUser =  userService.saveUser(user);
+        User savedUser = userService.saveUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
     }
 
@@ -66,9 +66,9 @@ public class UserController {
         User user = userService.findUserById(id);
         List<Role> allRoles = roleService.findAllRoles();
 
-        List<Long> assignedRoleIds = user.getUserRoles().stream()
+        List<Long> assignedRoleIds = user.getUserRoles() != null ? user.getUserRoles().stream()
                 .map(ur -> ur.getRole().getId())
-                .toList();
+                .toList() : new ArrayList<>();
 
         model.addAttribute("user", user);
         model.addAttribute("roles", allRoles);
@@ -78,7 +78,7 @@ public class UserController {
 
     @PostMapping("/{id}/roles")
     public String updateRoles(@PathVariable Long id,
-                          @RequestParam(value = "roleIds", required = false) List<Long> roleIds) {
+            @RequestParam(value = "roleIds", required = false) List<Long> roleIds) {
         if (roleIds == null || roleIds.isEmpty()) {
             return "redirect:/users/" + id + "/roles?error=Debe+asignar+al+menos+un+rol";
         }

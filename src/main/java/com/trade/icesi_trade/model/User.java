@@ -2,6 +2,7 @@ package com.trade.icesi_trade.model;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.ArrayList; // Agregar este import
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -54,15 +55,18 @@ public class User {
 
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonIgnore
-    private List<UserRole> userRoles;
+    @Builder.Default
+    private List<UserRole> userRoles = new ArrayList<>();
 
     @OneToMany(mappedBy = "sender")
-    private List<ChatMessage> sentMessages; // Mensajes enviados por el usuario
+    @Builder.Default
+    private List<ChatMessage> sentMessages = new ArrayList<>(); // Mensajes enviados por el usuario
 
     @OneToMany(mappedBy = "receiver")
-    private List<ChatMessage> receivedMessages; // Mensajes recibidos por el usuario
+    @Builder.Default
+    private List<ChatMessage> receivedMessages = new ArrayList<>(); // Mensajes recibidos por el usuario
 
 }
