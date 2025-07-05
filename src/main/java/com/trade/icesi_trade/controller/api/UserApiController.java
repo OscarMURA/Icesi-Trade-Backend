@@ -29,7 +29,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
-@CrossOrigin(origins = { "http://localhost:5173", "http://localhost:3000" })
+@CrossOrigin(origins = { "${app.frontend.url}", "${app.frontend.alternative-url}" })
 @Tag(name = "Users", description = "CRUD operations for users")
 public class UserApiController {
 

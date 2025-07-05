@@ -48,6 +48,10 @@ public class User {
     @Column(length = 20)
     private String phone;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean enabled = false;
+
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     

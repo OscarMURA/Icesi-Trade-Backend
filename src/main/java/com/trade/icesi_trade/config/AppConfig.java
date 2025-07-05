@@ -47,8 +47,12 @@ public class AppConfig {
                 .cors(cors -> cors.configure(http))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/Icesi-Trade/api/auth/**").permitAll()
-                        .requestMatchers("/Icesi-Trade/ws/**").permitAll() // Permite acceso al WebSocket
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/users").permitAll()
+                        .requestMatchers("/api/products/available").permitAll()
+                        .requestMatchers("/api/products").permitAll()
+                        .requestMatchers("/api/products/{id}").permitAll()
+                        .requestMatchers("/ws/**").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
 
