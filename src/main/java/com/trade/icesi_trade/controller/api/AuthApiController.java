@@ -141,6 +141,7 @@ public class AuthApiController {
 
     @Operation(summary = "Verify email with token")
     @PostMapping(value = "/verify-email", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
     public ResponseEntity<?> verifyEmail(@RequestParam String token) {
         try {
             System.out.println("Verificando token: " + token);
@@ -183,25 +184,22 @@ public class AuthApiController {
 
             // Si el usuario ya está habilitado, solo marcar el token como usado
             if (user.isEnabled()) {
-                System.out.println("Usuario ya está habilitado, solo marcando token como usado");
-                verification.setUsed(true);
-                emailVerificationRepository.save(verification);
-                System.out.println("Token marcado como usado: " + token);
-
+                System.out.println("Usuario ya está habilitado, retornando éxito sin marcar token como usado");
                 return ResponseEntity.ok(Map.of(
                         "message", "Tu cuenta ya está verificada y puedes iniciar sesión",
                         "verified", true,
                         "userEmail", user.getEmail()));
             }
 
-            user.setEnabled(true);
-            userRepository.save(user);
-            System.out.println("Usuario habilitado: " + user.getEmail());
-
-            // Marcar token como usado
+            // Marcar token como usado ANTES de habilitar el usuario para evitar condiciones
+            // de carrera
             verification.setUsed(true);
             emailVerificationRepository.save(verification);
             System.out.println("Token marcado como usado: " + token);
+
+            user.setEnabled(true);
+            userRepository.save(user);
+            System.out.println("Usuario habilitado: " + user.getEmail());
 
             // Enviar email de bienvenida
             try {
@@ -209,7 +207,7 @@ public class AuthApiController {
                 System.out.println("Email de bienvenida enviado a: " + user.getEmail());
             } catch (Exception e) {
                 // No fallar si el email de bienvenida falla
-                System.err.println("Error enviando email de bienvenida: " + e.getMessage());
+                System.err.println("❌ Error enviando email de bienvenida: " + e.getMessage());
             }
 
             System.out.println("🎉 Verificación completada exitosamente para: " + user.getEmail());

@@ -33,12 +33,17 @@ public class ReviewApiController {
 
     @GetMapping
     public ResponseEntity<List<ReviewDto>> getReviews(
-        @RequestParam(required = false) Long reviewerId,
-        @RequestParam(required = false) Long productId) {
-        List<Review> reviews = reviewService.getFilteredReviews(reviewerId, productId);
+            @RequestParam(required = false) Long reviewerId,
+            @RequestParam(required = false) Long revieweeId,
+            @RequestParam(required = false) Long productId) {
+        List<Review> reviews;
+        if (revieweeId != null) {
+            reviews = reviewService.getReviewsByReviewee(revieweeId);
+        } else {
+            reviews = reviewService.getFilteredReviews(reviewerId, productId);
+        }
         return ResponseEntity.ok(
-            reviews.stream().map(reviewMapper::entityToDto).collect(Collectors.toList())
-        );
+                reviews.stream().map(reviewMapper::entityToDto).collect(Collectors.toList()));
     }
 
     @Operation(summary = "Get review by ID")
