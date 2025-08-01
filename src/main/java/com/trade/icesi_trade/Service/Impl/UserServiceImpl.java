@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
                 .accountExpired(false)
                 .accountLocked(false)
                 .credentialsExpired(false)
-                .disabled(!user.isEnabled()) // Deshabilitar si el usuario no está verificado
+                .disabled(false) // Permitir login sin verificación
                 .build();
 
         return userDetails;

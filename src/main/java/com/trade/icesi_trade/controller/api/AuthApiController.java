@@ -82,7 +82,15 @@ public class AuthApiController {
             long expirationTime = jwtService.getTokenExpirationTime(token);
 
             TokenDto tokenDto = new TokenDto(username, loginDto.getEmail(), roles, token, creationTime, expirationTime);
-            return ResponseEntity.ok(tokenDto);
+
+            // Incluir información sobre el estado de verificación
+            Map<String, Object> response = Map.of(
+                    "token", tokenDto,
+                    "verified", user.isEnabled(),
+                    "message", user.isEnabled() ? "Login exitoso. Tu cuenta está verificada."
+                            : "Login exitoso. Tu cuenta no está verificada. Puedes verificar tu email más tarde.");
+
+            return ResponseEntity.ok(response);
         } catch (BadCredentialsException e) {
             return ResponseEntity.badRequest()
                     .contentType(MediaType.APPLICATION_JSON)
@@ -225,6 +233,29 @@ public class AuthApiController {
         }
     }
 
+    @Operation(summary = "Check user verification status")
+    @GetMapping(value = "/verification-status", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getVerificationStatus(Authentication auth) {
+        try {
+            if (auth == null || !auth.isAuthenticated()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body("{\"error\": \"No autenticado\"}");
+            }
+
+            User user = userService.findUserByEmail(auth.getName());
+
+            return ResponseEntity.ok(Map.of(
+                    "email", user.getEmail(),
+                    "verified", user.isEnabled(),
+                    "name", user.getName()));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body("{\"error\": \"Error obteniendo estado de verificación: " + e.getMessage() + "\"}");
+        }
+    }
+
     @Operation(summary = "Resend verification email")
     @PostMapping(value = "/resend-verification", produces = MediaType.APPLICATION_JSON_VALUE)
     @Transactional
@@ -267,6 +298,56 @@ public class AuthApiController {
             return ResponseEntity.internalServerError()
                     .contentType(MediaType.APPLICATION_JSON)
                     .body("{\"error\": \"Error reenviando verificación: " + e.getMessage() + "\"}");
+        }
+    }
+
+    @Operation(summary = "Request email verification for logged user")
+    @PostMapping(value = "/request-verification", produces = MediaType.APPLICATION_JSON_VALUE)
+    @Transactional
+    public ResponseEntity<?> requestVerification(Authentication auth) {
+        try {
+            if (auth == null || !auth.isAuthenticated()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body("{\"error\": \"No autenticado\"}");
+            }
+
+            User user = userService.findUserByEmail(auth.getName());
+
+            if (user.isEnabled()) {
+                return ResponseEntity.badRequest()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body("{\"error\": \"Tu cuenta ya está verificada\"}");
+            }
+
+            // Eliminar verificaciones anteriores para este email
+            emailVerificationRepository.deleteByEmailAndType(user.getEmail(),
+                    EmailVerification.VerificationType.EMAIL_VERIFICATION);
+
+            // Generar nuevo token
+            String newToken = java.util.UUID.randomUUID().toString().replace("-", "");
+
+            EmailVerification verification = EmailVerification.builder()
+                    .token(newToken)
+                    .email(user.getEmail())
+                    .expiresAt(java.time.LocalDateTime.now().plusHours(24))
+                    .type(EmailVerification.VerificationType.EMAIL_VERIFICATION)
+                    .used(false)
+                    .build();
+
+            emailVerificationRepository.save(verification);
+
+            // Enviar email de verificación
+            emailService.sendVerificationEmail(user.getEmail(), newToken, user.getName());
+
+            return ResponseEntity.ok(Map.of(
+                    "message", "Email de verificación enviado exitosamente",
+                    "email", user.getEmail()));
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body("{\"error\": \"Error solicitando verificación: " + e.getMessage() + "\"}");
         }
     }
 }
